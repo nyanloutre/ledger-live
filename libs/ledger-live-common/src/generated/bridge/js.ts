@@ -8,6 +8,7 @@ import hedera from "../../families/hedera/bridge/js";
 import internet_computer from "../../families/internet_computer/bridge/js";
 import stacks from "../../families/stacks/bridge/js";
 import stellar from "../../families/stellar/bridge/js";
+import tezos from "../../families/tezos/bridge/js";
 import ton from "../../families/ton/bridge/js";
 import vechain from "../../families/vechain/bridge/js";
 import { bridge as algorand } from "../../families/algorand/setup";
@@ -16,6 +17,7 @@ import { bridge as cardano } from "../../families/cardano/setup";
 import { bridge as evm } from "../../families/evm/setup";
 import { bridge as near } from "../../families/near/setup";
 import { bridge as polkadot } from "../../families/polkadot/setup";
+import { bridge as ton } from "../../families/ton/setup";
 import { bridge as solana } from "../../families/solana/setup";
 import { bridge as tezos } from "../../families/tezos/setup";
 import { bridge as tron } from "../../families/tron/setup";
@@ -32,6 +34,7 @@ export default {
   internet_computer,
   stacks,
   stellar,
+  tezos,
   ton,
   vechain,
   algorand,
@@ -40,6 +43,7 @@ export default {
   evm,
   near,
   polkadot,
+  ton,
   solana,
   tezos,
   tron,
