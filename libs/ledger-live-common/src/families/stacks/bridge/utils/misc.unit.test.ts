@@ -1,8 +1,8 @@
 import flatMap from "lodash/flatMap";
-import { mapTxToOps } from "./misc";
+import { mapTxToOps, mapPendingTxToOps } from "./misc";
 import { encodeAccountId } from "../../../../account";
 import { StacksOperation } from "../../types";
-import { TransactionResponse } from "./api.types";
+import { MempoolTransaction, TransactionResponse } from "./api.types";
 
 const sendManyTransfer = {
   tx: {
@@ -86,6 +86,26 @@ const sendManyTransfer = {
   ],
   ft_transfers: [],
   nft_transfers: [],
+};
+
+const mempoolTransfer = {
+  tx_id: "0x628369d2c9b49f0ec95531fe1e6a39141573117f3dd047fca65ff5e4058fbc55",
+  nonce: 32,
+  fee_rate: "487",
+  sender_address: "SPNX9YY3T4GR4XDSNRVWB2MDQVCTJMP3BGT7VCZA",
+  sponsored: false,
+  post_condition_mode: "deny",
+  post_conditions: [],
+  anchor_mode: "any",
+  tx_status: "pending",
+  receipt_time: 1714554733,
+  receipt_time_iso: "2024-05-01T09:12:13.000Z",
+  tx_type: "token_transfer",
+  token_transfer: {
+    recipient_address: "SP26AZ1JSFZQ82VH5W2NJSB2QW15EW5YKT6WMD69J",
+    amount: "9523",
+    memo: "0x00000000000000000000000000000000000000000000000000000000000000000000",
+  },
 };
 
 const basicTransfer = {
@@ -173,5 +193,31 @@ describe("operation building from raw", () => {
     expect(opBasic.internalOperations).toBeUndefined();
     expect(opBasic.senders).toHaveLength(1);
     expect(opBasic.recipients).toHaveLength(1);
+  });
+});
+
+describe("operation building from mempool raw", () => {
+  test("map raw mempool transaction to op", async () => {
+    const accountId = encodeAccountId({
+      type: "js",
+      version: "2",
+      currencyId: "stacks",
+      xpubOrAddress: "",
+      derivationMode: "stacks_wallet",
+    });
+
+    const address = "SPNX9YY3T4GR4XDSNRVWB2MDQVCTJMP3BGT7VCZA";
+
+    // Contains operations for txn of type token_transfer
+    const operations = flatMap<MempoolTransaction, StacksOperation>(
+      [mempoolTransfer],
+      mapPendingTxToOps(accountId, address),
+    );
+
+    expect(operations.length).toBe(1);
+    expect(operations[0].type).toBe("OUT");
+    expect(operations[0].internalOperations).toBeUndefined();
+    expect(operations[0].senders).toHaveLength(1);
+    expect(operations[0].recipients).toHaveLength(1);
   });
 });
