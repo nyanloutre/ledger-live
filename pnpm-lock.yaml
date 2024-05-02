@@ -1374,6 +1374,9 @@ importers:
       '@ledgerhq/coin-framework':
         specifier: workspace:^
         version: link:../../libs/coin-framework
+      '@ledgerhq/cryptoassets':
+        specifier: workspace:^
+        version: link:../../libs/ledgerjs/packages/cryptoassets
       '@ledgerhq/domain-service':
         specifier: workspace:^
         version: link:../../libs/domain-service
