@@ -187,8 +187,8 @@ jobs:
 
             const report = {
               linux: {
-                pass: ${{ needs.e2e-tests-linux.outputs.status == 'success' }},
-                status: "${{ needs.e2e-tests-linux.outputs.status }}",
+                pass: ${{ steps.tests.outcome == 'success' }},
+                status: "${{ steps.tests.outcome }}",
               }
             };
 
@@ -284,7 +284,6 @@ jobs:
                       }
                     }
                   ],
-                  "mrkdwn_in": ["text"],
                   "color": "${{ env.STATUS_COLOR }}"
                 }
               ]
