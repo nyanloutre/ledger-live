@@ -150,10 +150,10 @@ jobs:
         shell: bash
         run: >
           if ${{ steps.tests.outcome == 'success' }};
-          then echo "STATUS_COLOR=good" >> $GITHUB_ENV;
+          then echo "STATUS_COLOR=#33FF39" >> $GITHUB_ENV;
           elif ${{ steps.tests.outcome == 'failure' }};
-          then echo "STATUS_COLOR=danger" >> $GITHUB_ENV;
-          else echo "STATUS_COLOR=warning" >> $GITHUB_ENV;
+          then echo "STATUS_COLOR=#FF333C" >> $GITHUB_ENV;
+          else echo "STATUS_COLOR=#F3FF33" >> $GITHUB_ENV;
           fi
 
       - uses: actions/github-script@v6
