@@ -6091,6 +6091,9 @@
     },
     "TezosUnrevealedAccount": {
       "title": "Swap unavailable: Initial send/delegate needed with Tezos account or change pair."
+    },
+    "TonExcessFee": {
+      "title": "It constitutes a token transfer. You will pay 0.5 TON in fees, and any extra will be returned to you."
     }
   },
   "cryptoOrg": {
