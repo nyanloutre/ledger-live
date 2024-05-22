@@ -5,7 +5,7 @@
 import { describe, it, expect } from "@jest/globals";
 
 import React from "react";
-import { render, screen, waitFor } from "tests/testUtils";
+import { render, screen } from "tests/testUtils";
 import "@testing-library/jest-dom";
 import { WalletSyncPages } from "../utils/shared";
 
