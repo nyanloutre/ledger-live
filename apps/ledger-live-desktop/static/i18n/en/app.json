@@ -310,8 +310,8 @@
       "changeCTA": "Change",
       "rates": {
         "title": "Quotes",
-        "registration": "Registration required ",
-        "noRegistration": "No registration required",
+        "registration": "Login required ",
+        "noRegistration": "No login required",
         "fixed": "Fixed",
         "float": "Floating",
         "update": "Rates update in",
