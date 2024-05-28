@@ -687,7 +687,7 @@ async function getAccount(
     */
 
   const stakeAccountsRaw = [
-    ...(await api.getStakeAccountsByStakeAuth(address)),
+    // ...(await api.getStakeAccountsByStakeAuth(address)),
     ...(await api.getStakeAccountsByWithdrawAuth(address)),
   ];
 
