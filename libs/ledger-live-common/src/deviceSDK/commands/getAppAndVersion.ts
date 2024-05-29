@@ -2,6 +2,7 @@ import Transport from "@ledgerhq/hw-transport";
 import { from, Observable, of } from "rxjs";
 import { switchMap } from "rxjs/operators";
 import { GetAppAndVersionUnsupportedFormat } from "../../errors";
+import { LocalTracer, TraceContext, trace } from "@ledgerhq/logs";
 
 export type GetAppAndVersionCmdEvent = {
   type: "data";
@@ -22,8 +23,19 @@ export function getAppAndVersion(transport: Transport): Observable<GetAppAndVers
           let i = 0;
           const format = result[i++];
 
+          const LOG_TYPE = "hw";
+          const receivedAPDU = result.toString("hex");
+          const tracer = new LocalTracer(LOG_TYPE, {
+            id: 90000,
+            type: "debug",
+            origin: "hw:withDevice",
+          });
+          tracer.trace(`Received APDU: ${receivedAPDU}`);
+
           if (format !== 1) {
-            throw new GetAppAndVersionUnsupportedFormat("getAppAndVersion: format not supported");
+            throw new GetAppAndVersionUnsupportedFormat(
+              `getAppAndVersion: format not supported => received APDU: ${receivedAPDU}`,
+            );
           }
 
           const nameLength = result[i++];
