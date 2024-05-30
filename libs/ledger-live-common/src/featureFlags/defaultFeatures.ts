@@ -72,7 +72,7 @@ export const CURRENCY_DEFAULT_FEATURES = {
   currencyNeonEvm: DEFAULT_FEATURE,
   currencyLinea: DEFAULT_FEATURE,
   currencyLineaTesnet: DEFAULT_FEATURE,
-  currencyTon: { enabled: true },
+  currencyTon: DEFAULT_FEATURE,
 };
 
 /**
