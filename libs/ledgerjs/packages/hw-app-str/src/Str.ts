@@ -35,7 +35,7 @@ const INS_GET_PK = 0x02;
 const INS_SIGN_TX = 0x04;
 const INS_GET_CONF = 0x06;
 const INS_SIGN_HASH = 0x08;
-const INS_SIGN_SOROBAN_AUTHORATION = 0x0a;
+const INS_SIGN_SOROBAN_AUTHORIZATION = 0x0a;
 
 const APDU_MAX_PAYLOAD = 255;
 
@@ -153,7 +153,7 @@ export default class Str {
   }> {
     const pathBuffer = pathToBuffer(path);
     const payload = Buffer.concat([pathBuffer, hashIdPreimage]);
-    const resp = await this.sendToDevice(INS_SIGN_SOROBAN_AUTHORATION, payload);
+    const resp = await this.sendToDevice(INS_SIGN_SOROBAN_AUTHORIZATION, payload);
     return { signature: resp };
   }
 
