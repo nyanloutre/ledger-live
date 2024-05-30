@@ -6,7 +6,7 @@ import Str from "../src/Str";
 import { StellarHashSigningNotEnabledError, StellarDataParsingFailedError, StellarUserRefusedError, StellarDataTooLargeError } from "../src/errors";
 import { TransportStatusError } from "@ledgerhq/errors";
 
-test("getAppConfiguration (hash signing enabled)", async () => {
+test("getAppConfiguration (hash signing disabled)", async () => {
   const transport = await openTransportReplayer(
     RecordStore.fromString(`
     => e006000000
@@ -18,7 +18,7 @@ test("getAppConfiguration (hash signing enabled)", async () => {
   expect(result).toEqual({ hashSigningEnabled: false, maxDataSize: 1562, version: "5.4.1" });
 });
 
-test("getAppConfiguration (hash signing disabled)", async () => {
+test("getAppConfiguration (hash signing enabled)", async () => {
   const transport = await openTransportReplayer(
     RecordStore.fromString(`
     => e006000000
