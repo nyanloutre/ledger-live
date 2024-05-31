@@ -11,8 +11,19 @@ export default async (
   let i = 0;
   const format = r[i++];
 
+  //const LOG_TYPE = "hw";
+  const receivedAPDU = r.toString("hex");
+  /*const tracer = new LocalTracer(LOG_TYPE, {
+            id: 90000,
+            type: "debug",
+    origin: "hw:withDevice",
+          });
+          tracer.trace(`Received APDU: ${receivedAPDU}`);
+*/
   if (format !== 1) {
-    throw new GetAppAndVersionUnsupportedFormat("getAppAndVersion: format not supported");
+    throw new GetAppAndVersionUnsupportedFormat(
+      `getAppAndVersion: format not supported => received APDU: ${receivedAPDU}`,
+    );
   }
 
   const nameLength = r[i++];
