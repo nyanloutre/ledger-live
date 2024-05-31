@@ -8,7 +8,7 @@ import {
 
 import { decodeAccountId } from "../../../../account";
 import { fetchFullMempoolTxs, fetchNonce } from "../../bridge/utils/api";
-import { StacksNetwork, TransactionResponse } from "./api.types";
+import { MempoolTransaction, StacksNetwork, TransactionResponse } from "./api.types";
 import { getCryptoCurrencyById } from "../../../../currencies";
 import { encodeOperationId, encodeSubOperationId } from "../../../../operation";
 import { StacksOperation } from "../../types";
@@ -57,6 +57,66 @@ export const getAddress = (
   derivationPath: string;
 } => ({ address: account.freshAddress, derivationPath: account.freshAddressPath });
 
+const getMemo = (memoHex?: string) => {
+  if (memoHex?.substring(0, 2) === "0x") {
+    return Buffer.from(memoHex.substring(2), "hex").toString().replaceAll("\x00", "");
+  }
+
+  return "";
+};
+
+export const mapPendingTxToOps =
+  (accountID: string, address: string) =>
+  (tx: MempoolTransaction): StacksOperation[] => {
+    const { sender_address, receipt_time, fee_rate, tx_id, token_transfer, tx_status, nonce } = tx;
+    if (tx.tx_type !== "token_transfer" || tx_status !== "pending") {
+      return [];
+    }
+
+    const memo = getMemo(token_transfer.memo);
+    const feeToUse = new BigNumber(fee_rate || "0");
+
+    const date = new Date(receipt_time * 1000);
+
+    const operationCommons = {
+      hash: tx_id,
+      fee: feeToUse,
+      accountId: accountID,
+      senders: [sender_address],
+      recipients: [token_transfer.recipient_address],
+      transactionSequenceNumber: nonce,
+      value: new BigNumber(token_transfer.amount).plus(feeToUse),
+      date,
+      extra: {
+        memo,
+      },
+      blockHeight: null,
+      blockHash: null,
+    };
+
+    const isSending = address === sender_address;
+    const isReceiving = token_transfer.recipient_address === address;
+
+    const ops: StacksOperation[] = [];
+    if (isSending) {
+      const type: OperationType = "OUT";
+      ops.push({
+        ...operationCommons,
+        id: encodeOperationId(accountID, tx_id, type),
+        type,
+      });
+    } else if (isReceiving) {
+      const type: OperationType = "IN";
+      ops.push({
+        ...operationCommons,
+        id: encodeOperationId(accountID, tx_id, type),
+        type,
+      });
+    }
+
+    return ops;
+  };
+
 export const mapTxToOps =
   (accountID: string) =>
   (tx: TransactionResponse): StacksOperation[] => {
@@ -76,10 +136,7 @@ export const mapTxToOps =
       const recipients = allRecipients.length === 1 ? [allRecipients[0]] : [];
 
       const memoHex = tx.tx.token_transfer?.memo;
-      let memo: string = "";
-      if (memoHex?.substring(0, 2) === "0x") {
-        memo = Buffer.from(memoHex.substring(2), "hex").toString().replaceAll("\x00", "");
-      }
+      const memo: string = getMemo(memoHex);
 
       const ops: StacksOperation[] = [];
 
