@@ -30,6 +30,7 @@ export default class SpeculosHttpTransport extends Transport {
   opts: SpeculosHttpTransportOpts;
   eventStream: any; // ReadStream?
   automationEvents: Subject<Record<string, any>> = new Subject();
+  abortController = new AbortController();
 
   constructor(instance: AxiosInstance, opts: SpeculosHttpTransportOpts) {
     super();
@@ -105,16 +106,22 @@ export default class SpeculosHttpTransport extends Transport {
   async exchange(apdu: Buffer): Promise<any> {
     const hex = apdu.toString("hex");
     log("apdu", "=> " + hex);
-    return this.instance.post("/apdu", { data: hex }).then(r => {
-      // r.data is {"data": "hex value of response"}
-      const data = r.data.data;
-      log("apdu", "<= " + data);
-      return Buffer.from(data, "hex");
-    });
+    return this.instance
+      .post("/apdu", {
+        signal: this.abortController.signal,
+        data: hex,
+      })
+      .then(r => {
+        // r.data is {"data": "hex value of response"}
+        const data = r.data.data;
+        log("apdu", "<= " + data);
+        return Buffer.from(data, "hex");
+      });
   }
 
   async close() {
     // close event stream
+    this.abortController.abort();
     this.eventStream.destroy();
     return Promise.resolve();
   }

@@ -23,6 +23,7 @@ export function getAppAndVersion(transport: Transport): Observable<GetAppAndVers
           let i = 0;
           const format = result[i++];
 
+<<<<<<< Updated upstream
           const LOG_TYPE = "hw";
           const receivedAPDU = result.toString("hex");
           const tracer = new LocalTracer(LOG_TYPE, {
@@ -31,6 +32,9 @@ export function getAppAndVersion(transport: Transport): Observable<GetAppAndVers
             origin: "hw:withDevice",
           });
           tracer.trace(`Received APDU: ${receivedAPDU}`);
+=======
+          const receivedAPDU = result.toString("hex");
+>>>>>>> Stashed changes
 
           if (format !== 1) {
             throw new GetAppAndVersionUnsupportedFormat(
