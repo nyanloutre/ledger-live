@@ -11,67 +11,75 @@ import { getAccountBalance } from "./api/network";
 import type { Account } from "@ledgerhq/types-live";
 
 const getAccountShape: GetAccountShape = async (info): Promise<Partial<Account>> => {
-  const { currency, derivationMode, address, initialAccount } = info;
+  try {
+    const { currency, derivationMode, address, initialAccount } = info;
 
-  invariant(address, "an hedera address is expected");
+    invariant(address, "an hedera address is expected");
 
-  const liveAccountId = encodeAccountId({
-    type: "js",
-    version: "2",
-    currencyId: currency.id,
-    xpubOrAddress: address,
-    derivationMode,
-  });
+    const liveAccountId = encodeAccountId({
+      type: "js",
+      version: "2",
+      currencyId: currency.id,
+      xpubOrAddress: address,
+      derivationMode,
+    });
 
-  // get current account balance
-  const accountBalance = await getAccountBalance(address);
+    // get current account balance
+    const accountBalance = await getAccountBalance(address);
 
-  // grab latest operation's consensus timestamp for incremental sync
-  const oldOperations = initialAccount?.operations ?? [];
-  const latestOperationTimestamp = oldOperations[0]
-    ? Math.floor(oldOperations[0].date.getTime() / 1000)
-    : 0;
+    // grab latest operation's consensus timestamp for incremental sync
+    const oldOperations = initialAccount?.operations ?? [];
+    const latestOperationTimestamp = oldOperations[0]
+      ? Math.floor(oldOperations[0].date.getTime() / 1000)
+      : 0;
 
-  // merge new operations w/ previously synced ones
-  const newOperations = await getOperationsForAccount(
-    liveAccountId,
-    address,
-    new BigNumber(latestOperationTimestamp).toString(),
-  );
-  const operations = mergeOps(oldOperations, newOperations);
+    // merge new operations w/ previously synced ones
+    const newOperations = await getOperationsForAccount(
+      liveAccountId,
+      address,
+      new BigNumber(latestOperationTimestamp).toString(),
+    );
+    const operations = mergeOps(oldOperations, newOperations);
 
-  return {
-    id: liveAccountId,
-    freshAddress: address,
-    balance: accountBalance.balance,
-    spendableBalance: accountBalance.balance,
-    operations,
-    // NOTE: there are no "blocks" in hedera
-    // Set a value just so that operations are considered confirmed according to isConfirmedOperation
-    blockHeight: 10,
-  };
+    return {
+      id: liveAccountId,
+      freshAddress: address,
+      balance: accountBalance.balance,
+      spendableBalance: accountBalance.balance,
+      operations,
+      // NOTE: there are no "blocks" in hedera
+      // Set a value just so that operations are considered confirmed according to isConfirmedOperation
+      blockHeight: 10,
+    };
+  } catch (err) {
+    throw new Error(`Failed to get account shape: ${err}`);
+  }
 };
 
 const buildIterateResult: IterateResultBuilder = async ({ result: rootResult }) => {
-  const accounts = await getAccountsForPublicKey(rootResult.publicKey);
-  const addresses = accounts.map(a => a.accountId.toString());
+  try {
+    const accounts = await getAccountsForPublicKey(rootResult.publicKey);
+    const addresses = accounts.map(a => a.accountId.toString());
 
-  return async ({ currency, derivationMode, index }) => {
-    const derivationScheme = getDerivationScheme({
-      derivationMode,
-      currency,
-    });
-    const freshAddressPath = runDerivationScheme(derivationScheme, currency, {
-      account: index,
-    });
-    return addresses[index]
-      ? ({
-          address: addresses[index],
-          publicKey: addresses[index],
-          path: freshAddressPath,
-        } as Result)
-      : null;
-  };
+    return async ({ currency, derivationMode, index }) => {
+      const derivationScheme = getDerivationScheme({
+        derivationMode,
+        currency,
+      });
+      const freshAddressPath = runDerivationScheme(derivationScheme, currency, {
+        account: index,
+      });
+      return addresses[index]
+        ? ({
+            address: addresses[index],
+            publicKey: addresses[index],
+            path: freshAddressPath,
+          } as Result)
+        : null;
+    };
+  } catch (err) {
+    throw new Error(`Failed to build iterate result: ${err}`);
+  }
 };
 
 export const scanAccounts = makeScanAccounts({
