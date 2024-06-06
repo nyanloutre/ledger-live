@@ -49,7 +49,7 @@ const Wrapper = styled(Box).attrs({
   p: 20,
   mt: 12,
 })`
-  row-gap: 2rem;
+  row-gap: 18px;
   max-width: 37rem;
 `;
 
