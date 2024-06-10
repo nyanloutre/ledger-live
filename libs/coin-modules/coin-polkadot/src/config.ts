@@ -7,6 +7,9 @@ type PolkadotConfig = {
   metadataShortener: {
     url: string;
   };
+  getMetadataHash: {
+    url: string;
+  };
 };
 
 export type PolkadotCoinConfig = CurrencyConfig & PolkadotConfig;

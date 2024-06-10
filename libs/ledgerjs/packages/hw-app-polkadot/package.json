@@ -29,7 +29,8 @@
   "dependencies": {
     "@ledgerhq/errors": "workspace:^",
     "@ledgerhq/hw-transport": "workspace:^",
-    "bip32-path": "^0.4.2"
+    "bip32-path": "^0.4.2",
+    "@zondax/ledger-substrate": "^0.44.2"
   },
   "devDependencies": {
     "@ledgerhq/hw-transport-mocker": "workspace:^",

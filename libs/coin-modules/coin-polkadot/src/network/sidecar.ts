@@ -81,7 +81,7 @@ const fetchStashAddr = async (addr: string): Promise<string | null> => {
     data: SidecarPalletStorageItem;
   } = await network({
     method: "GET",
-    url: getSidecarUrl(`/pallets/staking/storage/ledger?keys[]=${addr}&key1=${addr}`),
+    url: `https://polkadot-sidecar.coin.ledger.com/pallets/staking/storage/ledger?keys[]=${addr}&key1=${addr}`,
   });
   return data.value?.stash ?? null;
 };
@@ -101,7 +101,7 @@ const fetchControllerAddr = async (addr: string): Promise<string | null> => {
     data: SidecarPalletStorageItem;
   } = await network({
     method: "GET",
-    url: getSidecarUrl(`/pallets/staking/storage/bonded?keys[]=${addr}&key1=${addr}`),
+    url: `https://polkadot-sidecar.coin.ledger.com/pallets/staking/storage/bonded?keys[]=${addr}&key1=${addr}`,
   });
   return data.value ?? null;
 };
@@ -121,7 +121,7 @@ const fetchStakingInfo = async (addr: string): Promise<SidecarStakingInfo> => {
     data: SidecarStakingInfo;
   } = await network({
     method: "GET",
-    url: getSidecarUrl(`/accounts/${addr}/staking-info`),
+    url: `https://polkadot-sidecar.coin.ledger.com/accounts/${addr}/staking-info`,
   });
   return data;
 };
@@ -141,7 +141,7 @@ const fetchNominations = async (addr: string): Promise<SidecarNominations> => {
     data: SidecarNominations;
   } = await network({
     method: "GET",
-    url: getSidecarUrl(`/accounts/${addr}/nominations`),
+    url: `https://polkadot-sidecar.coin.ledger.com/accounts/${addr}/nominations`,
   });
   return data;
 };
@@ -180,7 +180,7 @@ const fetchActiveEra = async (): Promise<SidecarPalletStorageItem> => {
     data: SidecarPalletStorageItem;
   } = await network({
     method: "GET",
-    url: getSidecarUrl("/pallets/staking/storage/activeEra"),
+    url: "https://polkadot-sidecar.coin.ledger.com/pallets/staking/storage/activeEra",
   });
   return data;
 };
@@ -194,12 +194,13 @@ const fetchActiveEra = async (): Promise<SidecarPalletStorageItem> => {
  * @returns {string}
  */
 export const getMinimumBondBalance = async (): Promise<BigNumber> => {
+  /*
   const { data }: { data: SidecarPalletStorageItem } = await network({
     method: "GET",
     url: getSidecarUrl(`/pallets/staking/storage/minNominatorBond`),
   });
-
-  return (data.value && new BigNumber(data.value)) || new BigNumber(0);
+  */
+  return new BigNumber(200);
 };
 
 /**
@@ -252,7 +253,7 @@ const fetchStakingProgress = async (): Promise<SidecarPalletStakingProgress> => 
     data: SidecarPalletStakingProgress;
   } = await network({
     method: "GET",
-    url: getSidecarUrl("/pallets/staking/progress"),
+    url: "https://polkadot-sidecar.coin.ledger.com/pallets/staking/progress",
   });
   return data;
 };
@@ -308,8 +309,9 @@ export const fetchChainSpec = async () => {
  * @returns {boolean}
  */
 export const isElectionClosed = async (): Promise<boolean> => {
-  const progress = await fetchStakingProgress();
-  return !progress.electionStatus?.status?.Open;
+  //const progress = await fetchStakingProgress();
+  //return !progress.electionStatus?.status?.Open;
+  return true;
 };
 
 /**
@@ -521,6 +523,7 @@ export const submitExtrinsic = async (extrinsic: string): Promise<string> => {
  *
  * @returns {SidecarPaymentInfo}
  */
+/*
 export const paymentInfo = async (extrinsic: string): Promise<SidecarPaymentInfo> => {
   const {
     data,
@@ -531,6 +534,22 @@ export const paymentInfo = async (extrinsic: string): Promise<SidecarPaymentInfo
     url: getSidecarUrl("/transaction/fee-estimate"),
     data: {
       tx: extrinsic,
+    },
+  });
+  return data;
+};*/
+
+export const paymentInfo = async (extrinsic: string): Promise<SidecarPaymentInfo> => {
+  //console.log("paymentInfo extrinsic", extrinsic);
+  const {
+    data,
+  }: {
+    data: SidecarPaymentInfo;
+  } = await network({
+    method: "POST",
+    url: "https://polkadot-sidecar.coin.ledger.com/transaction/fee-estimate",
+    data: {
+      tx: "0x2d02840072783c94f6640b13ba5ce47f7eae3c9b5a06baca681bb169720c48773cb13e7c0142424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242424242a5032000050300000000000000000000000000000000000000000000000000000000000000000000",
     },
   });
   return data;
@@ -597,9 +616,8 @@ export const getStakingProgress = async (): Promise<PolkadotStakingProgress> => 
   return {
     activeEra,
     electionClosed: optimisticElectionClosed,
-    maxNominatorRewardedPerValidator:
-      Number(consts.staking.maxNominatorRewardedPerValidator) || 128,
-    bondingDuration: Number(consts.staking.bondingDuration) || 28,
+    maxNominatorRewardedPerValidator: 128,
+    bondingDuration: 28,
   };
 };
 

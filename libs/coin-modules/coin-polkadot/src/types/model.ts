@@ -34,6 +34,8 @@ export type CoreTransasctionInfo = {
   genesisHash: string;
   method: `0x${string}`;
   nonce: `0x${string}`;
+  metadataHash: string;
+  mode: number;
   signedExtensions: string[];
   specVersion: `0x${string}`;
   tip: `0x${string}`;

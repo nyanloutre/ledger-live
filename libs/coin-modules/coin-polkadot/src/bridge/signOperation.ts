@@ -1,6 +1,7 @@
 import { BigNumber } from "bignumber.js";
 import { Observable } from "rxjs";
 import { FeeNotLoaded } from "@ledgerhq/errors";
+//import { ApiPromise, WsProvider } from '@polkadot/api';
 import type {
   PolkadotAccount,
   PolkadotOperation,
@@ -149,6 +150,9 @@ const buildSignOperation =
           transactionToSign,
           true,
         );
+        const metadataHash = await polkadotAPI.getMetadataHash();
+        console.log("metadataHash", metadataHash);
+
         const payload = registry
           .createType("ExtrinsicPayload", unsigned, {
             version: unsigned.version,
@@ -156,17 +160,72 @@ const buildSignOperation =
           .toU8a({
             method: true,
           });
+
         const payloadString = Buffer.from(payload).toString("hex");
         const metadata = await polkadotAPI.shortenMetadata(payloadString);
+        console.log("metadata", metadata);
+        //const payloadBuffer = Buffer.from(payloadString, "hex");
         const r = await signerContext(deviceId, signer =>
-          // FIXME: the type of payload Uint8Array is not compatible with the signature of sign which accept a string
           signer.sign(account.freshAddressPath, payload, metadata),
         );
+        console.log("r", r);
+        //r.signature
+        console.log("r signature", r.signature);
+        let lll = r.signature ?? "";
+        //lll = lll.substring(0, lll.length - 2);
+        const signed = await signExtrinsic(unsigned, lll, registry);
 
-        const signed = await signExtrinsic(unsigned, r.signature, registry);
         o.next({
           type: "device-signature-granted",
         });
+        console.log("unsigned", unsigned);
+        console.log("signed", signed);
+
+        /*
+        const wsProvider = new WsProvider("wss://rococo-rpc.polkadot.io");
+        const api = await ApiPromise.create({ provider: wsProvider });
+
+        const transfer = api.tx.balances.transferKeepAlive("5Eeo2upzLarLcVbx7L6MwggAxUGfaaPXvVxfy84JDdM9Vthw", 1000000000000);
+        //const { nonce } = await api.query.system.account();*/
+        /*
+        const accountInfo = await api.query.system.account(
+          "5DMzTbkrvkhNRg5x8L73kzVh5C9WRG9ukrJNXssJ1kMZp8XV",
+        );*/
+        //const nonce = accountInfo.nonce;
+        // 获取所需参数
+        /*
+        const signedBlock = await api.rpc.chain.getBlock();
+        const blockHash = signedBlock.block.header.hash;
+        const genesisHash = api.genesisHash;
+        const runtimeVersion = await api.rpc.state.getRuntimeVersion();
+        
+        //console.log("nonce", nonce);
+        console.log("signedBlock", signedBlock);
+        console.log("blockHash", blockHash);
+        console.log("genesisHash", genesisHash);
+        console.log("runtimeVersion", runtimeVersion);
+        
+        const payload1 = api.createType('ExtrinsicPayload', {
+            method: transfer.method,
+            era: api.createType('ExtrinsicEra', { current: signedBlock.block.header.number.toNumber(), period: 64 }),
+            nonce: 0,
+            genesisHash,
+            blockHash,
+            specVersion: runtimeVersion.specVersion,
+            transactionVersion: runtimeVersion.transactionVersion,
+        });
+        console.log("compare payload", payload1);
+        const signature = lll;
+        console.log("new signature", signature);
+        // 添加签名
+        transfer.addSignature(
+          "5DMzTbkrvkhNRg5x8L73kzVh5C9WRG9ukrJNXssJ1kMZp8XV",
+          `0x${signature}`,
+          payload1.toU8a(true),
+        );
+        const finalsigned = transfer.toHex();
+        console.log("finalsigned", finalsigned);
+        */
         const operation = buildOptimisticOperation(
           account as PolkadotAccount,
           transactionToSign,

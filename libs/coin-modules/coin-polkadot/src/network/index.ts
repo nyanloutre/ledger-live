@@ -70,12 +70,12 @@ const isElectionClosed = makeLRUCache(sidecarIsElectionClosed, () => "", minutes
 const isNewAccount = makeLRUCache(sidecarIsNewAccount, address => address, minutes(1));
 
 const shortenMetadata = async (transaction: string): Promise<string> => {
-  const res: any = await network({
+  const res = await network({
     method: "POST",
     url: getCoinConfig().metadataShortener.url,
     data: {
       chain: {
-        id: "dot",
+        id: "roc",
       },
       txBlob: transaction,
     },
@@ -84,9 +84,22 @@ const shortenMetadata = async (transaction: string): Promise<string> => {
   return res.data.txMetadata;
 };
 
+const getMetadataHash = async (): Promise<string> => {
+  const res = await network({
+    method: "POST",
+    url: getCoinConfig().getMetadataHash.url,
+    data: {
+      id: "roc",
+    },
+  });
+
+  return res.data.metadataHash;
+};
+
 export default {
   getAccount: async (address: string): Promise<PolkadotAPIAccount> => sidecardGetAccount(address),
   getOperations: bisonGetOperations,
+  getMetadataHash,
   getMinimumBondBalance,
   getRegistry,
   getStakingProgress: sidecarGetStakingProgress,

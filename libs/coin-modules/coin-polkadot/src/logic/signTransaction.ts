@@ -1,6 +1,7 @@
 import { TypeRegistry } from "@polkadot/types";
 import { u8aConcat } from "@polkadot/util";
 import { CoreTransasctionInfo } from "../types";
+//import { ApiPromise, WsProvider } from "@polkadot/api";
 
 /**
  * Serialize a signed transaction in a format that can be submitted over the
@@ -16,10 +17,21 @@ export const signExtrinsic = async (
   signature: any,
   registry: TypeRegistry,
 ): Promise<string> => {
+  //const metadata = registry.setMetadata(
+
+  //console.log("local metadata", JSON.stringify(registry.metadata, null, 2));
+  console.log("unsigned llllll: ", unsigned);
   const extrinsic = registry.createType("Extrinsic", unsigned, {
     version: unsigned.version,
   });
-  extrinsic.addSignature(unsigned.address, signature, unsigned);
+  console.log("human", extrinsic.toHuman());
+  console.log("signature llllll: ", signature);
+  const signedBuffer = Buffer.from(signature, "hex");
+  extrinsic.addSignature(unsigned.address, signedBuffer, unsigned);
+  console.log("bufferlength", signedBuffer.length);
+  console.log("human", extrinsic.toHuman());
+  console.log("signedTx to broadcast[human] " + JSON.stringify(extrinsic.toHuman(true)));
+  console.log("signedTx toJson", JSON.stringify(extrinsic.toJSON()));
   return extrinsic.toHex();
 };
 

@@ -114,7 +114,8 @@ const envDefinitions = {
   },
   API_POLKADOT_SIDECAR: {
     parser: stringParser,
-    def: "https://polkadot-sidecar.coin.ledger.com",
+    def: "http://127.0.0.1:8082",
+    //def: "https://polkadot-sidecar.coin.ledger.com",
     desc: "Polkadot Sidecar API url",
   },
   ELROND_API_ENDPOINT: {

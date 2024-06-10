@@ -4,6 +4,7 @@ import type { CoreTransaction, PalletMethod, PolkadotOperationMode } from "../ty
 import { loadPolkadotCrypto } from "./polkadot-crypto";
 import polkadotAPI from "../network";
 import { getAbandonSeedAddress } from "@ledgerhq/cryptoassets/index";
+import { hexToU8a } from "@polkadot/util";
 
 const EXTRINSIC_VERSION = 4;
 // Default values for tx parameters, if the user doesn't specify any
@@ -176,15 +177,18 @@ export async function craftTransaction(
   const extrinsicParams = getExtrinsicParams(extractExtrinsicArg);
 
   const blockNumber = registry.createType("BlockNumber", info.blockNumber).toHex();
+  /*
   const era = registry
     .createType("ExtrinsicEra", {
       current: info.blockNumber,
       period: DEFAULTS.eraPeriod,
     })
-    .toHex();
+    .toHex();*/
+  const era = registry.createType("ExtrinsicEra", "0x00").toHex();
   const nonce = registry.createType("Compact<Index>", nonceToUse).toHex();
   const specVersion = registry.createType("u32", info.specVersion).toHex();
   const tip = registry.createType("Compact<Balance>", DEFAULTS.tip).toHex();
+
   const transactionVersion = registry.createType("u32", info.transactionVersion).toHex();
   const methodFunction = extrinsics[extrinsicParams.pallet][extrinsicParams.name];
   const methodArgs = methodFunction.meta.args;
@@ -202,11 +206,16 @@ export async function craftTransaction(
       return param;
     }),
   ).toHex();
-
+  /*
+  const metadataHash = hexToU8a(
+    "01" + "0xb6648e3f302d557ff1ee5e6d2462f2c668b1c4ac92db6a05c6ab857372c10a13",
+  );*/
+  const metadataHash = "0xb6648e3f302d557ff1ee5e6d2462f2c668b1c4ac92db6a05c6ab857372c10a13";
   const { blockHash, genesisHash } = info;
   const unsigned = {
     address,
     blockHash,
+    metadataHash,
     blockNumber,
     era,
     genesisHash,
@@ -217,6 +226,7 @@ export async function craftTransaction(
     tip,
     transactionVersion,
     version: EXTRINSIC_VERSION,
+    mode: 1,
   };
 
   return {

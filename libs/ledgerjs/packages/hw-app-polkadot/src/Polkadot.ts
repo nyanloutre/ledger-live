@@ -17,8 +17,11 @@
 import type Transport from "@ledgerhq/hw-transport";
 import BIPPath from "bip32-path";
 import { UserRefusedOnDevice, UserRefusedAddress, TransportError } from "@ledgerhq/errors";
+import { PolkadotGenericApp } from "@zondax/ledger-substrate";
+
+
 const CHUNK_SIZE = 250;
-const CLA = 0x90;
+const CLA = 0xf9;
 const INS = {
   GET_VERSION: 0x00,
   GET_ADDR_ED25519: 0x01,
@@ -123,21 +126,16 @@ export default class Polkadot {
     signature: null | string;
     return_code: number;
   }> {
+    /*
     const bipPath = BIPPath.fromString(path).toPathArray();
     const serializedPath = this.serializePath(bipPath);
     const chunks: Buffer[] = [];
     let buffer = Buffer.from(message);
-    const appMajorVersion = await this.getMajorAppVersion();
-    if (appMajorVersion >= 26) {
-      // metadata is required for app version >= 26 (new polkadot generic nano app)
-      const blobLen = Buffer.alloc(2);
-      blobLen.writeUInt16LE(buffer.length);
-      chunks.push(Buffer.concat([serializedPath, blobLen]));
-      const metadataBuffer = Buffer.from(metadata.slice(2), "hex"); // remove 0x prefix
-      buffer = Buffer.concat([buffer, metadataBuffer]);
-    } else {
-      chunks.push(serializedPath);
-    }
+    const blobLen = Buffer.alloc(2);
+    blobLen.writeUInt16LE(buffer.length);
+    chunks.push(Buffer.concat([serializedPath, blobLen]));
+    const metadataBuffer = Buffer.from(metadata.slice(2), "hex"); // remove 0x prefix
+    buffer = Buffer.concat([buffer, metadataBuffer]);
 
     for (let i = 0; i < buffer.length; i += CHUNK_SIZE) {
       let end = i + CHUNK_SIZE;
@@ -150,7 +148,7 @@ export default class Polkadot {
     }
 
     let response: any = {};
-    return this.foreach(chunks, (data, j) =>
+    const res = await this.foreach(chunks, (data, j) =>
       this.transport
         .send(
           CLA,
@@ -181,6 +179,9 @@ export default class Polkadot {
 
       if (response.length > 2) {
         signature = response.slice(0, response.length - 2);
+        console.log("signaturelll", response.toString("hex"));
+        console.log("signatureaaa", response.toString("ascii"));
+        console.log("signaturexxx", signature);
       }
 
       return {
@@ -188,11 +189,18 @@ export default class Polkadot {
         return_code: returnCode,
       };
     });
-  }
-
-  private async getMajorAppVersion(): Promise<number> {
-    const response = await this.transport.send(CLA, INS.GET_VERSION, 0, 0);
-    const majorVersion = response[1] * 256 + response[2];
-    return majorVersion;
+    console.log("res", res);
+    */
+    const app = new PolkadotGenericApp(this.transport);
+    const signatureRequest = await app.signWithMetadata(
+      "m/" + path,
+      Buffer.from(message),
+      Buffer.from(metadata.slice(2), "hex"),
+    );
+    return {
+      signature: signatureRequest.signature.toString("hex"),
+      return_code: SW_OK,
+    };
+    //return res;
   }
 }
