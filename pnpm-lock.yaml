@@ -1936,8 +1936,8 @@ importers:
         specifier: ^1.0.3
         version: 1.0.4
       '@stricahq/typhonjs':
-        specifier: ^1.2.6
-        version: 1.2.8
+        specifier: ^2.0.0
+        version: 2.0.0
       bech32:
         specifier: ^1.1.3
         version: 1.1.4
@@ -3035,8 +3035,8 @@ importers:
         specifier: ^11.3.0
         version: 11.3.0
       '@stricahq/typhonjs':
-        specifier: ^1.2.6
-        version: 1.2.8
+        specifier: ^2.0.0
+        version: 2.0.0
       '@taquito/ledger-signer':
         specifier: ^20.0.0
         version: 20.0.0
@@ -12433,15 +12433,9 @@ packages:
       metro: '*'
       metro-core: '*'
     peerDependenciesMeta:
-      '@expo/metro-config':
-        optional: true
-      glob:
-        optional: true
       metro:
         optional: true
       metro-core:
-        optional: true
-      minimatch:
         optional: true
     dependencies:
       '@babel/runtime': 7.24.1
@@ -17689,9 +17683,6 @@ packages:
 
   /@react-native-community/cli-tools@12.3.6:
     resolution: {integrity: sha512-FPEvZn19UTMMXUp/piwKZSh8cMEfO8G3KDtOwo53O347GTcwNrKjgZGtLSPELBX2gr+YlzEft3CoRv2Qmo83fQ==}
-    peerDependenciesMeta:
-      find-up:
-        optional: true
     dependencies:
       appdirsjs: 1.2.7
       chalk: 4.1.2
@@ -22826,8 +22817,8 @@ packages:
       buffer: 6.0.3
     dev: false
 
-  /@stricahq/typhonjs@1.2.8:
-    resolution: {integrity: sha512-JPr5N8KZ/ipTPemhqieFgmibnnXT/E+EtrROCJ78IvBwZx1FpAxpLRMA7vf142IfXz9ZYREc1l9KQzKq2xaAbw==}
+  /@stricahq/typhonjs@2.0.0:
+    resolution: {integrity: sha512-4EdoVAht+hKDaBT1m0qCBQsi5unP9ghM4eUUKGcQcQQiEUZGsP8CgxcGuQbsXL1/LU5wNKoBnxWXUiylZD9uRQ==}
     dependencies:
       '@stricahq/cbors': 1.0.2
       bech32: 2.0.0
@@ -25731,9 +25722,6 @@ packages:
 
   /ajv-formats@2.1.1:
     resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
-    peerDependenciesMeta:
-      ajv:
-        optional: true
     dependencies:
       ajv: 8.11.2
 
@@ -32712,7 +32700,6 @@ packages:
       is-hex-prefixed: 1.0.0
       strip-hex-prefix: 1.0.0
     dev: false
-    bundledDependencies: false
 
   /ev-emitter@1.1.1:
     resolution: {integrity: sha512-ipiDYhdQSCZ4hSbX4rMW+XzNKMD1prg/sTvoVmSLkuQ1MVlwjJQQA+sW8tMYR3BLUr9KjodFV4pvzunvRhd33Q==}
@@ -32949,8 +32936,6 @@ packages:
     peerDependenciesMeta:
       expo-constants:
         optional: true
-      expo-file-system:
-        optional: true
       expo-modules-core:
         optional: true
       react:
@@ -32982,8 +32967,6 @@ packages:
     peerDependenciesMeta:
       expo-constants:
         optional: true
-      expo-file-system:
-        optional: true
       expo-modules-core:
         optional: true
       react:
@@ -33013,8 +32996,6 @@ packages:
       react: '*'
       react-native: '*'
     peerDependenciesMeta:
-      expo-constants:
-        optional: true
       expo-file-system:
         optional: true
       expo-modules-core:
@@ -33590,8 +33571,6 @@ packages:
       react: '*'
       react-native: '*'
     peerDependenciesMeta:
-      expo-modules-autolinking:
-        optional: true
       expo-modules-core:
         optional: true
       react:
@@ -41744,9 +41723,6 @@ packages:
   /metro-transform-worker@0.80.8:
     resolution: {integrity: sha512-+4FG3TQk3BTbNqGkFb2uCaxYTfsbuFOCKMMURbwu0ehCP8ZJuTUramkaNZoATS49NSAkRgUltgmBa4YaKZ5mqw==}
     engines: {node: '>=18'}
-    peerDependenciesMeta:
-      metro-minify-terser:
-        optional: true
     dependencies:
       '@babel/core': 7.24.3
       '@babel/generator': 7.24.1
