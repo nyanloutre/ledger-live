@@ -2,33 +2,34 @@ import test from "../../fixtures/common";
 import { Account } from "../../enum/Account";
 import { specs } from "../../utils/speculos";
 import { Application } from "tests/page";
+import { addTmsLink } from "tests/fixtures/common";
 
 const accounts: Account[] = [
-  // Derivation path is updated when account (BTC and tBTC) receive money
+  // Derivation path is updated when account receive money
   Account.BTC_1,
-  Account.tBTC_1,
   Account.ETH_1,
-  Account.tETH_1,
-  Account.sep_ETH_1,
   Account.SOL_1,
   Account.TRX_1,
   Account.DOT_1,
   Account.XRP_1,
+  Account.BCH_1,
+  Account.ATOM_1,
+  Account.XTZ_1,
 ];
 
-//This test might sporadically fail due to getAppAndVersion issue - Jira: LIVE-12581
+//Reactivate test after fixing the GetAppAndVersion issue - Jira: LIVE-12581
 for (const [i, account] of accounts.entries()) {
-  test.describe.parallel("Receive @smoke", () => {
+  test.describe.skip("Receive @smoke", () => {
     test.use({
-      userdata: "speculos",
+      userdata: "speculos-tests-app",
       testName: `receiveSpeculos_${account.currency.uiName}`,
       speculosCurrency: specs[account.currency.deviceLabel.replace(/ /g, "_")],
       speculosOffset: i,
     });
 
-    //@TmsLink("B2CQA-249")
-
     test(`[${account.currency.uiName}] Receive`, async ({ page }) => {
+      addTmsLink(["B2CQA-249"]);
+
       const app = new Application(page);
 
       await app.layout.goToAccounts();

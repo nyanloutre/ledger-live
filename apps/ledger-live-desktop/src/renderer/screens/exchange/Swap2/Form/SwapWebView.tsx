@@ -24,10 +24,7 @@ import {
 import { useRedirectToSwapHistory } from "../utils/index";
 
 import { SwapLiveError } from "@ledgerhq/live-common/exchange/swap/types";
-import { useFeature } from "@ledgerhq/live-common/featureFlags/index";
 import { LiveAppManifest } from "@ledgerhq/live-common/platform/types";
-import { Box, Button } from "@ledgerhq/react-ui";
-import { t } from "i18next";
 import { usePTXCustomHandlers } from "~/renderer/components/WebPTXPlayer/CustomHandlers";
 import { captureException } from "~/sentry/internal";
 
@@ -67,24 +64,12 @@ export type SwapWebProps = {
   liveAppUnavailable(): void;
   sourceCurrencyId?: string;
   targetCurrencyId?: string;
+  isMaxEnabled?: boolean;
 };
 
 export const SwapWebManifestIDs = {
   Demo0: "swap-live-app-demo-0",
   Demo1: "swap-live-app-demo-1",
-};
-
-export const useSwapLiveAppManifestID = () => {
-  const demo0 = useFeature("ptxSwapLiveAppDemoZero");
-  const demo1 = useFeature("ptxSwapLiveAppDemoOne");
-  switch (true) {
-    case demo1?.enabled:
-      return demo1?.params?.manifest_id ?? SwapWebManifestIDs.Demo1;
-    case demo0?.enabled:
-      return demo0?.params?.manifest_id ?? SwapWebManifestIDs.Demo0;
-    default:
-      return null;
-  }
 };
 
 const SwapWebAppWrapper = styled.div`
@@ -98,6 +83,7 @@ const SwapWebView = ({
   liveAppUnavailable,
   sourceCurrencyId,
   targetCurrencyId,
+  isMaxEnabled,
 }: SwapWebProps) => {
   const {
     colors: {
@@ -116,7 +102,7 @@ const SwapWebView = ({
   const hasSwapState = !!swapState;
   const customPTXHandlers = usePTXCustomHandlers(manifest);
 
-  const { fromCurrency, addressFrom, toCurrency, addressTo } = useMemo(() => {
+  const { fromCurrency, addressFrom, addressTo } = useMemo(() => {
     const [, , fromCurrency, addressFrom] =
       getAccountIdFromWalletAccountId(swapState?.fromAccountId || "")?.split(":") || [];
 
@@ -207,14 +193,17 @@ const SwapWebView = ({
     const searchParams = new URLSearchParams();
 
     const swapParams = {
-      provider: swapState?.provider,
-      from: sourceCurrencyId,
-      to: targetCurrencyId,
-      amountFrom: swapState?.fromAmount,
       addressFrom: addressFrom,
       addressTo: addressTo,
+      amountFrom: swapState?.fromAmount,
+      from: sourceCurrencyId,
+      hasError: swapState?.error ? "true" : undefined, // append param only if error is true
+      isMaxEnabled: isMaxEnabled,
+      loading: swapState?.loading,
       networkFees: swapState?.estimatedFees,
       networkFeesCurrency: fromCurrency,
+      provider: swapState?.provider,
+      to: targetCurrencyId,
     };
 
     Object.entries(swapParams).forEach(([key, value]) => {
@@ -226,14 +215,17 @@ const SwapWebView = ({
 
     return searchParams.toString();
   }, [
+    swapState?.fromAmount,
+    swapState?.loading,
+    swapState?.estimatedFees,
+    swapState?.provider,
+    swapState?.error,
     addressFrom,
     addressTo,
-    fromCurrency,
-    swapState?.estimatedFees,
-    swapState?.fromAmount,
-    swapState?.provider,
-    targetCurrencyId,
     sourceCurrencyId,
+    isMaxEnabled,
+    fromCurrency,
+    targetCurrencyId,
   ]);
 
   // return loader???
@@ -259,22 +251,6 @@ const SwapWebView = ({
     }
   };
 
-  // Keep the previous UI
-  // Display only the disabled swap button
-  if (
-    swapState.error ||
-    swapState.fromAmount === "0" ||
-    !(fromCurrency && addressFrom && toCurrency && addressTo)
-  ) {
-    return (
-      <Box width="100%">
-        <Button width="100%" disabled>
-          {t("sidebar.swap")}
-        </Button>
-      </Box>
-    );
-  }
-
   return (
     <>
       {enablePlatformDevTools && (
@@ -296,6 +272,7 @@ const SwapWebView = ({
           onStateChange={onStateChange}
           ref={webviewAPIRef}
           customHandlers={customHandlers as never}
+          hideLoader
         />
       </SwapWebAppWrapper>
     </>

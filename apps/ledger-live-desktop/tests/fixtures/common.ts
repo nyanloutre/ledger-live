@@ -15,6 +15,8 @@ import { getEnv, setEnv } from "@ledgerhq/live-env";
 import { startSpeculos, stopSpeculos } from "../utils/speculos";
 import { Spec } from "../utils/speculos";
 
+import { allure } from "allure-playwright";
+
 export function generateUUID(): string {
   return crypto.randomBytes(16).toString("hex");
 }
@@ -191,25 +193,26 @@ export const test = base.extend<TestFixtures>({
     });
 
     // start recording all network responses in artifacts/networkResponse.log
-    page.on("response", async data => {
+    await page.route("**/*", async route => {
       const now = Date.now();
       const timestamp = new Date(now).toISOString();
 
-      const headers = await data.allHeaders();
+      const headers = route.request().headers();
 
       if (headers.teststatus && headers.teststatus === "mocked") {
         fs.appendFile(
           responseLogfilePath,
-          `[${timestamp}] MOCKED RESPONSE: ${data.request().url()}\n`,
+          `[${timestamp}] MOCKED RESPONSE: ${route.request().url()}\n`,
           appendFileErrorHandler,
         );
       } else {
         fs.appendFile(
           responseLogfilePath,
-          `[${timestamp}] REAL RESPONSE: ${data.request().url()}\n`,
+          `[${timestamp}] REAL RESPONSE: ${route.request().url()}\n`,
           appendFileErrorHandler,
         );
       }
+      await route.continue();
     });
 
     // app is loaded
@@ -238,5 +241,11 @@ export const test = base.extend<TestFixtures>({
     { auto: true },
   ],
 });
+
+export async function addTmsLink(ids: string[]) {
+  for (const id of ids) {
+    await allure.tms(id, `https://ledgerhq.atlassian.net/browse/${id}`);
+  }
+}
 
 export default test;
