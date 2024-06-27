@@ -8,8 +8,6 @@ import hedera from "../families/hedera/specs";
 import internet_computer from "../families/internet_computer/specs";
 import stacks from "../families/stacks/specs";
 import stellar from "../families/stellar/specs";
-import ton from "../families/ton/specs";
-import tron from "../families/tron/specs";
 import vechain from "../families/vechain/specs";
 import algorand from "@ledgerhq/coin-algorand/specs";
 import bitcoin from "@ledgerhq/coin-bitcoin/specs";
@@ -34,7 +32,6 @@ export default {
   internet_computer,
   stacks,
   stellar,
-  ton,
   vechain,
   algorand,
   bitcoin,

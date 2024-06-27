@@ -8,7 +8,6 @@ import hedera from "../../families/hedera/bridge/js";
 import internet_computer from "../../families/internet_computer/bridge/js";
 import stacks from "../../families/stacks/bridge/js";
 import stellar from "../../families/stellar/bridge/js";
-import tezos from "../../families/tezos/bridge/js";
 import vechain from "../../families/vechain/bridge/js";
 import { bridge as algorand } from "../../families/algorand/setup";
 import { bridge as bitcoin } from "../../families/bitcoin/setup";
@@ -33,7 +32,6 @@ export default {
   internet_computer,
   stacks,
   stellar,
-  tezos,
   vechain,
   algorand,
   bitcoin,
