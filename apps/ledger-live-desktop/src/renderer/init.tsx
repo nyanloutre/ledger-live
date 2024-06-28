@@ -241,6 +241,11 @@ async function init() {
       store.dispatch(resetDevices());
     },
   };
+  if (process.env.NODE_ENV === "development") {
+    const devTools = document.createElement("script");
+    devTools.src = "http://localhost:8097";
+    document.head.append(devTools);
+  }
 }
 function r(Comp: JSX.Element) {
   if (rootNode) {
