@@ -51,46 +51,52 @@ export const getAccountShape: GetAccountShape<Account> = async (info, { blacklis
   const shouldSyncFromScratch = syncHash !== initialAccount?.syncHash;
 
   const newTxs: TonTransactionsList = { transactions: [], address_book: {} };
-  const newJettonTxs: TonJettonTransfer[] = [];
+  // const newJettonTxs: TonJettonTransfer[] = [];
   const oldOps = (initialAccount?.operations ?? []) as TonOperation[];
   const { last_transaction_lt, balance } = await fetchAccountInfo(address);
   // if last_transaction_lt is empty, then there are no transactions in account (as well in token accounts)
   if (last_transaction_lt != null) {
     if (oldOps.length === 0 || shouldSyncFromScratch) {
-      const [tmpTxs, tmpJettonTxs] = await Promise.all([
+      const [
+        tmpTxs,
+        //tmpJettonTxs
+      ] = await Promise.all([
         getTransactions(address),
-        getJettonTransfers(address),
+        // getJettonTransfers(address),
       ]);
       newTxs.transactions.push(...tmpTxs.transactions);
       newTxs.address_book = { ...newTxs.address_book, ...tmpTxs.address_book };
-      newJettonTxs.push(...tmpJettonTxs);
+      // newJettonTxs.push(...tmpJettonTxs);
     } else {
       // if they are the same, we have no new ops (including tokens)
       if (oldOps[0].extra.lt !== last_transaction_lt) {
-        const [tmpTxs, tmpJettonTxs] = await Promise.all([
+        const [
+          tmpTxs,
+          // tmpJettonTxs
+        ] = await Promise.all([
           getTransactions(address, oldOps[0].extra.lt),
-          getJettonTransfers(address, oldOps[0].extra.lt),
+          //getJettonTransfers(address, oldOps[0].extra.lt),
         ]);
         newTxs.transactions.push(...tmpTxs.transactions);
         newTxs.address_book = { ...newTxs.address_book, ...tmpTxs.address_book };
-        newJettonTxs.push(...tmpJettonTxs);
+        //newJettonTxs.push(...tmpJettonTxs);
       }
     }
   }
 
   const newOps = flatMap(newTxs.transactions, mapTxToOps(accountId, address, newTxs.address_book));
-  const newJettonOps = flatMap(
+  /*const newJettonOps = flatMap(
     newJettonTxs,
     mapJettonTxToOps(accountId, address, newTxs.address_book),
-  );
+  );*/
   const operations = shouldSyncFromScratch ? newOps : mergeOps(oldOps, newOps);
-  const subAccounts = await getSubAccounts(
+  /*const subAccounts = await getSubAccounts(
     info,
     accountId,
     newJettonOps,
     blacklistedTokenIds,
     shouldSyncFromScratch,
-  );
+  );*/
 
   const toReturn = {
     id: accountId,
@@ -98,7 +104,7 @@ export const getAccountShape: GetAccountShape<Account> = async (info, { blacklis
     spendableBalance: new BigNumber(balance),
     operations,
     operationsCount: operations.length,
-    subAccounts,
+    //subAccounts,
     blockHeight,
     xpub: publicKey,
     lastSyncDate: new Date(),
