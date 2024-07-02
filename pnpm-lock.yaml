@@ -22754,7 +22754,7 @@ packages:
       react-docgen-typescript: 2.2.2(typescript@5.4.3)
       tslib: 2.6.2
       typescript: 5.4.3
-      webpack: 5.89.0(esbuild@0.19.12)
+      webpack: 5.89.0(metro@0.80.8)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -26999,7 +26999,7 @@ packages:
       '@babel/core': 7.24.3
       find-cache-dir: 4.0.0
       schema-utils: 4.2.0
-      webpack: 5.89.0(@swc/core@1.4.11)(esbuild@0.19.12)
+      webpack: 5.89.0(@swc/core@1.4.11)(metro@0.80.8)
     dev: true
 
   /babel-plugin-add-react-displayname@0.0.5:
@@ -33127,7 +33127,6 @@ packages:
       is-hex-prefixed: 1.0.0
       strip-hex-prefix: 1.0.0
     dev: false
-    bundledDependencies: false
 
   /ev-emitter@1.1.1:
     resolution: {integrity: sha512-ipiDYhdQSCZ4hSbX4rMW+XzNKMD1prg/sTvoVmSLkuQ1MVlwjJQQA+sW8tMYR3BLUr9KjodFV4pvzunvRhd33Q==}
@@ -34875,7 +34874,7 @@ packages:
       semver: 7.5.4
       tapable: 2.2.1
       typescript: 5.4.3
-      webpack: 5.89.0(@swc/core@1.4.11)(esbuild@0.19.12)
+      webpack: 5.89.0(@swc/core@1.4.11)(metro@0.80.8)
     dev: true
 
   /form-data@2.3.3:
@@ -43642,8 +43641,8 @@ packages:
     resolution: {integrity: sha512-u6fs2AEUljNho3EYTJNBfImO5QTo/J/1Etd+NVdCj7qWKUSN/bSLkZwhDv7I+w/MSC6qJ4cknepkAYykDdK8og==}
     hasBin: true
 
-  /node-hid@2.2.0:
-    resolution: {integrity: sha512-vj48zh9j555DZzUhMc8tk/qw6xPFrDyPBH1ST1Z/hWaA/juBJw7IuSxPeOgpzNFNU36mGYj+THioRMt1xOdm/g==}
+  /node-hid@2.1.2:
+    resolution: {integrity: sha512-qhCyQqrPpP93F/6Wc/xUR7L8mAJW0Z6R7HMQV8jCHHksAxNDe/4z4Un/H9CpLOT+5K39OPyt9tIQlavxWES3lg==}
     engines: {node: '>=10'}
     hasBin: true
     requiresBuild: true
@@ -50818,7 +50817,7 @@ packages:
     dependencies:
       '@swc/core': 1.4.11
       '@swc/counter': 0.1.3
-      webpack: 5.89.0(@swc/core@1.4.11)(esbuild@0.19.12)
+      webpack: 5.89.0(@swc/core@1.4.11)(metro@0.80.8)
     dev: true
 
   /swiper@7.4.1:
@@ -54367,7 +54366,7 @@ packages:
       mime-types: 2.1.35
       range-parser: 1.2.1
       schema-utils: 4.2.0
-      webpack: 5.89.0(@swc/core@1.4.11)(esbuild@0.19.12)
+      webpack: 5.89.0(@swc/core@1.4.11)(metro@0.80.8)
     dev: true
 
   /webpack-dev-server@4.15.2(webpack-cli@4.10.0)(webpack@5.91.0):
