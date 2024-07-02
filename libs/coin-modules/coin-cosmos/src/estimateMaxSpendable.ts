@@ -4,7 +4,7 @@ import type { CosmosAccount, Transaction } from "./types";
 import getTransactionStatus from "./getTransactionStatus";
 import { prepareTransaction } from "./prepareTransaction";
 import { createTransaction } from "./createTransaction";
-import { getMainAccount } from "../../account";
+import { getMainAccount } from "@ledgerhq/coin-framework/account/index";
 
 export const estimateMaxSpendable: AccountBridge<
   Transaction,

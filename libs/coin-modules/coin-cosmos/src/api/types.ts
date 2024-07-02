@@ -339,3 +339,10 @@ export type PostSimulate = {
     msg_responses: { "@type": string; value: string }[];
   };
 };
+
+export type GetValidatorItem = {
+  operator_address: any;
+  description: { moniker: any };
+  tokens: any;
+  commission: { commission_rates: { rate: any } };
+};

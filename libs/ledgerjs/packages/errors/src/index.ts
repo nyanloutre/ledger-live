@@ -18,7 +18,6 @@ export const BluetoothRequired = createCustomErrorClass("BluetoothRequired");
 export const BtcUnmatchedApp = createCustomErrorClass("BtcUnmatchedApp");
 export const CantOpenDevice = createCustomErrorClass("CantOpenDevice");
 export const CashAddrNotSupported = createCustomErrorClass("CashAddrNotSupported");
-export const ClaimRewardsFeesWarning = createCustomErrorClass("ClaimRewardsFeesWarning");
 export const CurrencyNotSupported = createCustomErrorClass<
   { currencyName: string },
   LedgerErrorConstructor<{ currencyName: string }>

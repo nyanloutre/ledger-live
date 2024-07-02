@@ -5,16 +5,17 @@ import {
   GetAccountShape,
   mergeOps,
   AccountShapeInfo,
-} from "../../bridge/jsHelpers";
-import { encodeAccountId } from "../../account";
+} from "@ledgerhq/coin-framework/bridge/jsHelpers";
+import { encodeAccountId } from "@ledgerhq/coin-framework/account";
 import { CosmosAPI } from "./api/Cosmos";
-import { encodeOperationId } from "../../operation";
+import { encodeOperationId } from "@ledgerhq/coin-framework/operation";
 import { CosmosAccount, CosmosOperation, CosmosTx } from "./types";
 import type { OperationType } from "@ledgerhq/types-live";
 import { getMainMessage } from "./helpers";
 import { parseAmountStringToNumber } from "./logic";
+import getAddressWrapper from "@ledgerhq/coin-framework/bridge/getAddressWrapper";
 
-export const getAccountShape: GetAccountShape<CosmosAccount> = async info => {
+export const getAccountShape: GetAccountShape<CosmosAccount> = async (info: any) => {
   const { address, currency, derivationMode, initialAccount } = info;
   const accountId = encodeAccountId({
     type: "js",
@@ -87,9 +88,6 @@ export const getAccountShape: GetAccountShape<CosmosAccount> = async info => {
   return { ...shape, operations };
 };
 
-export const scanAccounts = makeScanAccounts({ getAccountShape });
-export const sync = makeSync({ getAccountShape });
-
 const getBlankOperation = (tx: CosmosTx, fees: BigNumber, accountId: string): CosmosOperation => {
   return {
     id: "",
@@ -129,7 +127,7 @@ const txToOps = (info: AccountShapeInfo, accountId: string, txs: CosmosTx[]): Co
     op.hasFailed = tx.code !== 0;
 
     // simplify the message types
-    const messages = tx.tx.body.messages.map(message => ({
+    const messages = tx.tx.body.messages.map((message: any) => ({
       ...message,
       type: message["@type"].substring(message["@type"].lastIndexOf(".") + 1),
     }));
@@ -140,7 +138,7 @@ const txToOps = (info: AccountShapeInfo, accountId: string, txs: CosmosTx[]): Co
       continue;
     }
 
-    const correspondingMessages = messages.filter(m => m.type === mainMessage.type);
+    const correspondingMessages = messages.filter((m: any) => m.type === mainMessage.type);
 
     switch (mainMessage.type) {
       case "MsgTransfer": {
@@ -186,7 +184,7 @@ const txToOps = (info: AccountShapeInfo, accountId: string, txs: CosmosTx[]): Co
       }
       case "MsgSend": {
         for (const message of correspondingMessages) {
-          const amount = message["amount"].find(amount => amount.denom === unitCode);
+          const amount = message["amount"].find((amount: any) => amount.denom === unitCode);
           const sender = message["from_address"];
           const recipient = message["to_address"];
           if (!amount || !sender || !recipient) {
