@@ -5,7 +5,7 @@ import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 import { Operation } from "@ledgerhq/types-live";
 import BigNumber from "bignumber.js";
 import { SequenceNumberError } from "@ledgerhq/errors";
-import { patchOperationWithHash } from "../../../operation";
+import { patchOperationWithHash } from "@ledgerhq/coin-framework/operation";
 import cryptoFactory from "../chain/chain";
 import cosmosBase from "../chain/cosmosBase";
 import * as CosmosSDKTypes from "./types";
@@ -231,6 +231,8 @@ export class CosmosAPI {
       BOND_STATUS_UNBONDED: "unbonded",
       BOND_STATUS_UNBONDING: "unbonding",
       BOND_STATUS_BONDED: "bonded",
+      // TO CHECK
+      BOND_STATUS_UNSPECIFIED: "unspecified",
     };
 
     for (const { delegation, balance } of filteredDelegationResponses) {
@@ -417,13 +419,16 @@ export class CosmosAPI {
     total: number;
   }> {
     let cosmosSDKVersion = await this.cosmosSDKVersion;
-    cosmosSDKVersion = semver.coerce(cosmosSDKVersion).version;
+    const coerceResult = semver.coerce(cosmosSDKVersion);
+    if (coerceResult != null) {
+      cosmosSDKVersion = coerceResult.version;
+    }
     let queryparam = "events";
     if (semver.gte(cosmosSDKVersion, "0.50.0")) {
       queryparam = "query";
     }
     let serializedOptions = "";
-    for (const key of Object.keys(options)) {
+    for (const key of Object.keys(options) as Array<keyof typeof options>) {
       serializedOptions += options[key] != null ? `&${key}=${options[key]}` : "";
     }
     const { data } = await network<CosmosSDKTypes.GetTxsEvents>({
@@ -445,7 +450,9 @@ export class CosmosAPI {
    * @deprecated body {..., mode } -> BROADCAST_MODE_BLOCK (Deprecated: post v0.47 use BROADCAST_MODE_SYNC instead)
    * @notice returns {..., events } (Since: cosmos-sdk 0.42.11, 0.44.5, 0.45)
    */
-  broadcast = async ({ signedOperation: { operation, signature } }): Promise<Operation> => {
+  // TO CHECK
+  broadcast = async (tx: any): Promise<Operation> => {
+    const { operation, signature } = tx.signedOperation;
     const {
       data: { tx_response: txResponse },
     } = await network<CosmosSDKTypes.PostBroadcast>({

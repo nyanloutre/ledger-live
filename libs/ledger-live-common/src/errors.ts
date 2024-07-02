@@ -31,12 +31,7 @@ export const DeviceNotOnboarded = createCustomErrorClass("DeviceNotOnboarded");
 export const DeviceAlreadySetup = createCustomErrorClass("DeviceAlreadySetup");
 
 export const SourceHasMultiSign = createCustomErrorClass("SourceHasMultiSign");
-export const CosmosRedelegationInProgress = createCustomErrorClass("CosmosRedelegationInProgress");
-export const CosmosDelegateAllFundsWarning = createCustomErrorClass(
-  "CosmosDelegateAllFundsWarning",
-);
-export const CosmosTooManyValidators = createCustomErrorClass("CosmosTooManyValidators");
-export const NotEnoughDelegationBalance = createCustomErrorClass("NotEnoughDelegationBalance");
+
 export const RPCHostRequired = createCustomErrorClass("RPCHostRequired");
 export const RPCHostInvalid = createCustomErrorClass("RPCHostInvalid");
 export const RPCUserRequired = createCustomErrorClass("RPCUserRequired");

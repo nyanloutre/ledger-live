@@ -6,6 +6,7 @@ import { EnvName, EnvValue } from "@ledgerhq/live-env";
 import cryptoFactory from "./chain/chain";
 import cosmosBase from "./chain/cosmosBase";
 import type { CosmosValidatorItem } from "./types";
+import { GetValidatorItem } from "./api/types";
 
 export class CosmosValidatorsManager {
   protected _version: string;
@@ -46,7 +47,7 @@ export class CosmosValidatorsManager {
         url,
         method: "GET",
       });
-      const validators = data.validators.map(validator => {
+      const validators = data.validators.map((validator: GetValidatorItem) => {
         const commission = parseFloat(validator.commission.commission_rates.rate);
         return {
           validatorAddress: validator.operator_address,

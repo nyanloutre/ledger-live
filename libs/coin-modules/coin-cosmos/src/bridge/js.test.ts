@@ -1,25 +1,30 @@
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
-import currencyBridge from "./js";
+import { createBridges } from "./js";
 jest.mock("../chain/chain");
 import cryptoFactory from "../chain/chain";
 jest.mock("../CosmosValidatorsManager");
 import cosmosBase from "../chain/cosmosBase";
+import { CurrencyBridge } from "@ledgerhq/types-live";
 const mockedCryptoFactory = jest.mocked(cryptoFactory);
 
 describe("currencyBridge", () => {
+  let currencyBridge: CurrencyBridge;
   describe("hydrate", () => {
+    beforeEach(() => {
+      // currencyBridge = createBridges()
+    });
     afterEach(() => {
       jest.resetAllMocks();
     });
 
     const currencyMock = {} as CryptoCurrency;
     it("shouldn't update configuration if data is undefined", () => {
-      currencyBridge.currencyBridge.hydrate(undefined, currencyMock);
+      currencyBridge.hydrate(undefined, currencyMock);
       expect(mockedCryptoFactory).not.toHaveBeenCalled();
     });
 
     it("shouldn't update configuration if data is not an object", () => {
-      currencyBridge.currencyBridge.hydrate("definitely not an object", currencyMock);
+      currencyBridge.hydrate("definitely not an object", currencyMock);
       expect(mockedCryptoFactory).not.toHaveBeenCalled();
     });
 
@@ -35,7 +40,7 @@ describe("currencyBridge", () => {
         ledgerValidator: "ledgerValidatorAddress",
       };
       mockedCryptoFactory.mockReturnValue(config as cosmosBase);
-      currencyBridge.currencyBridge.hydrate(
+      currencyBridge.hydrate(
         {
           config: newConfig,
         },

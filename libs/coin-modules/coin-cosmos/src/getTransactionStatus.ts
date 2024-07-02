@@ -13,7 +13,7 @@ import {
   CosmosRedelegationInProgress,
   CosmosTooManyValidators,
   NotEnoughDelegationBalance,
-} from "../../errors";
+} from "./errors";
 import {
   CosmosLikeTransaction,
   StatusErrorMap,
