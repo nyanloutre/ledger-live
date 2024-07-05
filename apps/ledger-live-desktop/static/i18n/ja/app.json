@@ -5493,6 +5493,10 @@
       "description" : "金額と手数料を算出できません"
     },
     "NotEnoughBalance" : {
+      "title" : "資金が不足しています。",
+      "description" : "アカウントに十分な資金があることを確認してください。"
+    },
+    "NotEnoughBalanceSwap" : {
       "title" : "申し訳ありません。ネットワーク手数料を含む残高が不足しています。数量を調整するか、残高を確認してください。",
       "description" : "アカウントに十分な資金があることを確認してください。"
     },
@@ -6088,6 +6092,9 @@
     },
     "newAddressTRC20" : {
       "title" : "有効化するには、こちらのアドレスに0.1 TRX以上を送る必要があります。"
+    },
+    "BitcoinInfrastructureError" : {
+      "title" : "当社のビットコインインフラストラクチャで問題が発生しています。後でもう一度お試しください。"
     }
   },
   "cryptoOrg" : {
