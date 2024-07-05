@@ -5493,6 +5493,10 @@
       "description" : "금액 및 수수료 계산이 불가능합니다"
     },
     "NotEnoughBalance" : {
+      "title" : "죄송하지만 자금이 부족합니다",
+      "description" : "계정에 자금이 충분한지 확인해 주세요."
+    },
+    "NotEnoughBalanceSwap" : {
       "title" : "죄송합니다. 네트워크 수수료를 포함한 잔액이 부족합니다. 금액을 조정하거나 잔액을 확인하세요",
       "description" : "계정에 자금이 충분한지 확인해 주세요."
     },
@@ -6088,6 +6092,9 @@
     },
     "newAddressTRC20" : {
       "title" : "활성화하려면 먼저 이 주소로 최소 0.1 TRX를 보내야 합니다."
+    },
+    "BitcoinInfrastructureError" : {
+      "title" : "당사 비트코인 인프라에 문제개 발생했습니다. 나중에 다시 시도해 주세요."
     }
   },
   "cryptoOrg" : {
