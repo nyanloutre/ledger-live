@@ -1457,16 +1457,16 @@
     "featuredButtons" : {
       "buySell" : {
         "title" : "Satın Al / Sat",
-        "description" : "Güvenilir sağlayıcılarla alın ve satın"
+        "description" : "Güvenilir sağlayıcılarımızla alın ve satın"
       },
       "swap" : {
         "title" : "Takas et",
-        "description" : "Bir kriptoyu diğerine güvenle dönüştürün",
+        "description" : "Kriptolar arası dönüştürme",
         "label" : "Popüler"
       },
       "earn" : {
         "title" : "Stake et",
-        "description" : "Ledger ile kripto bakiyenizi artırın"
+        "description" : "Ledger ile kriptolarınızı stake edin"
       }
     },
     "recoverBanner" : {
@@ -5493,6 +5493,10 @@
       "description" : "Miktarı ve ücretleri hesaplamak mümkün değil"
     },
     "NotEnoughBalance" : {
+      "title" : "Üzgünüz, fon miktarı yetersiz",
+      "description" : "Hesabınızdaki fon miktarının yeterli olduğundan lütfen emin olun."
+    },
+    "NotEnoughBalanceSwap" : {
       "title" : "Ne yazık ki bakiye, ağ ücretlerini karşılamaya yetmiyor. Tutarı değiştirin veya bakiyeyi doğrulayın.",
       "description" : "Hesabınızdaki fon miktarının yeterli olduğundan lütfen emin olun."
     },
