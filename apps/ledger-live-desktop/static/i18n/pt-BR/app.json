@@ -5493,8 +5493,12 @@
       "description" : "Impossível calcular quantia e taxas"
     },
     "NotEnoughBalance" : {
-      "title" : "Saldo insuficiente, incluindo taxas de rede. Ajuste a quantia ou verifique o saldo.",
+      "title" : "Fundos Insuficientes",
       "description" : "Certifique-se de que a conta tem fundos suficientes."
+    },
+    "NotEnoughBalanceSwap" : {
+      "title" : "Saldo insuficiente incluindo taxas de rede. Ajuste a quantia ou verifique o saldo.",
+      "description" : "Certifique-se de que a conta tenha fundos suficientes."
     },
     "NotEnoughBalanceBecauseDestinationNotCreated" : {
       "title" : "Endereço do destinatário inativo. Envie pelo menos {{minimalAmount}} para ativá-lo"
@@ -6088,6 +6092,9 @@
     },
     "newAddressTRC20" : {
       "title" : "Primeiro, você precisa enviar pelo menos 0,1 TRX a este endereço para ativá-lo."
+    },
+    "BitcoinInfrastructureError" : {
+      "title" : "Estamos enfrentando um problema com a nossa infraestrutura Bitcoin. Tente novamente mais tarde."
     }
   },
   "cryptoOrg" : {
