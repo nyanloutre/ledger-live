@@ -5493,6 +5493,10 @@
       "description" : "No es posible calcular la cantidad y las tarifas"
     },
     "NotEnoughBalance" : {
+      "title" : "Fondos insuficientes",
+      "description" : "Asegúrate de que la cuenta tenga fondos suficientes."
+    },
+    "NotEnoughBalanceSwap" : {
       "title" : "Lo sentimos, el saldo es insuficiente con las tarifas de red incluidas. Modifica el importe o verifica el saldo.",
       "description" : "Asegúrate de que la cuenta tenga fondos suficientes."
     },
@@ -6088,6 +6092,9 @@
     },
     "newAddressTRC20" : {
       "title" : "Primero debes enviar al menos 0,1 TRX a esta dirección para activarla."
+    },
+    "BitcoinInfrastructureError" : {
+      "title" : "Estamos sufriendo inconvenientes con nuestra infraestructura de Bitcoin. Inténtalo de nuevo más tarde."
     }
   },
   "cryptoOrg" : {
