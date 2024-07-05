@@ -1457,16 +1457,16 @@
     "featuredButtons" : {
       "buySell" : {
         "title" : "Comprar / Vender",
-        "description" : "Compra y vende con proveedores verificados"
+        "description" : "Compra y vende con nuestros proveedores verificados"
       },
       "swap" : {
         "title" : "Permutar",
-        "description" : "Convierte una cripto en otra de manera segura",
+        "description" : "Convierte una cripto en otra",
         "label" : "Popular"
       },
       "earn" : {
         "title" : "Poner en participación",
-        "description" : "Con Ledger tus cripto generan intereses"
+        "description" : "Pon en participación tus cripto con Ledger"
       }
     },
     "recoverBanner" : {
@@ -5493,6 +5493,10 @@
       "description" : "No es posible calcular la cantidad y las tarifas"
     },
     "NotEnoughBalance" : {
+      "title" : "Fondos insuficientes",
+      "description" : "Asegúrate de que la cuenta tenga fondos suficientes."
+    },
+    "NotEnoughBalanceSwap" : {
       "title" : "Lo sentimos, el saldo es insuficiente con las tarifas de red incluidas. Modifica el importe o verifica el saldo.",
       "description" : "Asegúrate de que la cuenta tenga fondos suficientes."
     },
