@@ -5493,6 +5493,10 @@
       "description" : "Miktarı ve ücretleri hesaplamak mümkün değil"
     },
     "NotEnoughBalance" : {
+      "title" : "Üzgünüz, fon miktarı yetersiz",
+      "description" : "Hesabınızdaki fon miktarının yeterli olduğundan lütfen emin olun."
+    },
+    "NotEnoughBalanceSwap" : {
       "title" : "Ne yazık ki bakiye, ağ ücretlerini karşılamaya yetmiyor. Tutarı değiştirin veya bakiyeyi doğrulayın.",
       "description" : "Hesabınızdaki fon miktarının yeterli olduğundan lütfen emin olun."
     },
@@ -6088,6 +6092,9 @@
     },
     "newAddressTRC20" : {
       "title" : "Önce bu hesaba en az 0,1 TRX göndererek hesabı etkinleştirmelisiniz."
+    },
+    "BitcoinInfrastructureError" : {
+      "title" : "Bitcoin altyapımızla ilgili olarak bir sorun yaşıyoruz. Lütfen daha sonra tekrar deneyin."
     }
   },
   "cryptoOrg" : {
