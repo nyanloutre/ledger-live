@@ -5493,6 +5493,10 @@
       "description" : "Impossible de calculer le montant et les frais"
     },
     "NotEnoughBalance" : {
+      "title" : "Solde insuffisant",
+      "description" : "Vérifiez que ce compte a des fonds suffisants."
+    },
+    "NotEnoughBalanceSwap" : {
       "title" : "Solde insuffisant, frais de réseau inclus. Modifiez le montant ou vérifiez votre solde.",
       "description" : "Vérifiez que ce compte a des fonds suffisants."
     },
@@ -6088,6 +6092,9 @@
     },
     "newAddressTRC20" : {
       "title" : "Vous devez d’abord envoyer un minimum de 0,1 TRX à cette adresse pour l’activer."
+    },
+    "BitcoinInfrastructureError" : {
+      "title" : "Notre infrastructure Bitcoin rencontre actuellement des difficultés. Veuillez réessayer plus tard."
     }
   },
   "cryptoOrg" : {
