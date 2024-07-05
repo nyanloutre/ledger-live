@@ -1457,16 +1457,16 @@
     "featuredButtons" : {
       "buySell" : {
         "title" : "Comprar / Vender",
-        "description" : "Comprar e vender com provedores confiáveis"
+        "description" : "Comprar e vender com nossos provedores de confiança"
       },
       "swap" : {
         "title" : "Trocar",
-        "description" : "Troque cripto por cripto em segurança",
+        "description" : "Trocar cripto por cripto",
         "label" : "Populares"
       },
       "earn" : {
         "title" : "Aplicar",
-        "description" : "Multiplique sua cripto com a Ledger"
+        "description" : "Faça staking de suas criptos com a Ledger"
       }
     },
     "recoverBanner" : {
@@ -5493,8 +5493,12 @@
       "description" : "Impossível calcular quantia e taxas"
     },
     "NotEnoughBalance" : {
-      "title" : "Saldo insuficiente, incluindo taxas de rede. Ajuste a quantia ou verifique o saldo.",
+      "title" : "Fundos Insuficientes",
       "description" : "Certifique-se de que a conta tem fundos suficientes."
+    },
+    "NotEnoughBalanceSwap" : {
+      "title" : "Saldo insuficiente incluindo taxas de rede. Ajuste a quantia ou verifique o saldo.",
+      "description" : "Certifique-se de que a conta tenha fundos suficientes."
     },
     "NotEnoughBalanceBecauseDestinationNotCreated" : {
       "title" : "Endereço do destinatário inativo. Envie pelo menos {{minimalAmount}} para ativá-lo"
