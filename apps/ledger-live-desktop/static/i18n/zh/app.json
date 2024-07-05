@@ -5493,6 +5493,10 @@
       "description" : "无法计算金额和费用"
     },
     "NotEnoughBalance" : {
+      "title" : "抱歉，资金不足",
+      "description" : "请确保该账户资金充足。"
+    },
+    "NotEnoughBalanceSwap" : {
       "title" : "抱歉，余额不足（包括网络费用）。请调整数额或核对余额。",
       "description" : "请确保该账户资金充足。"
     },
@@ -6088,6 +6092,9 @@
     },
     "newAddressTRC20" : {
       "title" : "您首先需要向该地址发送至少 0.1 TRX 才能将其激活。"
+    },
+    "BitcoinInfrastructureError" : {
+      "title" : "我们的比特币基础设施遇到了问题。请稍后重试。"
     }
   },
   "cryptoOrg" : {
