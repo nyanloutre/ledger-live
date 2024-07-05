@@ -1457,16 +1457,16 @@
     "featuredButtons" : {
       "buySell" : {
         "title" : "Acheter / Vendre",
-        "description" : "Achetez et vendez avec des prestataires de confiance."
+        "description" : "Achetez et vendez avec nos prestataires de confiance."
       },
       "swap" : {
         "title" : "Swap",
-        "description" : "Échangez une crypto contre une autre en toute sécurité.",
+        "description" : "Échangez une crypto contre une autre.",
         "label" : "Populaire"
       },
       "earn" : {
         "title" : "Staker",
-        "description" : "Faites fructifier vos crypto-actifs via Ledger."
+        "description" : "Stakez vos cryptos via Ledger."
       }
     },
     "recoverBanner" : {
@@ -5493,6 +5493,10 @@
       "description" : "Impossible de calculer le montant et les frais"
     },
     "NotEnoughBalance" : {
+      "title" : "Solde insuffisant",
+      "description" : "Vérifiez que ce compte a des fonds suffisants."
+    },
+    "NotEnoughBalanceSwap" : {
       "title" : "Solde insuffisant, frais de réseau inclus. Modifiez le montant ou vérifiez votre solde.",
       "description" : "Vérifiez que ce compte a des fonds suffisants."
     },
