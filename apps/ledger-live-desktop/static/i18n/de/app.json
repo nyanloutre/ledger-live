@@ -5493,8 +5493,12 @@
       "description" : "Berechnung von Betrag und Gebühren nicht möglich"
     },
     "NotEnoughBalance" : {
-      "title" : "Leider ist für den Betrag einschließlich der Netzwerkgebühren nicht genügend Guthaben vorhanden. Bitte Betrag ändern oder Guthaben verifizieren.",
+      "title" : "Entschuldigung, Guthaben reicht nicht aus",
       "description" : "Bitte stellen Sie sicher, dass das Konto ausreichend gedeckt ist."
+    },
+    "NotEnoughBalanceSwap" : {
+      "title" : "Leider ist für den Betrag einschließlich der Netzwerkgebühren nicht genügend Guthaben vorhanden. Bitte Betrag ändern oder Guthaben verifizieren.",
+      "description" : "Bitte vergewissere dich, dass das Konto über ausreichende Deckung verfügt."
     },
     "NotEnoughBalanceBecauseDestinationNotCreated" : {
       "title" : "Die Adresse des Empfängers ist inaktiv. Senden Sie mindestens {{minimalAmount}}, um sie zu aktivieren"
@@ -6088,6 +6092,9 @@
     },
     "newAddressTRC20" : {
       "title" : "Du musst zuerst mindestens 0,1 TRX an diese Adresse senden, um sie zu aktivieren."
+    },
+    "BitcoinInfrastructureError" : {
+      "title" : "Bei unserer Bitcoin-Infrastruktur ist ein Problem aufgetreten. Versuche es bitte später noch einmal."
     }
   },
   "cryptoOrg" : {
