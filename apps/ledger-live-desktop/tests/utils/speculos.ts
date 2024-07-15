@@ -17,13 +17,15 @@ import { getEnv } from "@ledgerhq/live-env";
 import { waitForTimeOut } from "./waitFor";
 
 export type Spec = {
-  currency: CryptoCurrency;
+  currency?: CryptoCurrency;
   appQuery: {
     model: DeviceModelId;
     appName: string;
     appVersion: string;
   };
-  dependency: string;
+  /** @deprecated */
+  dependency?: string;
+  dependencies?: string[];
   onSpeculosDeviceCreated?: (device: Device) => Promise<void>;
 };
 
@@ -81,7 +83,16 @@ export const specs: Specs = {
       appName: "Ethereum Classic",
       appVersion: "1.10.4",
     },
-    dependency: "Ethereum",
+    //dependency: "Ethereum",
+    dependencies: ["Ethereum"],
+  },
+  Exchange: {
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Exchange",
+      appVersion: "3.3.3",
+    },
+    dependencies: [],
   },
   Bitcoin_Testnet: {
     currency: getCryptoCurrencyById("bitcoin_testnet"),
@@ -239,7 +250,7 @@ export async function startSpeculos(
   );
   const deviceParams = {
     ...(appCandidate as AppCandidate),
-    appName: spec.currency.managerAppName,
+    appName: spec.currency ? spec.currency.managerAppName : spec.appQuery.appName.toUpperCase(),
     seed,
     dependency,
     coinapps,

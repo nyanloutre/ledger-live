@@ -1,5 +1,7 @@
 import { waitFor } from "../utils/waitFor";
 import { AppPage } from "tests/page/abstractClasses";
+import { step } from "tests/misc/reporters/step";
+import { expect } from "@playwright/test";
 
 export class SwapPage extends AppPage {
   private swapMenuButton = this.page.getByTestId("drawer-swap-button"); // TODO: Should this be here?
@@ -7,6 +9,7 @@ export class SwapPage extends AppPage {
 
   // Swap Amount and Currency components
   private maxSpendableToggle = this.page.getByTestId("swap-max-spendable-toggle");
+  private originCurrencyDropdown = this.page.getByTestId("origin-currency-dropdown");
   private destinationCurrencyDropdown = this.page.getByTestId("destination-currency-dropdown");
   private fromCurrencyDropdownAddAccountButton = this.page.getByText("Add account");
   private reverseSwapPairButton = this.page.getByTestId("swap-reverse-pair-button");
@@ -160,6 +163,23 @@ export class SwapPage extends AppPage {
   async waitForProviderRates() {
     await this.centralisedQuoteFilterButton.waitFor({ state: "visible" });
     await this.decentralisedQuoteFilterButton.waitFor({ state: "visible" });
+  }
+
+  @step("Select account to swap from: $0")
+  async selectAccountToSwapFrom(accountToSwapFrom: string) {
+    await this.originCurrencyDropdown.click();
+    await this.dropdownOptions.locator(this.optionWithText(accountToSwapFrom)).click();
+    const selectedAccountFrom = this.originCurrencyDropdown.locator(this.dropdownSelectedValue);
+    await expect(selectedAccountFrom).toHaveText(accountToSwapFrom);
+  }
+
+  @step("Select currency to swap to: $0")
+  async selectCurrencyToSwapTo(currencyToSwapTo: string) {
+    await this.destinationCurrencyDropdown.click();
+    await this.page.keyboard.type(currencyToSwapTo);
+    await this.dropdownOptions.locator(this.optionWithText(currencyToSwapTo)).first().click();
+    const selectedCurrencyTo = this.destinationCurrencyDropdown.locator(this.dropdownSelectedValue);
+    await expect(selectedCurrencyTo).toHaveText(currencyToSwapTo);
   }
 
   // TODO: pull this function out into a utility function so we can use it elsewhere

@@ -61,7 +61,7 @@ export async function releaseSpeculosDevice(id: string) {
   const obj = data[id];
 
   if (obj) {
-    await obj.destroy();
+    obj.destroy();
   }
 }
 
@@ -124,6 +124,7 @@ export async function createSpeculosDevice(
     appName: string;
     appVersion: string;
     dependency?: string;
+    dependencies?: string[];
     seed: string;
     // Root folder from which you need to lookup app binaries
     coinapps: string;
@@ -133,8 +134,17 @@ export async function createSpeculosDevice(
   },
   maxRetry = 3,
 ): Promise<SpeculosDevice> {
-  const { overridesAppPath, model, firmware, appName, appVersion, seed, coinapps, dependency } =
-    arg;
+  const {
+    overridesAppPath,
+    model,
+    firmware,
+    appName,
+    appVersion,
+    seed,
+    coinapps,
+    dependency,
+    dependencies,
+  } = arg;
   idCounter = idCounter ?? getEnv("SPECULOS_PID_OFFSET");
   const speculosID = `speculosID-${++idCounter}`;
   const ports = getPorts(idCounter, isSpeculosWebsocket);
@@ -143,6 +153,9 @@ export async function createSpeculosDevice(
 
   const subpath = overridesAppPath || conventionalAppSubpath(model, firmware, appName, appVersion);
   const appPath = `./apps/${subpath}`;
+  const flatDependencies = dependencies?.flatMap(dep => {
+    return `-l${dep}`;
+  });
 
   const params = [
     "run",
@@ -181,6 +194,9 @@ export async function createSpeculosDevice(
           `${dependency}:./apps/${conventionalAppSubpath(model, firmware, dependency, appVersion)}`,
         ]
       : []),
+    ...(Array.isArray(flatDependencies) && flatDependencies.length > 0
+      ? [flatDependencies.join(" ")]
+      : []),
     ...(sdk ? ["--sdk", sdk] : []),
     "--display",
     "headless",
@@ -202,6 +218,7 @@ export async function createSpeculosDevice(
         ]),
   ];
 
+  console.log("speculos", `${speculosID}: spawning = ${params.join(" ")}`);
   log("speculos", `${speculosID}: spawning = ${params.join(" ")}`);
 
   const p = spawn("docker", [...params, "--seed", `${seed}`]);

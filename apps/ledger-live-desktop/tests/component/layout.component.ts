@@ -19,6 +19,7 @@ export class Layout extends Component {
   private drawerManagerButton = this.page.getByTestId("drawer-manager-button");
   private drawerBuycryptoButton = this.page.getByTestId("drawer-exchange-button");
   private drawerEarnButton = this.page.getByTestId("drawer-earn-button");
+  private drawerSwapButton = this.page.getByTestId("drawer-swap-button");
   readonly drawerExperimentalButton = this.page.getByTestId("drawer-experimental-button");
   private bookmarkedAccountsList = this.page.getByTestId("drawer-bookmarked-accounts");
   readonly bookmarkedAccounts = this.bookmarkedAccountsList.locator(".bookmarked-account-item");
@@ -75,6 +76,11 @@ export class Layout extends Component {
 
   async goToEarn() {
     await this.drawerEarnButton.click();
+  }
+
+  @step("Go to swap")
+  async goToSwap() {
+    await this.drawerSwapButton.click();
   }
 
   async toggleDiscreetMode() {

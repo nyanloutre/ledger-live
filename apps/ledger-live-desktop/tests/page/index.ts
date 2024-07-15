@@ -8,6 +8,7 @@ import { Modal } from "../component/modal.component";
 import { ReceiveModal } from "../page/modal/receive.modal";
 import { SpeculosPage } from "tests/page/speculos.page";
 import { SendModal } from "tests/page/modal/send.modal";
+import { SwapPage } from "tests/page/swap.page";
 
 export class Application extends PageHolder {
   public account = new AccountPage(this.page);
@@ -19,4 +20,5 @@ export class Application extends PageHolder {
   public receive = new ReceiveModal(this.page);
   public speculos = new SpeculosPage(this.page);
   public send = new SendModal(this.page);
+  public swap = new SwapPage(this.page);
 }

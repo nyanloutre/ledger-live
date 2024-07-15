@@ -7,7 +7,7 @@ const currencies: Currency[] = [
   Currency.BTC,
   Currency.ETH,
   Currency.ETC,
-  Currency.XRP,
+  /*Currency.XRP,
   Currency.DOT,
   Currency.TRX,
   Currency.ADA,
@@ -15,7 +15,7 @@ const currencies: Currency[] = [
   Currency.BCH,
   Currency.ALGO,
   Currency.ATOM,
-  Currency.XTZ,
+  Currency.XTZ,*/
 ];
 
 for (const [i, currency] of currencies.entries()) {

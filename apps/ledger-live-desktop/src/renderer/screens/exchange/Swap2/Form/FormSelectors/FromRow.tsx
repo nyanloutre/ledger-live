@@ -195,7 +195,7 @@ function FromRow({
         </Box>
       </Box>
       <Box horizontal boxShadow="0px 2px 4px rgba(0, 0, 0, 0.05);">
-        <Box width="50%">
+        <Box data-test-id="origin-currency-dropdown" width="50%">
           <SelectAccount
             accounts={accounts}
             value={fromAccount}
