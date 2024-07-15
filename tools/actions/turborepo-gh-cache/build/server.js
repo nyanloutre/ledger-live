@@ -87763,28 +87763,32 @@ function startServer() {
     app.get(
       "/v8/artifacts/:artifactId",
       asyncHandler_default((req, res) => __async(this, null, function* () {
-        const { artifactId } = req.params;
-        const filename = artifactId + ".gz";
-        const cacheKey = yield cache.restoreCache(
-          [`${cacheDirectory}/${filename}`],
-          artifactId,
-          void 0,
-          {
-            timeoutInMs: 5e3
-          }
-        );
-        if (!cacheKey) {
-          console.log(`Artifact ${artifactId} not found.`);
-          return res.status(404).send("Not found");
-        } else {
-          console.log(
-            `Artifact ${artifactId} downloaded successfully to ${cacheDirectory}/${filename}.`
+        try {
+          const { artifactId } = req.params;
+          const filename = artifactId + ".gz";
+          const cacheKey = yield cache.restoreCache(
+            [`${cacheDirectory}/${filename}`],
+            artifactId,
+            void 0,
+            {
+              timeoutInMs: 5e3
+            }
           );
+          if (!cacheKey) {
+            console.log(`Artifact ${artifactId} not found.`);
+            return res.status(404).send("Not found");
+          } else {
+            console.log(
+              `Artifact ${artifactId} downloaded successfully to ${cacheDirectory}/${filename}.`
+            );
+          }
+          fs2.createReadStream(path2.join(absoluteCacheDirectory, filename)).pipe(res).on("error", (err) => {
+            console.error(err);
+            res.end(err);
+          });
+        } catch (error) {
+          return res.status(500).send("Error", error);
         }
-        fs2.createReadStream(path2.join(absoluteCacheDirectory, filename)).pipe(res).on("error", (err) => {
-          console.error(err);
-          res.end(err);
-        });
       }))
     );
     app.put(
