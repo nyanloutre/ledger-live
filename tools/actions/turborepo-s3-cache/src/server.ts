@@ -61,6 +61,8 @@ async function startServer() {
     asyncHandler(async (req, res) => {
       const artifactId = req.params.artifactId;
       const filename = `${artifactId}.gz`;
+      console.log("REQUEST");
+      console.log(req);
 
       const command = new PutObjectCommand({
         Bucket: bucket,
@@ -68,13 +70,18 @@ async function startServer() {
         Body: req,
         ContentLength: req.headers["content-length"],
       });
-
       try {
         await client.send(command);
         return res.end();
-      } catch (error) {
-        console.log(error);
-        return res.status(500).end();
+      } catch (error: any) {
+        const errorDetails = {
+          message: error.message,
+          stack: error.stack,
+          name: error.name,
+          code: error.code,
+        };
+        console.error("Error uploading artifact:", errorDetails);
+        return res.status(500).json(errorDetails);
       }
     }),
   );
