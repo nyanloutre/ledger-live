@@ -1,5 +1,3 @@
-import Transport from "@ledgerhq/hw-transport";
-
 /**
  * The JWT is a JSON Web Token that is used to authenticate the user.
  */
@@ -126,12 +124,6 @@ export interface TrustchainSDK {
     policy?: AuthCachePolicy,
   ): Promise<T>;
 
-  withDeviceAuth<T>(
-    transport: Transport,
-    f: (jwt: JWT) => Promise<T>,
-    policy?: AuthCachePolicy,
-  ): Promise<T>;
-
   /**
    * This method will either create the required trustchains (root and application) or restore them.
    * The returned trustchain will be initialized on the root level and also will have the branch derivation corresponding to the contextual applicationId.
@@ -139,7 +131,6 @@ export interface TrustchainSDK {
    * The latest jwt is also returned because it was potentially updated during the process.
    */
   getOrCreateTrustchain(
-    transport: Transport,
     memberCredentials: MemberCredentials,
     callbacks?: TrustchainDeviceCallbacks,
     topic?: Uint8Array,
@@ -165,7 +156,6 @@ export interface TrustchainSDK {
    * remove a member from the application trustchain
    */
   removeMember(
-    transport: Transport,
     trustchain: Trustchain,
     memberCredentials: MemberCredentials,
     member: TrustchainMember,
