@@ -80,7 +80,7 @@ export const specs: Specs = {
     currency: getCryptoCurrencyById("ethereum_classic"),
     appQuery: {
       model: DeviceModelId.nanoSP,
-      appName: "Ethereum Classic",
+      appName: "Ethereum classic",
       appVersion: "1.10.4",
     },
     //dependency: "Ethereum",

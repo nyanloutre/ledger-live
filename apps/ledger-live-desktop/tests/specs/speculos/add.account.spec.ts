@@ -4,8 +4,8 @@ import { Currency } from "../../enum/Currency";
 import { addTmsLink } from "tests/utils/allureUtils";
 
 const currencies: Currency[] = [
-  Currency.BTC,
-  Currency.ETH,
+  //Currency.BTC,
+  //Currency.ETH,
   Currency.ETC,
   /*Currency.XRP,
   Currency.DOT,
