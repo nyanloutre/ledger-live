@@ -26,7 +26,7 @@ permissions:
 
 jobs:
   detox-tests-ios:
-    name: "Ledger Live Mobile - iOS Detox Tests"
+    name: "LLM - iOS Detox Tests"
     runs-on: [m1, ARM64]
     env:
       NODE_OPTIONS: "--max-old-space-size=7168"
@@ -358,12 +358,12 @@ jobs:
               summary
             };
 
-            fs.writeFileSync("summary.json", JSON.stringify(output), "utf-8");
+            fs.writeFileSync("summary-detox.json", JSON.stringify(output), "utf-8");
       - uses: actions/upload-artifact@v4
         name: upload summary
         with:
-          name: summary.json
-          path: ${{ github.workspace }}/summary.json
+          name: summary-detox.json
+          path: ${{ github.workspace }}/summary-detox.json
 
   report-on-slack:
     runs-on: ubuntu-latest

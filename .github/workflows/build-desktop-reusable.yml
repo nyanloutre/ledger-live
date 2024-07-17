@@ -39,7 +39,7 @@ jobs:
             { name: "win", os: "windows-latest", dotnet: true, image: "win-x64.exe" },
             { name: "mac", os: "macos-latest", image: "mac.dmg" },
           ]
-    name: "Build Ledger Live Desktop | ${{ matrix.config.name }}"
+    name: "Build LLD | ${{ matrix.config.name }}"
     runs-on: ${{ matrix.config.os }}
     outputs:
       linux: ${{ steps.status.outputs.linux }}
@@ -163,5 +163,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         name: Upload output
         with:
-          path: ${{ github.workspace }}/summary.json
-          name: summary.json
+          path: ${{ github.workspace }}/summary-build-desktop.json
+          name: summary-build-desktop.json

@@ -26,7 +26,7 @@ permissions:
 
 jobs:
   codecheck:
-    name: "Ledger Live Mobile CodeCheck"
+    name: "LLM CodeCheck"
     env:
       NODE_OPTIONS: "--max-old-space-size=7168"
       FORCE_COLOR: 3
@@ -50,7 +50,7 @@ jobs:
       - name: Install dependencies
         run: pnpm i --filter="live-mobile..." --filter="ledger-live" --no-frozen-lockfile --unsafe-perm
       - name: Run linter
-        run: pnpm lint --filter="live-mobile" --api="http://127.0.0.1:${{ steps.toolchain.outputs.port }}" --token="${{ secrets.TURBOREPO_SERVER_TOKEN }}" --team="foo" -- --format="json" -o="lint.json"
+        run: pnpm lint --filter="live-mobile" --api="http://127.0.0.1:${{ steps.toolchain.outputs.port }}" --token="${{ secrets.TURBOREPO_SERVER_TOKEN }}" --team="foo" -- --format="json" -o="lint-mobile.json"
       - name: check for dead code
         run: pnpm mobile unimported
         shell: bash
@@ -62,5 +62,5 @@ jobs:
         name: upload eslint json output
         if: ${{ !cancelled() }}
         with:
-          name: lint
-          path: ${{ github.workspace }}/apps/ledger-live-mobile/lint.json
+          name: lint-mobile
+          path: ${{ github.workspace }}/apps/ledger-live-mobile/lint-mobile.json

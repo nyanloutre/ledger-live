@@ -30,6 +30,7 @@ permissions:
 
 jobs:
   test-design-system:
+    name: "Design System Tests"
     env:
       NODE_OPTIONS: "--max-old-space-size=7168"
       FORCE_COLOR: 3

@@ -30,7 +30,7 @@ permissions:
 
 jobs:
   build-mobile-app-android:
-    name: "Build Ledger Live Mobile (Android)"
+    name: "Build LLM | Android"
     runs-on: [ledger-live-4xlarge]
     env:
       NODE_OPTIONS: "--max-old-space-size=7168"
@@ -86,7 +86,7 @@ jobs:
 
   build-mobile-app-ios:
     runs-on: [m1, ARM64]
-    name: "Build Ledger Live Mobile (Mac OS X)"
+    name: "Build LLM | iOS"
     env:
       NODE_OPTIONS: "--max-old-space-size=7168"
     steps:
@@ -235,9 +235,9 @@ jobs:
                 description: "Will regenerate cocoapods lockfile",
               }],
             }
-            fs.writeFileSync("summary.json", JSON.stringify(output), "utf-8");
+            fs.writeFileSync("summary-build-mobile.json", JSON.stringify(output), "utf-8");
       - uses: actions/upload-artifact@v4
         name: upload output
         with:
-          path: ${{ github.workspace }}/summary.json
-          name: summary.json
+          path: ${{ github.workspace }}/summary-build-mobile.json
+          name: summary-build-mobile.json

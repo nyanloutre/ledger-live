@@ -30,7 +30,7 @@ permissions:
 
 jobs:
   codechecks:
-    name: "Desktop Code Checks"
+    name: "LLD Code Checks"
     env:
       NODE_OPTIONS: "--max-old-space-size=7168"
       FORCE_COLOR: 3
@@ -65,8 +65,8 @@ jobs:
         name: upload eslint json output
         if: ${{ !cancelled() }}
         with:
-          name: lint
-          path: ${{ github.workspace }}/apps/ledger-live-desktop/lint.json
+          name: lint-desktop
+          path: ${{ github.workspace }}/apps/ledger-live-desktop/lint-desktop.json
       - name: check for dead code
         run: pnpm desktop unimported
         shell: bash
@@ -294,7 +294,7 @@ jobs:
             // Store eslint results as annotations
             let annotations = []
             try {
-              const lintResult = require("./lint.json");
+              const lintResult = require("./lint-desktop.json");
               const LEVELS = {
                 0: "notice",
                 1: "warning",
@@ -342,7 +342,7 @@ jobs:
               }],
             };
 
-            fs.writeFileSync("summary.json", JSON.stringify(output), "utf-8");
+            fs.writeFileSync("summary-test-desktop.json", JSON.stringify(output), "utf-8");
 
             if (${{ github.event_name != 'push' }}) return;
 
@@ -410,8 +410,8 @@ jobs:
       - uses: actions/upload-artifact@v4
         name: upload summary
         with:
-          name: summary.json
-          path: ${{ github.workspace }}/summary.json
+          name: summary-test-desktop.json
+          path: ${{ github.workspace }}/summary-test-desktop.json
 
   allure-report:
     name: "Allure Reports Export on Server"

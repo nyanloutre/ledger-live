@@ -45,7 +45,7 @@ const lint = async () => {
       -o="lint.json"`;
   }
 
-  const lintJson = require("../lint.json");
+  const lintJson = require("../lint-desktop.json");
   stylish(lintJson);
 };
 

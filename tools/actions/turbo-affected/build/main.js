@@ -20863,10 +20863,7 @@ var package_default = {
     "coin:polkadot": "pnpm --filter coin-polkadot",
     "coin:solana": "pnpm --filter coin-solana",
     "coin:tezos": "pnpm --filter coin-tezos",
-<<<<<<< HEAD
     "coin:tron": "pnpm --filter coin-tron",
-=======
->>>>>>> 8edb3d785c (WIP)
     "coin:xrp": "pnpm --filter coin-xrp",
     "coin:ton": "pnpm --filter coin-ton",
     "evm-tools": "pnpm --filter evm-tools",
@@ -21053,7 +21050,7 @@ ${affected}`);
         core.setOutput("packages", JSON.stringify(Object.keys(affectedPackages)));
         core.setOutput(
           "paths",
-          JSON.stringify(Object.keys(affectedPackages || {}).map((p) => affectedPackages[p].path))
+          JSON.stringify(Object.keys(affectedPackages || {}).map(p => affectedPackages[p].path)),
         );
         core.setOutput("is-package-affected", isPackageAffected);
         core.summary.addHeading("Affected Packages");

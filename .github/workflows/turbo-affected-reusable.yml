@@ -28,7 +28,7 @@ permissions:
 
 jobs:
   turbo-affected:
-    name: "Run Turbo Affected"
+    name: "Determine Affected"
     runs-on: ubuntu-22.04
     outputs:
       affected: ${{ steps.affected.outputs.affected }}
