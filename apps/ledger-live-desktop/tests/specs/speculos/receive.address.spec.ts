@@ -1,6 +1,6 @@
 import test from "../../fixtures/common";
 import { Account } from "../../enum/Account";
-import { specs } from "../../utils/speculos";
+import { specs } from "@ledgerhq/speculos-transport";
 import { addTmsLink } from "tests/utils/allureUtils";
 
 const accounts: Account[] = [

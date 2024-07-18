@@ -1,11 +1,11 @@
 import test from "../../fixtures/common";
-import { specs } from "../../utils/speculos";
+import { specs } from "@ledgerhq/speculos-transport";
 import { Currency } from "../../enum/Currency";
 import { addTmsLink } from "tests/utils/allureUtils";
 
 const currencies: Currency[] = [
-  //Currency.BTC,
-  //Currency.ETH,
+  Currency.BTC,
+  Currency.ETH,
   Currency.ETC,
   /*Currency.XRP,
   Currency.DOT,

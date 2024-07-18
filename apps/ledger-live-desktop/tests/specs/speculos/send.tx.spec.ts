@@ -1,7 +1,7 @@
 import test from "../../fixtures/common";
 import { Account } from "../../enum/Account";
 import { Transaction } from "../../models/Transaction";
-import { specs } from "../../utils/speculos";
+import { specs } from "@ledgerhq/speculos-transport";
 
 // ONLY TESTNET (SEND WILL BE APPROVED ON DEVICE)
 const transactions = [

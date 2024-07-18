@@ -1,6 +1,6 @@
 import test from "../../fixtures/common";
 import { Token } from "../../enum/Tokens";
-import { specs } from "../../utils/speculos";
+import { specs } from "@ledgerhq/speculos-transport";
 import { addTmsLink } from "tests/utils/allureUtils";
 
 const tokens: Token[] = [

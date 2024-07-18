@@ -5,6 +5,210 @@ import SpeculosTransportHttp from "@ledgerhq/hw-transport-node-speculos-http";
 import SpeculosTransportWebsocket from "@ledgerhq/hw-transport-node-speculos";
 import { getEnv } from "@ledgerhq/live-env";
 import { delay } from "@ledgerhq/live-promise";
+//import { Device } from "../../../apps/ledger-live-desktop/tests/utils/speculos";
+import { getCryptoCurrencyById } from "@ledgerhq/live-common/currencies/index";
+import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
+
+export function setExchangeDependencies(dependencies: string[]) {
+  specs["Exchange"].dependencies = dependencies;
+}
+
+export type Device = {
+  transport: SpeculosTransport;
+  id: string;
+  appPath: string;
+};
+
+export type Specs = {
+  [key: string]: Spec;
+};
+
+export type Spec = {
+  currency?: CryptoCurrency;
+  appQuery: {
+    model: DeviceModelId;
+    appName: string;
+    appVersion: string;
+  };
+  /** @deprecated */
+  dependency?: string;
+  dependencies?: string[];
+  onSpeculosDeviceCreated?: (device: Device) => Promise<void>;
+};
+
+export const specs: Specs = {
+  Bitcoin: {
+    currency: getCryptoCurrencyById("bitcoin"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Bitcoin",
+      appVersion: "2.2.2",
+    },
+    dependency: "",
+  },
+  Ethereum: {
+    currency: getCryptoCurrencyById("ethereum"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Ethereum",
+      appVersion: "1.10.4",
+    },
+    dependency: "",
+  },
+  Ethereum_Holesky: {
+    currency: getCryptoCurrencyById("ethereum_holesky"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Ethereum",
+      appVersion: "1.10.4",
+    },
+    dependency: "",
+  },
+  Ethereum_Sepolia: {
+    currency: getCryptoCurrencyById("ethereum_sepolia"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Ethereum",
+      appVersion: "1.10.4",
+    },
+    dependency: "",
+  },
+  Ethereum_Classic: {
+    currency: getCryptoCurrencyById("ethereum_classic"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Ethereum classic",
+      appVersion: "1.10.4",
+    },
+    //dependency: "Ethereum",
+    dependencies: ["Ethereum"],
+  },
+  Exchange: {
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Exchange",
+      appVersion: "3.3.3",
+    },
+    dependencies: [],
+  },
+  Bitcoin_Testnet: {
+    currency: getCryptoCurrencyById("bitcoin_testnet"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Bitcoin Test",
+      appVersion: "2.2.2",
+    },
+    dependency: "",
+  },
+  Solana: {
+    currency: getCryptoCurrencyById("solana"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Solana",
+      appVersion: "1.4.1",
+    },
+    dependency: "",
+  },
+  Cardano: {
+    currency: getCryptoCurrencyById("cardano"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "CardanoADA",
+      appVersion: "6.1.2",
+    },
+    dependency: "",
+  },
+  Polkadot: {
+    currency: getCryptoCurrencyById("polkadot"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Polkadot",
+      appVersion: "100.0.5",
+    },
+    dependency: "",
+  },
+  Tron: {
+    currency: getCryptoCurrencyById("tron"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Tron",
+      appVersion: "0.5.0",
+    },
+    dependency: "",
+  },
+  Ripple: {
+    currency: getCryptoCurrencyById("ripple"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "XRP",
+      appVersion: "2.2.3",
+    },
+    dependency: "",
+  },
+  Stellar: {
+    currency: getCryptoCurrencyById("stellar"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Stellar",
+      appVersion: "5.0.3",
+    },
+    dependency: "",
+  },
+  Bitcoin_Cash: {
+    currency: getCryptoCurrencyById("bitcoin_cash"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Bitcoin Cash",
+      appVersion: "2.4.1",
+    },
+    dependency: "",
+  },
+  Algorand: {
+    currency: getCryptoCurrencyById("algorand"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Algorand",
+      appVersion: "2.1.11",
+    },
+    dependency: "",
+  },
+  Cosmos: {
+    currency: getCryptoCurrencyById("cosmos"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Cosmos",
+      appVersion: "2.35.22",
+    },
+    dependency: "",
+  },
+  Tezos: {
+    currency: getCryptoCurrencyById("tezos"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "TezosWallet",
+      appVersion: "2.4.5",
+    },
+    dependency: "",
+  },
+  Polygon: {
+    currency: getCryptoCurrencyById("polygon"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Polygon",
+      appVersion: "1.10.4",
+    },
+    dependency: "",
+  },
+  Binance_Smart_Chain: {
+    currency: getCryptoCurrencyById("bsc"),
+    appQuery: {
+      model: DeviceModelId.nanoSP,
+      appName: "Binance Smart Chain",
+      appVersion: "1.10.4",
+    },
+    dependency: "",
+  },
+};
 
 export type SpeculosDevice = {
   transport: SpeculosTransport;
@@ -148,15 +352,13 @@ export async function createSpeculosDevice(
   idCounter = idCounter ?? getEnv("SPECULOS_PID_OFFSET");
   const speculosID = `speculosID-${++idCounter}`;
   const ports = getPorts(idCounter, isSpeculosWebsocket);
-
   const sdk = inferSDK(firmware, model);
 
   const subpath = overridesAppPath || conventionalAppSubpath(model, firmware, appName, appVersion);
   const appPath = `./apps/${subpath}`;
-  const flatDependencies = dependencies?.flatMap(dep => {
-    return `-l${dep}`;
-  });
 
+  console.log("deps appversion :");
+  console.log(dependencies !== undefined ? specs[dependencies[0]].appQuery.appVersion : "");
   const params = [
     "run",
     "-v",
@@ -194,8 +396,13 @@ export async function createSpeculosDevice(
           `${dependency}:./apps/${conventionalAppSubpath(model, firmware, dependency, appVersion)}`,
         ]
       : []),
-    ...(Array.isArray(flatDependencies) && flatDependencies.length > 0
-      ? [flatDependencies.join(" ")]
+    ...(dependencies !== undefined
+      ? dependencies.flatMap(dependency => [
+          "-l",
+          //todo update appVersion for dependency appVersion
+          //might need to retrieve dynamically from coin-apps repo or elsewhere
+          `${dependency}:./apps/${conventionalAppSubpath(model, firmware, dependency,  specs[dependency].appQuery.appVersion)}`,
+        ])
       : []),
     ...(sdk ? ["--sdk", sdk] : []),
     "--display",
@@ -217,8 +424,8 @@ export async function createSpeculosDevice(
           "40000",
         ]),
   ];
-
   console.log("speculos", `${speculosID}: spawning = ${params.join(" ")}`);
+  console.log("dependencies", `${dependencies}`);
   log("speculos", `${speculosID}: spawning = ${params.join(" ")}`);
 
   const p = spawn("docker", [...params, "--seed", `${seed}`]);
