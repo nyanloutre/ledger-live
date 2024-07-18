@@ -8,7 +8,7 @@ export function generateUUID(): string {
 export async function safeAppendFile(filePath: string, data: string) {
   try {
     await appendFile(filePath, data);
-  } catch (e: any) {
+  } catch (e: unknown) {
     if (e) console.error("couldn't append file", e);
   }
 }

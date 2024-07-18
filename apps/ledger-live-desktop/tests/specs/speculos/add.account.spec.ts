@@ -1,5 +1,5 @@
 import test from "../../fixtures/common";
-import { specs } from "@ledgerhq/speculos-transport";
+import { specs } from "../../utils/speculos";
 import { Currency } from "../../enum/Currency";
 import { addTmsLink } from "tests/utils/allureUtils";
 

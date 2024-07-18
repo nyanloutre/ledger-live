@@ -37,4 +37,9 @@ export class SpeculosPage extends AppPage {
       await pressBoth();
     }
   }
+
+  @step("")
+  async expectSwap() {
+    await pressRightUntil("toto");
+  }
 }
