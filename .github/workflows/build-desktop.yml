@@ -79,7 +79,7 @@ jobs:
       - name: Setup the caches
         id: caches
         if: ${{ matrix.config.name == 'linux' }}
-        uses: LedgerHQ/ledger-live/tools/actions/composites/setup-caches@develop
+        uses: LedgerHQ/ledger-live/tools/actions/composites/setup-caches@test/improve-desktop
         with:
           accountId: ${{ secrets.AWS_ACCOUNT_ID_PROD }}
           roleName: ${{ secrets.AWS_CACHE_ROLE_NAME }}

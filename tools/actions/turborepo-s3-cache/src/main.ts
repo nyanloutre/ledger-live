@@ -15,7 +15,7 @@ saveState("cleanupCacheFolder", cleanupCacheFolder);
 
   const out = fs.openSync(path.join(absoluteCacheDirectory, logFileName), "w");
   const err = fs.openSync(path.join(absoluteCacheDirectory, logFileName), "a");
-
+  console.log(getInput("aws-access-key"));
   const subprocess = spawn("node", [path.resolve(__dirname, "server.js")], {
     detached: true,
     stdio: ["ignore", out, err],
