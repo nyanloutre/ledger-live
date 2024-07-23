@@ -144,7 +144,6 @@ export class SwapPage extends AppPage {
     return this.detailsSwapId.innerText();
   }
 
-<<<<<<< HEAD
   async waitForProviderRates() {
     await this.centralisedQuoteFilterButton.waitFor({ state: "visible" });
     await this.decentralisedQuoteFilterButton.waitFor({ state: "visible" });
@@ -167,8 +166,6 @@ export class SwapPage extends AppPage {
     await expect(selectedCurrencyTo).toHaveText(currencyToSwapTo);
   }
 
-=======
->>>>>>> develop
   // TODO: pull this function out into a utility function so we can use it elsewhere
   async verifyHistoricalSwapsHaveLoadedFully() {
     await this.page.waitForFunction(async () => {
