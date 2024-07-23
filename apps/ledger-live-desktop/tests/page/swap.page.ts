@@ -1,7 +1,7 @@
-import { waitFor } from "../utils/waitFor";
 import { AppPage } from "tests/page/abstractClasses";
 import { step } from "tests/misc/reporters/step";
 import { expect } from "@playwright/test";
+import { waitFor } from "../utils/waitFor";
 
 export class SwapPage extends AppPage {
   private swapMenuButton = this.page.getByTestId("drawer-swap-button"); // TODO: Should this be here?
@@ -115,22 +115,6 @@ export class SwapPage extends AppPage {
     await this.customFeeTextbox.fill(amount);
   }
 
-  async filterByCentralisedQuotes() {
-    await this.centralisedQuoteFilterButton.click();
-  }
-
-  async filterByDecentralisedQuotes() {
-    await this.decentralisedQuoteFilterButton.click();
-  }
-
-  async filterByFloatingRateQuotes() {
-    await this.floatQuoteFilterButton.click();
-  }
-
-  async filterByFixedRateQuotes() {
-    await this.fixedQuoteFilterButton.click();
-  }
-
   async selectExchangeQuote(
     providerName: "changelly" | "cic" | "oneinch" | "paraswap",
     exchangeType: "fixed" | "float",
@@ -160,6 +144,7 @@ export class SwapPage extends AppPage {
     return this.detailsSwapId.innerText();
   }
 
+<<<<<<< HEAD
   async waitForProviderRates() {
     await this.centralisedQuoteFilterButton.waitFor({ state: "visible" });
     await this.decentralisedQuoteFilterButton.waitFor({ state: "visible" });
@@ -182,6 +167,8 @@ export class SwapPage extends AppPage {
     await expect(selectedCurrencyTo).toHaveText(currencyToSwapTo);
   }
 
+=======
+>>>>>>> develop
   // TODO: pull this function out into a utility function so we can use it elsewhere
   async verifyHistoricalSwapsHaveLoadedFully() {
     await this.page.waitForFunction(async () => {

@@ -43,6 +43,17 @@ const mockedDeviceJWT = { accessToken: "mock-device-jwt" };
 const trustchains = new Map<string, Trustchain>();
 const trustchainMembers = new Map<string, TrustchainMember[]>();
 
+/**
+ * to mock the encryption/decryption, we just xor the data with 0xff
+ */
+const applyXor = (a: Uint8Array) => {
+  const b = new Uint8Array(a.length);
+  for (let i = 0; i < a.length; i++) {
+    b[i] = a[i] ^ 0xff;
+  }
+  return b;
+};
+
 export class MockSDK implements TrustchainSDK {
   private context: TrustchainSDKContext;
   private lifecyle?: TrustchainLifecycle;
@@ -172,6 +183,10 @@ export class MockSDK implements TrustchainSDK {
     // simulate device interaction
     callbacks?.onEndRequestUserInteraction();
 
+    callbacks?.onStartRequestUserInteraction();
+    // simulate device interaction
+    callbacks?.onEndRequestUserInteraction();
+
     const currentMembers = (trustchainMembers.get(trustchain.rootId) || []).filter(
       m => m.id !== member.id,
     );
@@ -221,11 +236,11 @@ export class MockSDK implements TrustchainSDK {
 
   encryptUserData(trustchain: Trustchain, input: Uint8Array): Promise<Uint8Array> {
     assertTrustchain(trustchain);
-    return Promise.resolve(input);
+    return Promise.resolve(applyXor(input));
   }
 
   decryptUserData(trustchain: Trustchain, data: Uint8Array): Promise<Uint8Array> {
     assertTrustchain(trustchain);
-    return Promise.resolve(data);
+    return Promise.resolve(applyXor(data));
   }
 }

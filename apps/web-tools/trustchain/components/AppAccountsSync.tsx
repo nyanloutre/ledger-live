@@ -46,7 +46,7 @@ const localStateSelector = (state: State) => ({
   accountNames: state.walletState.accountNames,
 });
 
-const latestDistantStateSelector = (state: State) => state.walletState.wsState.data;
+const latestDistantStateSelector = (state: State) => state.walletState.walletSyncState.data;
 
 export default function AppAccountsSync({
   deviceId,
@@ -71,7 +71,10 @@ export default function AppAccountsSync({
     stateRef.current = state;
   }, [state]);
 
-  const getCurrentVersion = useCallback(() => stateRef.current.walletState.wsState.version, []);
+  const getCurrentVersion = useCallback(
+    () => stateRef.current.walletState.walletSyncState.version,
+    [],
+  );
 
   // in memory implementation of bridgeCache
   const bridgeCache = useMemo(() => {
@@ -96,7 +99,7 @@ export default function AppAccountsSync({
           const state = stateRef.current;
           const version = event.version;
           const data = event.data;
-          const wsState = state.walletState.wsState;
+          const walletSyncState = state.walletState.walletSyncState;
           const localState = localStateSelector(state);
           const ctx = { getAccountBridge, bridgeCache, blacklistedTokenIds: [] };
 
@@ -104,7 +107,7 @@ export default function AppAccountsSync({
           const resolved = await walletsync.resolveIncomingDistantState(
             ctx,
             localState,
-            wsState.data,
+            walletSyncState.data,
             data,
           );
 
@@ -182,9 +185,8 @@ export default function AppAccountsSync({
         trustchainSdk,
         getCurrentVersion,
         saveNewUpdate,
-        onTrustchainRefreshNeeded,
       }),
-    [trustchainSdk, getCurrentVersion, saveNewUpdate, onTrustchainRefreshNeeded],
+    [trustchainSdk, getCurrentVersion, saveNewUpdate],
   );
 
   const [visualPending, setVisualPending] = useState(true);
@@ -199,10 +201,11 @@ export default function AppAccountsSync({
       getState: () => stateRef.current,
       localStateSelector,
       latestDistantStateSelector,
+      onTrustchainRefreshNeeded,
     });
 
     return unsubscribe;
-  }, [trustchainSdk, walletSyncSdk, trustchain, memberCredentials]);
+  }, [trustchainSdk, walletSyncSdk, trustchain, memberCredentials, onTrustchainRefreshNeeded]);
 
   const setAccounts = useCallback(
     (fn: (_: Account[]) => Account[]) => {

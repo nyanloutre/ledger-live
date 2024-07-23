@@ -38,8 +38,6 @@ import { TrustchainEjected, TrustchainNotAllowed } from "./errors";
 
 export class SDK implements TrustchainSDK {
   private context: TrustchainSDKContext;
-  private jwt: JWT | undefined = undefined;
-  private deviceJwt: JWT | undefined = undefined;
   private lifecycle?: TrustchainLifecycle;
 
   constructor(context: TrustchainSDKContext, lifecyle?: TrustchainLifecycle) {
@@ -47,12 +45,19 @@ export class SDK implements TrustchainSDK {
     this.lifecycle = lifecyle;
   }
 
+  private jwt: JWT | undefined = undefined;
+  private jwtHash = "";
   withAuth<T>(
     trustchain: Trustchain,
     memberCredentials: MemberCredentials,
     job: (jwt: JWT) => Promise<T>,
     policy?: AuthCachePolicy,
   ): Promise<T> {
+    const hash = trustchain.rootId + " " + memberCredentials.pubkey;
+    if (this.jwtHash !== hash) {
+      this.jwt = undefined;
+      this.jwtHash = hash;
+    }
     return genericWithJWT(
       jwt => {
         this.jwt = jwt;
@@ -64,6 +69,7 @@ export class SDK implements TrustchainSDK {
     );
   }
 
+  private deviceJwt: JWT | undefined = undefined;
   withDeviceAuth<T>(
     transport: Transport,
     job: (jwt: JWT) => Promise<T>,
@@ -128,13 +134,14 @@ export class SDK implements TrustchainSDK {
 
     // make a stream tree from all the trustchains associated to this root id
     let { streamTree } = await withJwt(jwt => fetchTrustchain(jwt, trustchainRootId));
-
     const path = streamTree.getApplicationRootPath(this.context.applicationId);
     const child = streamTree.getChild(path);
     let shouldShare = true;
+
     if (child) {
       const resolved = await child.resolve();
       const members = resolved.getMembers();
+
       shouldShare = !members.some(m => crypto.to_hex(m) === memberCredentials.pubkey); // not already a member
     }
     if (shouldShare) {
@@ -229,6 +236,12 @@ export class SDK implements TrustchainSDK {
 
     const newPath = streamTree.getApplicationRootPath(applicationId, 1);
 
+    // We close the current trustchain with the hardware wallet in order to get a user confirmation of the action
+    const sendCloseStreamToAPI = await remapUserInteractions(
+      closeStream(streamTree, applicationRootPath, trustchainId, withJwt, hw),
+      callbacks,
+    );
+
     // derive a new branch of the tree on the new path
     streamTree = await remapUserInteractions(
       pushMember(streamTree, newPath, trustchainId, withJwt, hw, {
@@ -249,14 +262,8 @@ export class SDK implements TrustchainSDK {
       memberCredentials,
     );
 
-    // close the previous stream
-    streamTree = await closeStream(
-      streamTree,
-      applicationRootPath,
-      trustchainId,
-      withJwt,
-      softwareDevice,
-    );
+    // we send the close stream to the API only after the new stream is created in case user cancelled the process in the middle.
+    await sendCloseStreamToAPI();
 
     // deviceJwt have changed, proactively refresh it
     this.deviceJwt = await withJwt(api.refreshAuth);
@@ -390,6 +397,7 @@ async function authWithDevice(
   const hw = device.apdu(transport);
   const challenge = await api.getAuthenticationChallenge();
   const data = crypto.from_hex(challenge.tlv);
+
   const seedId = await remapUserInteractions(hw.getSeedId(data), callbacks);
   const signature = crypto.to_hex(seedId.signature);
   const response = await api.postChallengeResponse({
@@ -419,7 +427,11 @@ async function auth(trustchain: Trustchain, memberCredentials: MemberCredentials
       },
     })
     .catch(e => {
-      if (e instanceof LedgerAPI4xx && e.message.includes("Not a member of trustchain")) {
+      if (
+        e instanceof LedgerAPI4xx &&
+        (e.message.includes("Not a member of trustchain") ||
+          e.message.includes("You are not member"))
+      ) {
         throw new TrustchainEjected(e.message);
       }
       throw e;
@@ -476,8 +488,7 @@ async function closeStream(
     path,
     blocks: [crypto.to_hex(commandStream)],
   };
-  await withJwt(jwt => api.putCommands(jwt, trustchainId, request));
-  return streamTree;
+  return () => withJwt(jwt => api.putCommands(jwt, trustchainId, request));
 }
 
 export function convertKeyPairToLiveCredentials(keyPair: CryptoKeyPair): MemberCredentials {
