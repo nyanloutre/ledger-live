@@ -8,7 +8,7 @@ import { Crypto, KeyPair, KeyPairWithChainCode } from "./Crypto";
 
 const bip32 = BIP32Factory(ecc);
 
-const USE_AES_GCM = false;
+const USE_AES_GCM = true;
 const AES_BLOCK_SIZE = 16;
 
 export class NobleCryptoSecp256k1 implements Crypto {
@@ -125,14 +125,11 @@ export class NobleCryptoSecp256k1 implements Crypto {
     const normalizedSecret = this.normalizeKey(secret);
     const normalizeNonce = this.normalizeNonce(nonce);
     const cipher = crypto.createCipheriv("aes-256-gcm", normalizedSecret, normalizeNonce);
-    cipher.setAutoPadding(true);
+    cipher.setAutoPadding(false);
     let result = cipher.update(this.to_hex(message), "hex", "hex");
     result += cipher.final("hex");
     const bytes = this.from_hex(result);
-    return this.concat(
-      this.concat(new Uint8Array([cipher.getAuthTag()!.length]), cipher.getAuthTag()!),
-      bytes,
-    );
+    return this.concat(bytes, cipher.getAuthTag()!);
   }
 
   async decrypt(
@@ -160,9 +157,8 @@ export class NobleCryptoSecp256k1 implements Crypto {
   ): Promise<Uint8Array> {
     const normalizedSecret = this.normalizeKey(secret);
     const normalizeNonce = this.normalizeNonce(nonce);
-    const tagLength = ciphertext[0];
-    const authTag = ciphertext.slice(1, tagLength + 1);
-    const encryptedData = ciphertext.slice(tagLength + 1);
+    const encryptedData = ciphertext.slice(0, ciphertext.length - AES_BLOCK_SIZE);
+    const authTag = ciphertext.slice(encryptedData.length);
     const decipher = crypto.createDecipheriv("aes-256-gcm", normalizedSecret, normalizeNonce);
     decipher.setAuthTag(authTag);
     let result = decipher.update(this.to_hex(encryptedData), "hex", "hex");

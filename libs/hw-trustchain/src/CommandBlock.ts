@@ -8,6 +8,8 @@ export interface Command {
   getType(): CommandType;
 }
 
+export const TP_ENCRYPT = 1 << 7;
+
 /**
  *
  */
