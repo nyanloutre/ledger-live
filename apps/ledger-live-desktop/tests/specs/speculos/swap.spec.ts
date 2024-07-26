@@ -6,14 +6,14 @@ import { Account } from "tests/enum/Account";
 const accounts: Account[][] = [[Account.ETH_1, Account.BTC_1]];
 
 for (const [i, account] of accounts.entries()) {
-  test.describe.parallel("Swap", () => {
+  test.describe.serial("Swap", () => {
     const accPair: string[] = account.map(acc => acc.currency.deviceLabel.replace(/ /g, "_"));
     const dependencies: Dependency[] = accPair.map(appName => ({
       name: appName,
       appVersion: specs[appName].appQuery.appVersion,
     }));
     setExchangeDependencies(dependencies);
-    console.log("exchange deps:" + specs["Exchange"].dependencies);
+    console.log("exchange deps:" + JSON.stringify(specs["Exchange"].dependencies));
     test.use({
       userdata: "speculos-tests-app",
       testName: `Swap from (${account[0].accountName}) to (${account[1].accountName})`,
@@ -28,14 +28,17 @@ for (const [i, account] of accounts.entries()) {
 
       await app.layout.goToSwap();
       await app.swap.selectAccountToSwapFrom(account[0].accountName);
-      await app.swap.sendMax();
+      await app.swap.fillInOriginAmount("0.022");
+      //await app.swap.sendMax();
       await app.swap.selectCurrencyToSwapTo(account[1].currency.uiName);
       //find a way to retrieve each target currency accounts name & balance to verify selected one
-      await app.swap.selectExchangeQuote("changelly", "fixed");
-      console.log(app.speculos);
-      //await app.swap.confirmExchange();
+      await app.swap.selectExchangeQuote("changelly", "float");
+      await app.swap.clickExchangeButton();
+      await page.waitForTimeout(10000); // 10 seconds in milliseconds
+
+      //console.log(await app.speculos.expectSwap());
       //await new Promise(resolve => setTimeout(resolve, 1000));
-      await app.speculos.expectSwap();
+      //await app.speculos.expectSwap();
       //await app.swap.selectCurrencyToSwapTo(account[1].currency.uiName);
     });
   });

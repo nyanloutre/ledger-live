@@ -61,6 +61,7 @@ export async function releaseSpeculosDevice(id: string) {
   const obj = data[id];
 
   if (obj) {
+    console.log(`releasing speculos device`);
     obj.destroy();
   }
 }
@@ -95,12 +96,11 @@ const getPorts = (idCounter: number, isSpeculosWebsocket?: boolean) => {
     const vncPort = 35000 + idCounter;
     const buttonPort = 40000 + idCounter;
     const automationPort = 45000 + idCounter;
-
     return { apduPort, vncPort, buttonPort, automationPort };
   } else {
     const apiPort = 30000 + idCounter;
     const vncPort = 35000 + idCounter;
-
+    console.log(`api port: ${apiPort}, vncport: ${vncPort}`);
     return { apiPort, vncPort };
   }
 };
@@ -157,7 +157,6 @@ export async function createSpeculosDevice(
 
   const subpath = overridesAppPath || conventionalAppSubpath(model, firmware, appName, appVersion);
   const appPath = `./apps/${subpath}`;
-
   const params = [
     "run",
     "-v",
@@ -237,22 +236,27 @@ export async function createSpeculosDevice(
   let destroyed = false;
 
   const destroy = () => {
-    if (destroyed) return;
-    destroyed = true;
+    console.log(`into destroy`);
+  };
+    /*if (destroyed) return;
+    //destroyed = true;
     new Promise((resolve, reject) => {
       if (!data[speculosID]) return;
-      delete data[speculosID];
+      //delete data[speculosID];
+      //console.log(`deleting speculos`);
       exec(`docker rm -f ${speculosID}`, (error, stdout, stderr) => {
         if (error) {
+          console.log("speculos-error", `${speculosID} not destroyed ${error} ${stderr}`);
           log("speculos-error", `${speculosID} not destroyed ${error} ${stderr}`);
           reject(error);
         } else {
+          console.log("speculos", `destroyed ${speculosID}`);
           log("speculos", `destroyed ${speculosID}`);
           resolve(undefined);
         }
       });
     });
-  };
+  };*/
 
   p.stdout.on("data", data => {
     if (data) {
@@ -276,6 +280,7 @@ export async function createSpeculosDevice(
       );
     } else if (data.includes("address already in use")) {
       if (maxRetry > 0) {
+        console.log("speculos", "retrying speculos connection");
         log("speculos", "retrying speculos connection");
         destroy();
         resolveReady(false);
@@ -283,9 +288,11 @@ export async function createSpeculosDevice(
     }
   });
   p.on("close", () => {
+    console.log("speculos", `${speculosID} closed`);
     log("speculos", `${speculosID} closed`);
 
     if (!destroyed) {
+      console.log(`speculos process failure. ${latestStderr || ""}`);
       destroy();
       rejectReady(new Error(`speculos process failure. ${latestStderr || ""}`));
     }
@@ -299,12 +306,13 @@ export async function createSpeculosDevice(
 
   let transport: SpeculosTransport;
   if (isSpeculosWebsocket) {
+    console.log(`opening transport WITH websocket`);
     transport = await SpeculosTransportWebsocket.open({
       apduPort: ports?.apduPort as number,
       buttonPort: ports?.buttonPort as number,
       automationPort: ports?.automationPort as number,
     });
-
+    console.log(`transport: ${JSON.stringify(transport)}`);
     data[speculosID] = {
       process: p,
       apduPort: ports.apduPort as number,
@@ -313,17 +321,21 @@ export async function createSpeculosDevice(
       transport,
       destroy,
     };
+    console.log(`data[speculosID] : ${JSON.stringify(data[speculosID])}`);
   } else {
+    console.log(`opening transport WITHOUT websocket`);
     transport = await SpeculosTransportHttp.open({
       apiPort: ports.apiPort?.toString(),
     });
-
+    console.log(`transport: ${transport}`);
+    console.log(`port ${ports.apiPort?.toString()}`);
     data[speculosID] = {
       process: p,
       apiPort: ports.apiPort?.toString(),
       transport,
       destroy,
     };
+    console.log(`data[speculosID] : ${data}`);
   }
 
   const device = {

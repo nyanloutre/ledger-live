@@ -103,7 +103,7 @@ function ToRow({
             onMenuOpen={trackEditCurrency}
           />
         </Box>
-        <InputCurrencyContainer flex="1">
+        <InputCurrencyContainer flex="1" data-test-id="destination-currency-amount">
           <InputCurrency
             // @DEV: onChange props is required by the component, there is no read-only logic
             onChange={() => null}

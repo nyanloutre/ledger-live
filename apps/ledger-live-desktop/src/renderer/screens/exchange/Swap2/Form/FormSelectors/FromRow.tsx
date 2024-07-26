@@ -195,7 +195,7 @@ function FromRow({
         </Box>
       </Box>
       <Box horizontal boxShadow="0px 2px 4px rgba(0, 0, 0, 0.05);">
-        <Box data-test-id="origin-currency-dropdown" width="50%">
+        <Box width="50%" data-test-id="origin-currency-dropdown">
           <SelectAccount
             accounts={accounts}
             value={fromAccount}
@@ -209,7 +209,7 @@ function FromRow({
             onMenuOpen={trackEditAccount}
           />
         </Box>
-        <InputSection width="50%">
+        <InputSection width="50%" data-test-id="origin-currency-amount">
           <InputCurrency
             loading={isSendMaxLoading}
             value={fromAmount}

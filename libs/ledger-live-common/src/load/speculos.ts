@@ -151,6 +151,19 @@ export const findAppCandidate = (
   return app;
 };
 
+export const findLatestAppCandidate = (
+  appCandidates: AppCandidate[],
+  search: AppSearch,
+): AppCandidate | null => {
+  let apps = appCandidates.filter(c => appCandidatesMatches(c, search));
+  if (apps.length === 0) {
+    return null;
+  }
+
+  apps = apps.sort((a, b) => semver.rcompare(a.appVersion, b.appVersion));
+  return apps[0];
+};
+
 function eatDevice(parts: string[]): {
   model?: DeviceModelId;
   firmware?: string;

@@ -149,7 +149,7 @@ export const test = base.extend<TestFixtures>({
     }
 
     // record all logs into an artifact
-    const logFile = testInfo.outputPath("logs.log");
+    /*const logFile = testInfo.outputPath("logs.log");
     page.on("console", msg => {
       const txt = msg.text();
       if (msg.type() == "error") {
@@ -160,7 +160,7 @@ export const test = base.extend<TestFixtures>({
         console.log(txt);
       }
       safeAppendFile(logFile, `${txt}\n`);
-    });
+    });*/
 
     // app is loaded
     await page.waitForLoadState("domcontentloaded");

@@ -10,6 +10,7 @@ export class SwapPage extends AppPage {
   // Swap Amount and Currency components
   private maxSpendableToggle = this.page.getByTestId("swap-max-spendable-toggle");
   private originCurrencyDropdown = this.page.getByTestId("origin-currency-dropdown");
+  private originCurrencyAmount = this.page.locator("[data-test-id=origin-currency-amount] input");
   private destinationCurrencyDropdown = this.page.getByTestId("destination-currency-dropdown");
   private fromCurrencyDropdownAddAccountButton = this.page.getByText("Add account");
   private reverseSwapPairButton = this.page.getByTestId("swap-reverse-pair-button");
@@ -40,7 +41,9 @@ export class SwapPage extends AppPage {
 
   // Exchange Button Component
   private exchangeButton = this.page.getByTestId("exchange-button");
-
+  private confirmExchangeButton = (exchangeProvider: string) =>
+    this.page.getByRole("button").getByText(`Swap with ${exchangeProvider}`);
+  //private confirmExchangeButton = this.page.locator("[data-test-id='exchange-button']");
   // Exchange Drawer Components
   readonly swapId = this.page.getByTestId("swap-id");
   private seeDetailsButton = this.page.locator('button:has-text("See details")');
@@ -126,7 +129,13 @@ export class SwapPage extends AppPage {
     return waitFor(() => this.exchangeButton.isEnabled(), 250, 10000);
   }
 
+  async clickExchangeButton() {
+    await this.exchangeButton.click();
+  }
+
   async confirmExchange() {
+    //await this.confirmExchangeButton("Changelly").click();
+    //await this.confirmExchangeButton.click();
     await this.exchangeButton.click();
   }
 
@@ -155,6 +164,11 @@ export class SwapPage extends AppPage {
     await this.dropdownOptions.locator(this.optionWithText(accountToSwapFrom)).click();
     const selectedAccountFrom = this.originCurrencyDropdown.locator(this.dropdownSelectedValue);
     await expect(selectedAccountFrom).toHaveText(accountToSwapFrom);
+  }
+
+  @step("Fill in amount: $0")
+  async fillInOriginAmount(originAmount: string) {
+    await this.originCurrencyAmount.fill(originAmount);
   }
 
   @step("Select currency to swap to: $0")

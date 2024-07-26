@@ -4,7 +4,8 @@ import {
   listAppCandidates,
   createSpeculosDevice,
   releaseSpeculosDevice,
-  findAppCandidate,
+  //findAppCandidate,
+  findLatestAppCandidate,
   SpeculosTransport,
 } from "@ledgerhq/live-common/load/speculos";
 import { SpeculosDevice } from "@ledgerhq/speculos-transport";
@@ -25,7 +26,7 @@ export type Spec = {
   };
   /** @deprecated */
   dependency?: string;
-  dependencies?: { name: string; appVersion: string }[];
+  dependencies?: Dependency[];
   onSpeculosDeviceCreated?: (device: Device) => Promise<void>;
 };
 
@@ -51,7 +52,7 @@ export const specs: Specs = {
     appQuery: {
       model: DeviceModelId.nanoSP,
       appName: "Bitcoin",
-      appVersion: "2.2.2",
+      appVersion: "2.2.4",
     },
     dependency: "",
   },
@@ -237,7 +238,9 @@ export async function startSpeculos(
   }
 
   const { appQuery, dependency, dependencies, onSpeculosDeviceCreated } = spec;
-  const appCandidate = findAppCandidate(appCandidates, appQuery);
+  console.log("appquery" + JSON.stringify(appQuery));
+  const appCandidate = findLatestAppCandidate(appCandidates, appQuery);
+  console.log("appCandidate " + JSON.stringify(appCandidate));
   if (!appCandidate) {
     console.warn("no app found for " + testName);
     console.warn(appQuery);
@@ -296,8 +299,8 @@ export async function waitFor(text: string, maxAttempts: number = 10): Promise<s
       `http://127.0.0.1:${speculosApiPort}/events?stream=false&currentscreenonly=true`,
     );
     const responseData = response.data;
-    console.log("waitFor responseData" + responseData);
     const texts = responseData.events.map(event => event.text);
+    console.log("waitFor responseData" + texts);
 
     if (texts[0].includes(text)) {
       textFound = true;
@@ -325,8 +328,8 @@ export async function pressRightUntil(text: string, maxAttempts: number = 10): P
       `http://127.0.0.1:${speculosApiPort}/events?stream=false&currentscreenonly=true`,
     );
     const responseData = response.data;
-    console.log("pressRightUntil responseData" + responseData);
     const texts = responseData.events.map(event => event.text);
+    console.log("pressRightUntil responseData" + texts);
 
     if (texts[0].includes(text)) {
       textFound = true;
