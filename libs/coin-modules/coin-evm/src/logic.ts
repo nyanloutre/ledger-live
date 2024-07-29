@@ -5,19 +5,20 @@ import {
   AnyMessage,
   MessageProperties,
   Operation,
-  SubAccount,
+  TokenAccount,
 } from "@ledgerhq/types-live";
 import murmurhash from "imurmurhash";
 import { log } from "@ledgerhq/logs";
 import { getEnv } from "@ledgerhq/live-env";
 import { isNFTActive } from "@ledgerhq/coin-framework/nft/support";
-import { CryptoCurrency, Unit } from "@ledgerhq/types-cryptoassets";
+import { CryptoCurrency, TokenCurrency, Unit } from "@ledgerhq/types-cryptoassets";
 import { mergeOps } from "@ledgerhq/coin-framework/bridge/jsHelpers";
 import { encodeOperationId } from "@ledgerhq/coin-framework/operation";
-import { listTokensForCryptoCurrency } from "@ledgerhq/cryptoassets/tokens";
+import { hashes as tokensHashesByChainId } from "@ledgerhq/cryptoassets/data/evm/index";
 import { decodeTokenAccountId } from "@ledgerhq/coin-framework/account/index";
 import { getEIP712FieldsDisplayedOnNano } from "@ledgerhq/evm-tools/message/EIP712/index";
 import { getNodeApi } from "./api/node/index";
+import { getCoinConfig } from "./config";
 import {
   EvmNftTransaction,
   Transaction as EvmTransaction,
@@ -70,11 +71,17 @@ export const getAdditionalLayer2Fees = async (
 ): Promise<BigNumber | undefined> => {
   switch (currency.id) {
     case "optimism":
-    case "optimism_goerli":
+    case "optimism_sepolia":
     case "base":
     case "base_sepolia": {
       const nodeApi = getNodeApi(currency);
       const additionalFees = await nodeApi.getOptimismAdditionalFees(currency, transaction);
+      return additionalFees;
+    }
+    case "scroll":
+    case "scroll_sepolia": {
+      const nodeApi = getNodeApi(currency);
+      const additionalFees = await nodeApi.getScrollAdditionalFees(currency, transaction);
       return additionalFees;
     }
     default:
@@ -98,16 +105,16 @@ const updatableSubAccountProperties: { name: string; isOps: boolean }[] = [
  */
 export const mergeSubAccounts = (
   initialAccount: Account | undefined,
-  newSubAccounts: Partial<SubAccount>[],
-): Array<Partial<SubAccount> | SubAccount> => {
-  const oldSubAccounts: Array<Partial<SubAccount> | SubAccount> | undefined =
+  newSubAccounts: Partial<TokenAccount>[],
+): Array<Partial<TokenAccount> | TokenAccount> => {
+  const oldSubAccounts: Array<Partial<TokenAccount> | TokenAccount> | undefined =
     initialAccount?.subAccounts;
   if (!oldSubAccounts) {
     return newSubAccounts;
   }
 
   // Creating a map of already existing sub accounts by id
-  const oldSubAccountsById: { [key: string]: Partial<SubAccount> } = {};
+  const oldSubAccountsById: { [key: string]: Partial<TokenAccount> } = {};
   for (const oldSubAccount of oldSubAccounts) {
     oldSubAccountsById[oldSubAccount.id!] = oldSubAccount;
   }
@@ -115,9 +122,9 @@ export const mergeSubAccounts = (
   // Looping on new sub accounts to compare them with already existing ones
   // Already existing will be updated if necessary (see `updatableSubAccountProperties`)
   // Fresh new sub accounts will be added/pushed after already existing
-  const newSubAccountsToAdd: Partial<SubAccount>[] = [];
+  const newSubAccountsToAdd: Partial<TokenAccount>[] = [];
   for (const newSubAccount of newSubAccounts) {
-    const duplicatedAccount: Partial<SubAccount> | undefined =
+    const duplicatedAccount: Partial<TokenAccount> | undefined =
       oldSubAccountsById[newSubAccount.id!];
 
     // If this sub account was not already in the initialAccount
@@ -127,7 +134,7 @@ export const mergeSubAccounts = (
       continue;
     }
 
-    const updates: Partial<SubAccount> = {};
+    const updates: Partial<TokenAccount> = {};
     for (const { name, isOps } of updatableSubAccountProperties) {
       if (!isOps) {
         // @ts-expect-error FIXME: fix typings
@@ -155,20 +162,35 @@ export const mergeSubAccounts = (
 };
 
 /**
- * A pseudo private Map used to memoize the very long
- * string used to detect a change in the CAL
- * tokens and its corresponding hash.
+ * Map of Crypto Asset List content hash per currency.
+ * Used to detect changes between syncs and trigger
+ * a full synchronization in order to detect
+ * freshly added token definitions
  */
-const simpleSyncHashMemoize: Record<string, string> = {};
+const CALHashByChainIdMap = new Map<CryptoCurrency, string>();
 
 /**
- * Helper clearing the simpleSyncHashMemoize object
- * Exported & used only by test runners
+ * Getter for the CAL content hash
  */
-export const __testOnlyClearSyncHashMemoize = (): void => {
-  for (const key in simpleSyncHashMemoize) {
-    delete simpleSyncHashMemoize[key];
+export const getCALHash = (currency: CryptoCurrency): string => {
+  if (!CALHashByChainIdMap.has(currency)) {
+    CALHashByChainIdMap.set(
+      currency,
+      tokensHashesByChainId[
+        (currency?.ethereumLikeInfo?.chainId || "") as keyof typeof tokensHashesByChainId
+      ],
+    );
   }
+
+  return CALHashByChainIdMap.get(currency) || "";
+};
+
+/**
+ * Setter for the CAL content hash
+ */
+export const setCALHash = (currency: CryptoCurrency, hash: string): string => {
+  CALHashByChainIdMap.set(currency, hash);
+  return CALHashByChainIdMap.get(currency)!;
 };
 
 /**
@@ -182,31 +204,24 @@ export const __testOnlyClearSyncHashMemoize = (): void => {
  * which would mean not seeing some potential new tokens.
  * This can be fixed by simply removing the account
  * and adding it again, now syncing from block 0.
- *
- * This computation could be easily simplified
- * if the CAL files where to include an
- * already crafted hash per token
  */
 export const getSyncHash = (
   currency: CryptoCurrency,
   blacklistedTokenIds: string[] = [],
 ): string => {
-  const tokens = listTokensForCryptoCurrency(currency).filter(
-    token => !blacklistedTokenIds.includes(token.id),
-  );
-  const basicTokensListString = tokens
-    .map(token => token.id + token.contractAddress + token.name + token.ticker)
-    .join("");
   const isNftSupported = isNFTActive(currency);
-  const { node = {}, explorer = {} } = currency.ethereumLikeInfo || {};
+
+  const config = getCoinConfig(currency).info;
+  const { node = {}, explorer = {} } = config;
 
   const stringToHash =
-    basicTokensListString + isNftSupported + JSON.stringify(node) + JSON.stringify(explorer);
+    getCALHash(currency) +
+    blacklistedTokenIds.join("") +
+    isNftSupported +
+    JSON.stringify(node) +
+    JSON.stringify(explorer);
 
-  if (!simpleSyncHashMemoize[stringToHash]) {
-    simpleSyncHashMemoize[stringToHash] = `0x${murmurhash(stringToHash).result().toString(16)}`;
-  }
-  return simpleSyncHashMemoize[stringToHash];
+  return `0x${murmurhash(stringToHash).result().toString(16)}`;
 };
 
 /**
@@ -231,7 +246,7 @@ export const attachOperations = (
   _tokenOperations: Operation[],
   _nftOperations: Operation[],
   _internalOperations: Operation[],
-  filters: { blacklistedTokenIds?: string[] } = { blacklistedTokenIds: [] },
+  filters: { blacklistedTokenIds: string[] | undefined } = { blacklistedTokenIds: [] },
 ): Operation[] => {
   const { blacklistedTokenIds } = filters;
 
@@ -397,4 +412,21 @@ export const safeEncodeEIP55 = (addr: string): string => {
 
     return addr;
   }
+};
+
+/**
+ * Similar to mergeAccount but used to keep previous data we can't fetch on chain
+ */
+// logic.ts
+export const createSwapHistoryMap = (
+  initialAccount: Account | undefined,
+): Map<TokenCurrency, TokenAccount["swapHistory"]> => {
+  if (!initialAccount?.subAccounts) return new Map();
+
+  const swapHistoryMap = new Map<TokenCurrency, TokenAccount["swapHistory"]>();
+  for (const subAccount of initialAccount.subAccounts) {
+    swapHistoryMap.set(subAccount.token, subAccount.swapHistory);
+  }
+
+  return swapHistoryMap;
 };

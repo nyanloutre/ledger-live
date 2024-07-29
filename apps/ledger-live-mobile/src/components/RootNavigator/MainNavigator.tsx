@@ -5,6 +5,8 @@ import { IconsLegacy } from "@ledgerhq/native-ui";
 import { BottomTabBarProps, createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useSelector } from "react-redux";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Web3HubNavigator from "LLM/features/Web3Hub/Navigator";
+import { useFeature } from "@ledgerhq/live-common/featureFlags/index";
 import { useManagerNavLockCallback } from "./CustomBlockRouterNavigator";
 import { ScreenName, NavigatorName } from "~/const";
 import { PortfolioTabIcon } from "~/screens/Portfolio";
@@ -12,7 +14,7 @@ import Transfer, { TransferTabIcon } from "../TabBar/Transfer";
 import TabIcon from "../TabIcon";
 import PortfolioNavigator from "./PortfolioNavigator";
 import { hasOrderedNanoSelector, readOnlyModeEnabledSelector } from "~/reducers/settings";
-import ManagerNavigator, { ManagerTabIcon } from "./ManagerNavigator";
+import MyLedgerNavigator, { ManagerTabIcon } from "./MyLedgerNavigator";
 import DiscoverNavigator from "./DiscoverNavigator";
 import customTabBar from "../TabBar/CustomTabBar";
 import { MainNavigatorParamList } from "./types/MainNavigator";
@@ -32,6 +34,7 @@ export default function MainNavigator() {
   const hasOrderedNano = useSelector(hasOrderedNanoSelector);
   const isMainNavigatorVisible = useSelector(isMainNavigatorVisibleSelector);
   const managerNavLockCallback = useManagerNavLockCallback();
+  const web3hub = useFeature("web3hub");
 
   const insets = useSafeAreaInsets();
   const tabBar = useMemo(
@@ -131,29 +134,50 @@ export default function MainNavigator() {
           tabBarIcon: () => <TransferTabIcon />,
         }}
       />
-      <Tab.Screen
-        name={NavigatorName.Discover}
-        component={DiscoverNavigator}
-        options={{
-          headerShown: false,
-          tabBarIcon: props => (
-            <TabIcon Icon={IconsLegacy.PlanetMedium} i18nKey="tabs.discover" {...props} />
-          ),
-        }}
-        listeners={({ navigation }) => ({
-          tabPress: e => {
-            e.preventDefault();
-            managerLockAwareCallback(() => {
-              navigation.navigate(NavigatorName.Discover, {
-                screen: ScreenName.DiscoverScreen,
+      {web3hub?.enabled ? (
+        <Tab.Screen
+          name={NavigatorName.Web3Hub}
+          component={Web3HubNavigator}
+          options={{
+            headerShown: false,
+            tabBarIcon: props => (
+              <TabIcon Icon={IconsLegacy.PlanetMedium} i18nKey="tabs.discover" {...props} />
+            ),
+          }}
+          listeners={({ navigation }) => ({
+            tabPress: e => {
+              e.preventDefault();
+              managerLockAwareCallback(() => {
+                navigation.navigate(NavigatorName.Web3Hub);
               });
-            });
-          },
-        })}
-      />
+            },
+          })}
+        />
+      ) : (
+        <Tab.Screen
+          name={NavigatorName.Discover}
+          component={DiscoverNavigator}
+          options={{
+            headerShown: false,
+            tabBarIcon: props => (
+              <TabIcon Icon={IconsLegacy.PlanetMedium} i18nKey="tabs.discover" {...props} />
+            ),
+          }}
+          listeners={({ navigation }) => ({
+            tabPress: e => {
+              e.preventDefault();
+              managerLockAwareCallback(() => {
+                navigation.navigate(NavigatorName.Discover, {
+                  screen: ScreenName.DiscoverScreen,
+                });
+              });
+            },
+          })}
+        />
+      )}
       <Tab.Screen
-        name={NavigatorName.Manager}
-        component={ManagerNavigator}
+        name={NavigatorName.MyLedger}
+        component={MyLedgerNavigator}
         options={{
           tabBarIcon: props => <ManagerTabIcon {...props} />,
           tabBarTestID: "TabBarManager",
@@ -167,8 +191,8 @@ export default function MainNavigator() {
               } else if (readOnlyModeEnabled) {
                 navigation.navigate(NavigatorName.BuyDevice);
               } else {
-                navigation.navigate(NavigatorName.Manager, {
-                  screen: ScreenName.Manager,
+                navigation.navigate(NavigatorName.MyLedger, {
+                  screen: ScreenName.MyLedgerChooseDevice,
                   params: {
                     tab: undefined,
                     searchQuery: undefined,

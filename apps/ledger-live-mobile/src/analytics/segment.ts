@@ -49,9 +49,11 @@ import { NavigatorName } from "~/const";
 import { previousRouteNameRef, currentRouteNameRef } from "./screenRefs";
 import { AnonymousIpPlugin } from "./AnonymousIpPlugin";
 import { UserIdPlugin } from "./UserIdPlugin";
+import { BrazePlugin } from "./BrazePlugin";
 import { Maybe } from "../types/helpers";
 import { appStartupTime } from "../StartupTimeMarker";
 import { aggregateData, getUniqueModelIdList } from "../logic/modelIdList";
+import { getEnv } from "@ledgerhq/live-env";
 
 let sessionId = uuid();
 const appVersion = `${VersionNumber.appVersion || ""} (${VersionNumber.buildVersion || ""})`;
@@ -101,10 +103,12 @@ const getMandatoryProperties = async (store: AppStore) => {
   const analyticsEnabled = analyticsEnabledSelector(state);
   const personalizedRecommendationsEnabled = personalizedRecommendationsEnabledSelector(state);
   const hasSeenAnalyticsOptInPrompt = hasSeenAnalyticsOptInPromptSelector(state);
+  const devModeEnabled = getEnv("MANAGER_DEV_MODE");
 
   return {
     userId: user?.id,
     braze_external_id: user?.id, // Needed for braze with this exact name
+    devModeEnabled,
     optInAnalytics: analyticsEnabled,
     optInPersonalRecommendations: personalizedRecommendationsEnabled,
     hasSeenAnalyticsOptInPrompt,
@@ -227,6 +231,8 @@ export const start = async (store: AppStore): Promise<SegmentClient | undefined>
     segmentClient.add({ plugin: new AnonymousIpPlugin() });
     // This allows us to make sure we are adding the userId to the event
     segmentClient.add({ plugin: new UserIdPlugin() });
+    // This allows us to debounce identify events for Braze and save data points
+    segmentClient.add({ plugin: new BrazePlugin() });
 
     if (created) {
       segmentClient.reset();

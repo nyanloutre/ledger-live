@@ -3,6 +3,7 @@ import { getEnv } from "@ledgerhq/live-env";
 import network from "@ledgerhq/live-network/network";
 import { CryptoCurrency, LedgerExplorerId } from "@ledgerhq/types-cryptoassets";
 import { GasOptions } from "../../types";
+import { EvmConfigInfo, getCoinConfig } from "../../config";
 import { LedgerGasTrackerUsedIncorrectly, NoGasTrackerFound } from "../../errors";
 import { GasTrackerApi, isLedgerGasTracker } from "./types";
 
@@ -22,8 +23,6 @@ const explorerIdGasTrackerMap = new Map<LedgerExplorerId, GasTracker>([
   ["eth", { compatibilty: { eip1559: true } }],
   ["etc", { compatibilty: { eip1559: false } }],
   ["matic", { compatibilty: { eip1559: true } }],
-  ["eth_ropsten", { compatibilty: { eip1559: true } }],
-  ["eth_goerli", { compatibilty: { eip1559: true } }],
   ["eth_sepolia", { compatibilty: { eip1559: true } }],
   ["eth_holesky", { compatibilty: { eip1559: true } }],
 ]);
@@ -35,9 +34,16 @@ export const getGasOptions = async ({
   currency: CryptoCurrency;
   options?: {
     useEIP1559: boolean;
+    overrideGasTracker?: EvmConfigInfo["gasTracker"];
   };
 }): Promise<GasOptions> => {
-  const { gasTracker } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+
+  const gasTracker =
+    options?.overrideGasTracker ||
+    config.gasTracker ||
+    /* istanbul ignore next */ ({} as EvmConfigInfo["gasTracker"]);
+
   if (!isLedgerGasTracker(gasTracker)) {
     throw new LedgerGasTrackerUsedIncorrectly();
   }

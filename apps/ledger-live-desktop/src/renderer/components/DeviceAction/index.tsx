@@ -17,7 +17,10 @@ import {
   setLastSeenDeviceInfo,
   addNewDeviceModel,
 } from "~/renderer/actions/settings";
-import { preferredDeviceModelSelector } from "~/renderer/reducers/settings";
+import {
+  storeSelector as settingsSelector,
+  preferredDeviceModelSelector,
+} from "~/renderer/reducers/settings";
 import { DeviceModelId } from "@ledgerhq/devices";
 import AutoRepair from "~/renderer/components/AutoRepair";
 import TransactionConfirm from "~/renderer/components/TransactionConfirm";
@@ -31,6 +34,8 @@ import {
   UserRefusedFirmwareUpdate,
   UserRefusedOnDevice,
   UserRefusedDeviceNameChange,
+  UnresponsiveDeviceError,
+  TransportRaceCondition,
 } from "@ledgerhq/errors";
 import {
   InstallingApp,
@@ -61,13 +66,19 @@ import {
   DeviceInfo,
   DeviceModelInfo,
 } from "@ledgerhq/types-live";
-import { Exchange, ExchangeRate, InitSwapResult } from "@ledgerhq/live-common/exchange/swap/types";
+import {
+  ExchangeSwap,
+  ExchangeRate,
+  InitSwapResult,
+} from "@ledgerhq/live-common/exchange/swap/types";
 import { Transaction, TransactionStatus } from "@ledgerhq/live-common/generated/types";
 import { AppAndVersion } from "@ledgerhq/live-common/hw/connectApp";
 import { Device } from "@ledgerhq/types-devices";
 import { LedgerErrorConstructor } from "@ledgerhq/errors/lib/helpers";
 import { TokenCurrency } from "@ledgerhq/types-cryptoassets";
 import { isDeviceNotOnboardedError } from "./utils";
+import { useKeepScreenAwake } from "~/renderer/hooks/useKeepScreenAwake";
+import { walletSelector } from "~/renderer/reducers/wallet";
 
 type LedgerError = InstanceType<LedgerErrorConstructor<{ [key: string]: unknown }>>;
 
@@ -220,6 +231,8 @@ export const DeviceActionDefaultRendering = <R, H extends States, P>({
   const dispatch = useDispatch();
   const preferredDeviceModel = useSelector(preferredDeviceModelSelector);
   const swapDefaultTrack = useGetSwapTrackingProperties();
+  const stateSettings = useSelector(settingsSelector);
+  const walletState = useSelector(walletSelector);
 
   const type = useTheme().colors.palette.type;
 
@@ -337,7 +350,7 @@ export const DeviceActionDefaultRendering = <R, H extends States, P>({
           amountExpectedTo = 0,
         } = request as {
           transaction: Transaction;
-          exchange: Exchange;
+          exchange: ExchangeSwap;
           provider: string;
           rate: number;
           amountExpectedTo: number;
@@ -356,6 +369,8 @@ export const DeviceActionDefaultRendering = <R, H extends States, P>({
           swapDefaultTrack,
           amountExpectedTo: amountExpectedTo.toString() ?? undefined,
           estimatedFees: estimatedFees?.toString() ?? undefined,
+          stateSettings,
+          walletState,
         });
       }
 
@@ -375,7 +390,7 @@ export const DeviceActionDefaultRendering = <R, H extends States, P>({
   if (initSwapRequested && !initSwapResult && !initSwapError) {
     const { transaction, exchange, exchangeRate } = request as {
       transaction: Transaction;
-      exchange: Exchange;
+      exchange: ExchangeSwap;
       exchangeRate: ExchangeRate;
     };
     const { amountExpectedTo, estimatedFees } = hookState;
@@ -388,6 +403,8 @@ export const DeviceActionDefaultRendering = <R, H extends States, P>({
       amountExpectedTo: amountExpectedTo ?? undefined,
       estimatedFees: estimatedFees ?? undefined,
       swapDefaultTrack,
+      stateSettings,
+      walletState,
     });
   }
 
@@ -406,10 +423,15 @@ export const DeviceActionDefaultRendering = <R, H extends States, P>({
   }
 
   if (inWrongDeviceForAccount) {
-    return renderInWrongAppForAccount({
+    return renderInWrongAppForAccount({ t, onRetry });
+  }
+
+  if (unresponsive || error instanceof TransportRaceCondition) {
+    return renderError({
       t,
+      error: new UnresponsiveDeviceError(),
       onRetry,
-      accountName: inWrongDeviceForAccount.accountName,
+      withExportLogs: false,
     });
   }
 
@@ -423,7 +445,7 @@ export const DeviceActionDefaultRendering = <R, H extends States, P>({
       return renderError({
         t,
         error,
-        managerAppName: error.managerAppName,
+        managerAppName: (error as { managerAppName: string }).managerAppName,
       });
     }
 
@@ -451,7 +473,7 @@ export const DeviceActionDefaultRendering = <R, H extends States, P>({
     }
 
     // workaround to catch ECONNRESET error and show better message
-    if (error?.message?.includes("ECONNRESET")) {
+    if ((error as Error)?.message?.includes("ECONNRESET")) {
       return renderError({
         t,
         error: new EConnResetError(),
@@ -467,7 +489,7 @@ export const DeviceActionDefaultRendering = <R, H extends States, P>({
     // All the error rendering needs to be unified, the same way we do for ErrorIcon
     // not handled here.
     if (
-      error instanceof UserRefusedFirmwareUpdate ||
+      (error as unknown) instanceof UserRefusedFirmwareUpdate ||
       (error as unknown) instanceof UserRefusedAllowManager ||
       (error as unknown) instanceof UserRefusedOnDevice ||
       (error as unknown) instanceof UserRefusedAddress ||
@@ -499,7 +521,7 @@ export const DeviceActionDefaultRendering = <R, H extends States, P>({
     return renderLockedDeviceError({ t, device, onRetry, inlineRetry });
   }
 
-  if ((!isLoading && !device) || unresponsive) {
+  if (!isLoading && !device) {
     return renderConnectYourDevice({
       modelId,
       type,
@@ -602,6 +624,7 @@ export default function DeviceAction<R, H extends States, P>({
   const device = useSelector(getCurrentDevice);
   const hookState = action.useHook(device, request);
   const payload = action.mapResult(hookState);
+  useKeepScreenAwake(true);
 
   return (
     <DeviceActionDefaultRendering

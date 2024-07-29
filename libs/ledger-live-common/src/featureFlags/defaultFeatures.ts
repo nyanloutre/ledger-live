@@ -1,9 +1,9 @@
 import {
+  ABTestingVariants,
   DefaultFeature,
   Feature,
-  Features,
   FeatureMap,
-  ABTestingVariants,
+  Features,
 } from "@ledgerhq/types-live";
 import reduce from "lodash/reduce";
 import { formatToFirebaseFeatureId } from "./firebaseFeatureFlags";
@@ -53,7 +53,7 @@ export const CURRENCY_DEFAULT_FEATURES = {
   currencyMoonriver: DEFAULT_FEATURE,
   currencyOnomy: DEFAULT_FEATURE,
   currencyOptimism: DEFAULT_FEATURE,
-  currencyOptimismGoerli: DEFAULT_FEATURE,
+  currencyOptimismSepolia: DEFAULT_FEATURE,
   currencyPersistence: DEFAULT_FEATURE,
   currencyPolygonZkEvm: DEFAULT_FEATURE,
   currencyPolygonZkEvmTestnet: DEFAULT_FEATURE,
@@ -71,7 +71,11 @@ export const CURRENCY_DEFAULT_FEATURES = {
   currencyCasper: DEFAULT_FEATURE,
   currencyNeonEvm: DEFAULT_FEATURE,
   currencyLinea: DEFAULT_FEATURE,
-  currencyLineaGoerli: DEFAULT_FEATURE,
+  currencyLineaSepolia: DEFAULT_FEATURE,
+  currencyBlast: DEFAULT_FEATURE,
+  currencyBlastSepolia: DEFAULT_FEATURE,
+  currencyScroll: DEFAULT_FEATURE,
+  currencyScrollSepolia: DEFAULT_FEATURE,
 };
 
 /**
@@ -85,22 +89,17 @@ export const DEFAULT_FEATURES: Features = {
   portfolioExchangeBanner: DEFAULT_FEATURE,
   postOnboardingAssetsTransfer: DEFAULT_FEATURE,
   counterValue: DEFAULT_FEATURE,
-  llmNewDeviceSelection: DEFAULT_FEATURE,
   mockFeature: DEFAULT_FEATURE,
   multibuyNavigation: DEFAULT_FEATURE,
   ptxServiceCtaExchangeDrawer: DEFAULT_FEATURE,
   ptxServiceCtaScreens: DEFAULT_FEATURE,
+  ptxSwapReceiveTRC20WithoutTrx: DEFAULT_FEATURE,
   disableNftLedgerMarket: DEFAULT_FEATURE,
   disableNftRaribleOpensea: DEFAULT_FEATURE,
   disableNftSend: DEFAULT_FEATURE,
-  staxWelcomeScreen: DEFAULT_FEATURE,
-  protectServicesDiscoverDesktop: DEFAULT_FEATURE,
-  llmWalletQuickActions: DEFAULT_FEATURE,
   listAppsV2minor1: DEFAULT_FEATURE,
-  llmMarketNewArch: DEFAULT_FEATURE,
   flexibleContentCards: DEFAULT_FEATURE,
   ethStakingProviders: initFeature(),
-  referralProgramDiscoverCard: initFeature(),
   newsfeedPage: initFeature(),
   swapWalletApiPartnerList: initFeature(),
   stakePrograms: initFeature(),
@@ -136,11 +135,6 @@ export const DEFAULT_FEATURES: Features = {
   referralProgramDesktopSidebar: {
     enabled: false,
     params: { amount: "$20", isNew: true, path: "/discover/refer-a-friend" },
-  },
-
-  referralProgramMobile: {
-    enabled: false,
-    params: { path: "/discover/refer-a-friend" },
   },
 
   protectServicesDesktop: {
@@ -183,7 +177,7 @@ export const DEFAULT_FEATURES: Features = {
   },
 
   storyly: {
-    enabled: true,
+    enabled: false,
     params: {
       stories: {
         recoverySeed: {
@@ -191,6 +185,12 @@ export const DEFAULT_FEATURES: Features = {
           instanceId: "14829",
           token:
             "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NfaWQiOjY5NDgsImFwcF9pZCI6MTE0MjIsImluc19pZCI6MTQ4Mjl9.iak4gUnizDdPrEXJEV3wszzJ2YkYX-RIWDXv31aJkiE",
+        },
+        backupRecoverySeed: {
+          testingEnabled: false,
+          instanceId: "19768",
+          token:
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NfaWQiOjY5NDgsImFwcF9pZCI6MTE0MjIsImluc19pZCI6MTk3Njh9.cXofdXH2klFGH5PmkzIC5w-dgOMrrma8RpGksi0iMlk",
         },
         storylyExample: {
           testingEnabled: false,
@@ -381,7 +381,14 @@ export const DEFAULT_FEATURES: Features = {
     enabled: false,
   },
 
-  ptxSwapLiveApp: {
+  buySellUi: {
+    enabled: false,
+    params: {
+      manifestId: "multibuy-v2", // Update to "buy-sell-ui" after rollout
+    },
+  },
+
+  buySellShortcut: {
     enabled: false,
   },
 
@@ -400,6 +407,8 @@ export const DEFAULT_FEATURES: Features = {
   },
 
   ptxSwapMoonpayProvider: DEFAULT_FEATURE,
+  ptxSwapExodusProvider: DEFAULT_FEATURE,
+  ptxSwapThorswapProvider: DEFAULT_FEATURE,
 
   llmAnalyticsOptInPrompt: {
     enabled: false,
@@ -417,7 +426,7 @@ export const DEFAULT_FEATURES: Features = {
     },
   },
 
-  lldPortfolioCarousel: {
+  lldActionCarousel: {
     enabled: false,
     params: {
       variant: ABTestingVariants.variantA,
@@ -435,10 +444,33 @@ export const DEFAULT_FEATURES: Features = {
     enabled: false,
     params: {
       variant: ABTestingVariants.variantA,
+      refreshRate: 2,
+      top: 50,
+      supported: true,
     },
   },
-  supportDeviceStax: DEFAULT_FEATURE,
+
+  lldChatbotSupport: DEFAULT_FEATURE,
+  llmChatbotSupport: DEFAULT_FEATURE,
   supportDeviceEuropa: DEFAULT_FEATURE,
+  lldRefreshMarketData: {
+    ...DEFAULT_FEATURE,
+    params: {
+      refreshTime: 3, //nb minutes
+    },
+  },
+  llmRefreshMarketData: {
+    ...DEFAULT_FEATURE,
+    params: {
+      refreshTime: 3, //nb minutes
+    },
+  },
+  spamReportNfts: DEFAULT_FEATURE,
+  lldWalletSync: DEFAULT_FEATURE,
+  llmWalletSync: DEFAULT_FEATURE,
+  lldNftsGalleryNewArch: DEFAULT_FEATURE,
+  enableAppsBackup: DEFAULT_FEATURE,
+  web3hub: DEFAULT_FEATURE,
 };
 
 // Firebase SDK treat JSON values as strings

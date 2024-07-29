@@ -30,6 +30,7 @@ const UpdateBanner = ({
     : undefined;
 
   const deviceName = lastConnectedDevice?.deviceName;
+
   return bannerVisible ? (
     <>
       <Pressable onPress={onClickUpdate} testID="fw-update-banner">
@@ -45,7 +46,7 @@ const UpdateBanner = ({
             {lastConnectedDevice?.modelId === DeviceModelId.stax ? (
               <Icons.Stax color="primary.c80" size="M" />
             ) : lastConnectedDevice?.modelId === DeviceModelId.europa ? (
-              <Icons.Europa color="primary.c80" size="M" />
+              <Icons.Flex color="primary.c80" size="M" />
             ) : (
               <Icons.Nano color="primary.c80" size="M" />
             )}

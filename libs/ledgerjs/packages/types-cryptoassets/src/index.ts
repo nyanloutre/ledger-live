@@ -78,7 +78,6 @@ export type CryptoCurrencyId =
   | "onomy"
   | "ontology"
   | "particl"
-  | "peercoin"
   | "persistence"
   | "pirl"
   | "pivx"
@@ -100,7 +99,6 @@ export type CryptoCurrencyId =
   | "stakenet"
   | "stargaze"
   | "stratis"
-  | "stealthcoin"
   | "stellar"
   | "stride"
   | "osmosis"
@@ -112,8 +110,6 @@ export type CryptoCurrencyId =
   | "ubiq"
   | "umee"
   | "vechain"
-  | "vertcoin"
-  | "viacoin"
   | "wanchain"
   | "waves"
   | "zcash"
@@ -123,8 +119,6 @@ export type CryptoCurrencyId =
   | "zilliqa"
   | "crypto_org"
   | "bitcoin_testnet"
-  | "ethereum_ropsten"
-  | "ethereum_goerli"
   | "ethereum_sepolia"
   | "ethereum_holesky"
   | "stacks"
@@ -143,7 +137,7 @@ export type CryptoCurrencyId =
   | "rsk"
   | "bittorrent"
   | "optimism"
-  | "optimism_goerli"
+  | "optimism_sepolia"
   | "energy_web"
   | "astar"
   | "metis"
@@ -163,7 +157,11 @@ export type CryptoCurrencyId =
   | "neon_evm"
   | "lukso"
   | "linea"
-  | "linea_goerli";
+  | "linea_sepolia"
+  | "blast"
+  | "blast_sepolia"
+  | "scroll"
+  | "scroll_sepolia";
 
 export type LedgerExplorerId =
   | "btc"
@@ -178,21 +176,14 @@ export type LedgerExplorerId =
   | "hsr"
   | "kmd"
   | "ltc"
-  | "ppc"
   | "pivx"
   | "posw"
   | "qtum"
-  | "xsn"
   | "strat"
-  | "xst"
-  | "vtc"
-  | "via"
   | "zec"
   | "zen"
   | "avax"
   | "eth"
-  | "eth_ropsten"
-  | "eth_goerli"
   | "eth_sepolia"
   | "eth_holesky"
   | "etc"
@@ -272,39 +263,12 @@ export type ExplorerView = {
 
 export type EthereumLikeInfo = {
   chainId: number;
-  // used by evm coin integration
-  node:
-    | {
-        type: "external";
-        uri: string;
-      }
-    | {
-        type: "ledger";
-        explorerId: LedgerExplorerId;
-      };
-  // used by evm coin integration
-  explorer?:
-    | {
-        type: "etherscan" | "blockscout" | "teloscan" | "klaytnfinder";
-        uri: string;
-      }
-    | {
-        type: "ledger";
-        explorerId: LedgerExplorerId;
-      };
-  // used by evm coin integration
-  gasTracker?: {
-    type: "ledger";
-    explorerId: LedgerExplorerId;
-  };
 };
 
 export type BitcoinLikeInfo = {
   P2PKH: number;
   P2SH: number;
   XPUBVersion?: number;
-  // FIXME optional as we miss some data to fill
-  hasTimestamp?: boolean;
 };
 
 /**

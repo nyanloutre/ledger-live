@@ -4,7 +4,12 @@ import axios, { AxiosRequestConfig } from "axios";
 import { makeLRUCache } from "@ledgerhq/live-network/cache";
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 import { isNFTActive } from "@ledgerhq/coin-framework/nft/support";
-import { EtherscanAPIError, EtherscanLikeExplorerUsedIncorrectly } from "../../errors";
+import { log } from "@ledgerhq/logs";
+import {
+  EtherscanAPIError,
+  EtherscanLikeExplorerUsedIncorrectly,
+  InvalidExplorerResponse,
+} from "../../errors";
 import {
   etherscanOperationToOperations,
   etherscanERC20EventToOperations,
@@ -12,6 +17,7 @@ import {
   etherscanERC1155EventToOperations,
   etherscanInternalTransactionToOperations,
 } from "../../adapters";
+import { getCoinConfig } from "../../config";
 import {
   EtherscanERC1155Event,
   EtherscanERC20Event,
@@ -64,7 +70,8 @@ export const getLastCoinOperations = async (
   fromBlock: number,
   toBlock?: number,
 ): Promise<Operation[]> => {
-  const { explorer } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+  const { explorer } = config || /* istanbul ignore next */ {};
   if (!isEtherscanLikeExplorerConfig(explorer)) {
     throw new EtherscanLikeExplorerUsedIncorrectly();
   }
@@ -94,7 +101,8 @@ export const getLastTokenOperations = async (
   fromBlock: number,
   toBlock?: number,
 ): Promise<Operation[]> => {
-  const { explorer } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+  const { explorer } = config || /* istanbul ignore next */ {};
   if (!isEtherscanLikeExplorerConfig(explorer)) {
     throw new EtherscanLikeExplorerUsedIncorrectly();
   }
@@ -145,7 +153,8 @@ export const getLastERC721Operations = async (
   fromBlock: number,
   toBlock?: number,
 ): Promise<Operation[]> => {
-  const { explorer } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+  const { explorer } = config || /* istanbul ignore next */ {};
   if (!isEtherscanLikeExplorerConfig(explorer)) {
     throw new EtherscanLikeExplorerUsedIncorrectly();
   }
@@ -196,7 +205,8 @@ export const getLastERC1155Operations = async (
   fromBlock: number,
   toBlock?: number,
 ): Promise<Operation[]> => {
-  const { explorer } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+  const { explorer } = config || /* istanbul ignore next */ {};
   if (!isEtherscanLikeExplorerConfig(explorer)) {
     throw new EtherscanLikeExplorerUsedIncorrectly();
   }
@@ -273,7 +283,8 @@ export const getLastInternalOperations = async (
   fromBlock: number,
   toBlock?: number,
 ): Promise<Operation[]> => {
-  const { explorer } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+  const { explorer } = config || /* istanbul ignore next */ {};
   if (!isEtherscanLikeExplorerConfig(explorer)) {
     throw new EtherscanLikeExplorerUsedIncorrectly();
   }
@@ -336,40 +347,45 @@ export const getLastOperations: ExplorerApi["getLastOperations"] = makeLRUCache<
   }
 >(
   async (currency, address, accountId, fromBlock, toBlock) => {
-    const lastCoinOperations = await getLastCoinOperations(
-      currency,
-      address,
-      accountId,
-      fromBlock,
-      toBlock,
-    );
+    try {
+      const lastCoinOperations = await getLastCoinOperations(
+        currency,
+        address,
+        accountId,
+        fromBlock,
+        toBlock,
+      );
 
-    const lastInternalOperations = await getLastInternalOperations(
-      currency,
-      address,
-      accountId,
-      fromBlock,
-      toBlock,
-    );
+      const lastInternalOperations = await getLastInternalOperations(
+        currency,
+        address,
+        accountId,
+        fromBlock,
+        toBlock,
+      );
 
-    const lastTokenOperations = await getLastTokenOperations(
-      currency,
-      address,
-      accountId,
-      fromBlock,
-      toBlock,
-    );
+      const lastTokenOperations = await getLastTokenOperations(
+        currency,
+        address,
+        accountId,
+        fromBlock,
+        toBlock,
+      );
 
-    const lastNftOperations = isNFTActive(currency)
-      ? await getLastNftOperations(currency, address, accountId, fromBlock, toBlock)
-      : [];
+      const lastNftOperations = isNFTActive(currency)
+        ? await getLastNftOperations(currency, address, accountId, fromBlock, toBlock)
+        : [];
 
-    return {
-      lastCoinOperations,
-      lastTokenOperations,
-      lastNftOperations,
-      lastInternalOperations,
-    };
+      return {
+        lastCoinOperations,
+        lastTokenOperations,
+        lastNftOperations,
+        lastInternalOperations,
+      };
+    } catch (err) {
+      log("EVM getLastOperations", "Error while fetching data from Etherscan like API", err);
+      throw new InvalidExplorerResponse("", { currencyName: currency.name });
+    }
   },
   (currency, address, accountId, fromBlock, toBlock) => accountId + fromBlock + toBlock,
   { ttl: ETHERSCAN_TIMEOUT },

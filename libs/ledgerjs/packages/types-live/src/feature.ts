@@ -76,7 +76,7 @@ export type CurrencyFeatures = {
   currencyAvalancheCChain: DefaultFeature;
   currencyStacks: DefaultFeature;
   currencyOptimism: DefaultFeature;
-  currencyOptimismGoerli: DefaultFeature;
+  currencyOptimismSepolia: DefaultFeature;
   currencyArbitrum: DefaultFeature;
   currencyArbitrumSepolia: DefaultFeature;
   currencyRsk: DefaultFeature;
@@ -112,7 +112,11 @@ export type CurrencyFeatures = {
   currencyNeonEvm: DefaultFeature;
   currencyLukso: DefaultFeature;
   currencyLinea: DefaultFeature;
-  currencyLineaGoerli: DefaultFeature;
+  currencyLineaSepolia: DefaultFeature;
+  currencyBlast: DefaultFeature;
+  currencyBlastSepolia: DefaultFeature;
+  currencyScroll: DefaultFeature;
+  currencyScrollSepolia: DefaultFeature;
 };
 
 /**
@@ -123,24 +127,22 @@ export type CurrencyFeatures = {
 export type Features = CurrencyFeatures & {
   brazePushNotifications: Feature_BrazePushNotifications;
   brazeLearn: Feature_BrazeLearn;
-  llmNewDeviceSelection: Feature_LlmNewDeviceSelection;
   ratingsPrompt: Feature_RatingsPrompt;
   npsRatingsPrompt: Feature_NpsRatingsPrompt;
   counterValue: Feature_CounterValue;
   deviceInitialApps: Feature_DeviceInitialApps;
   buyDeviceFromLive: Feature_BuyDeviceFromLive;
   mockFeature: Feature_MockFeature;
+  buySellUi: Feature_BuySellUiManifest;
+  buySellShortcut: DefaultFeature;
   multibuyNavigation: Feature_MultibuyNavigation;
-  referralProgramDiscoverCard: Feature_ReferralProgramDiscoverCard;
   referralProgramDesktopSidebar: Feature_ReferralProgramDesktopSidebar;
-  referralProgramMobile: Feature_ReferralProgramMobile;
   disableNftSend: Feature_DisableNftSend;
   disableNftLedgerMarket: Feature_DisableNftLedgerMarket;
   disableNftRaribleOpensea: Feature_DisableNftRaribleOpensea;
   receiveStakingFlowConfigDesktop: Feature_ReceiveStakingFlowConfigDesktop;
   ethStakingProviders: Feature_EthStakingProviders;
   storyly: Feature_Storyly;
-  staxWelcomeScreen: Feature_StaxWelcomeScreen;
   postOnboardingAssetsTransfer: Feature_PostOnboardingAssetsTransfer;
   firebaseEnvironmentReadOnly: Feature_FirebaseEnvironmentReadOnly;
   protectServicesMobile: Feature_ProtectServicesMobile;
@@ -156,25 +158,33 @@ export type Features = CurrencyFeatures & {
   newsfeedPage: Feature_NewsfeedPage;
   domainInputResolution: Feature_DomainInputResolution;
   discover: Feature_Discover;
-  protectServicesDiscoverDesktop: Feature_ProtectServicesDiscoverDesktop;
   transactionsAlerts: Feature_TransactionsAlerts;
   listAppsV2minor1: Feature_ListAppsV2minor1;
-  llmWalletQuickActions: Feature_LlmWalletQuickActions;
   fetchAdditionalCoins: Feature_FetchAdditionalCoins;
-  ptxSwapLiveApp: Feature_PtxSwapLiveApp;
   ptxSwapLiveAppDemoZero: Feature_PtxSwapLiveAppDemoZero;
   ptxSwapLiveAppDemoOne: Feature_PtxSwapLiveAppDemoZero;
   ptxSwapMoonpayProvider: Feature_PtxSwapMoonpayProvider;
+  ptxSwapExodusProvider: Feature_PtxSwapExodusProvider;
+  ptxSwapThorswapProvider: Feature_PtxSwapThorswapProvider;
+  ptxSwapReceiveTRC20WithoutTrx: Feature_PtxSwapReceiveTRC20WithoutTrx;
   flexibleContentCards: Feature_FlexibleContentCards;
   llmAnalyticsOptInPrompt: Feature_LlmAnalyticsOptInPrompt;
   lldAnalyticsOptInPrompt: Feature_LldAnalyticsOptInPrompt;
+  lldChatbotSupport: Feature_LldChatbotSupport;
+  llmChatbotSupport: Feature_LlmChatbotSupport;
   myLedgerDisplayAppDeveloperName: Feature_MyLedgerDisplayAppDeveloperName;
   nftsFromSimplehash: Feature_NftsFromSimpleHash;
-  lldPortfolioCarousel: Feature_LldPortfolioCarousel;
-  llmMarketNewArch: Feature_LlmMarketNewArch;
+  lldActionCarousel: Feature_lldActionCarousel;
   marketperformanceWidgetDesktop: Feature_MarketperformanceWidgetDesktop;
-  supportDeviceStax: Feature_SupportDeviceStax;
   supportDeviceEuropa: Feature_SupportDeviceEuropa;
+  lldRefreshMarketData: Feature_LldRefreshMarketData;
+  llmRefreshMarketData: Feature_LlmRefreshMarketData;
+  spamReportNfts: Feature_SpamReportNfts;
+  lldWalletSync: Feature_LldWalletSync;
+  llmWalletSync: Feature_LlmWalletSync;
+  lldNftsGalleryNewArch: DefaultFeature;
+  enableAppsBackup: Feature_EnableAppsBackup;
+  web3hub: Feature_web3hub;
 };
 
 /**
@@ -210,14 +220,6 @@ export type Feature_StakePrograms = Feature<{
 }>;
 
 export type Feature_StakeAccountBanner = Feature<{ [blockchainName: string]: any }>;
-
-export type Feature_ReferralProgramMobile = Feature<{
-  path: string;
-}>;
-
-export type Feature_ReferralProgramDiscoverCard = Feature<{
-  url: string;
-}>;
 
 export type Feature_ReferralProgramDesktopSidebar = Feature<{
   path: string;
@@ -445,16 +447,30 @@ export type Feature_LldAnalyticsOptInPrompt = Feature<{
   entryPoints: Array<string>;
 }>;
 
-export type Feature_LldPortfolioCarousel = Feature<{
+export type Feature_lldActionCarousel = Feature<{
   variant: ABTestingVariants;
 }>;
 
 export type Feature_MarketperformanceWidgetDesktop = Feature<{
   variant: ABTestingVariants;
+  refreshRate: number;
+  top: number;
+  supported: boolean;
 }>;
 
 export type Feature_NftsFromSimpleHash = Feature<{
   threshold: number;
+}>;
+
+export type Feature_LldRefreshMarketData = Feature<{
+  refreshTime: number;
+}>;
+export type Feature_LlmRefreshMarketData = Feature<{
+  refreshTime: number;
+}>;
+
+export type Feature_BuySellUiManifest = Feature<{
+  manifestId: string; // id of the app to use for the Buy/Sell UI, e.g. "multibuy-v2"
 }>;
 
 export type Feature_CounterValue = DefaultFeature;
@@ -463,24 +479,28 @@ export type Feature_MultibuyNavigation = DefaultFeature;
 export type Feature_DisableNftSend = DefaultFeature;
 export type Feature_DisableNftLedgerMarket = DefaultFeature;
 export type Feature_DisableNftRaribleOpensea = DefaultFeature;
-export type Feature_StaxWelcomeScreen = DefaultFeature;
 export type Feature_PostOnboardingAssetsTransfer = DefaultFeature;
 export type Feature_PtxServiceCtaExchangeDrawer = DefaultFeature;
 export type Feature_PtxServiceCtaScreens = DefaultFeature;
 export type Feature_PortfolioExchangeBanner = DefaultFeature;
 export type Feature_Objkt = DefaultFeature;
-export type Feature_ProtectServicesDiscoverDesktop = DefaultFeature;
 export type Feature_ListAppsV2minor1 = DefaultFeature;
 export type Feature_BrazeLearn = DefaultFeature;
-export type Feature_LlmNewDeviceSelection = DefaultFeature;
-export type Feature_LlmWalletQuickActions = DefaultFeature;
 export type Feature_PtxSwapMoonpayProvider = DefaultFeature;
+export type Feature_PtxSwapExodusProvider = DefaultFeature;
+export type Feature_PtxSwapThorswapProvider = DefaultFeature;
+export type Feature_PtxSwapReceiveTRC20WithoutTrx = DefaultFeature;
 export type Feature_FlexibleContentCards = DefaultFeature;
 export type Feature_MyLedgerDisplayAppDeveloperName = DefaultFeature;
-export type Feature_SupportDeviceStax = DefaultFeature;
 export type Feature_SupportDeviceEuropa = DefaultFeature;
+export type Feature_LldChatbotSupport = DefaultFeature;
+export type Feature_LlmChatbotSupport = DefaultFeature;
+export type Feature_LldWalletSync = DefaultFeature;
+export type Feature_LlmWalletSync = DefaultFeature;
+export type Feature_SpamReportNfts = DefaultFeature;
+export type Feature_EnableAppsBackup = DefaultFeature;
+export type Feature_web3hub = DefaultFeature;
 
-export type Feature_LlmMarketNewArch = DefaultFeature;
 /**
  * Utils types.
  */

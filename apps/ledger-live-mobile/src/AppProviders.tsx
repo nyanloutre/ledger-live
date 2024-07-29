@@ -9,11 +9,8 @@ import { OnboardingContextProvider } from "~/screens/Onboarding/onboardingContex
 import CounterValuesProvider from "~/components/CounterValuesProvider";
 import NotificationsProvider from "~/screens/NotificationCenter/NotificationsProvider";
 import SnackbarContainer from "~/screens/NotificationCenter/Snackbar/SnackbarContainer";
-import NewMarketDataProvider from "LLM/features/Market/components//MarketDataProviderWrapper";
-import OldMarketDataProvider from "~/screens/Market/MarketDataProviderWrapper";
 import PostOnboardingProviderWrapped from "~/logic/postOnboarding/PostOnboardingProviderWrapped";
 import { CounterValuesStateRaw } from "@ledgerhq/live-countervalues/types";
-import useFeature from "@ledgerhq/live-common/featureFlags/useFeature";
 import { CountervaluesMarketcap } from "@ledgerhq/live-countervalues-react/index";
 
 type AppProvidersProps = {
@@ -24,8 +21,6 @@ type AppProvidersProps = {
 const queryClient = new QueryClient();
 
 function AppProviders({ initialCountervalues, children }: AppProvidersProps) {
-  const marketNewArch = useFeature("llmMarketNewArch");
-  const MarketDataProvider = marketNewArch?.enabled ? NewMarketDataProvider : OldMarketDataProvider;
   return (
     <QueryClientProvider client={queryClient}>
       <BridgeSyncProvider>
@@ -38,7 +33,7 @@ function AppProviders({ initialCountervalues, children }: AppProvidersProps) {
                     <NotificationsProvider>
                       <SnackbarContainer />
                       <NftMetadataProvider getCurrencyBridge={getCurrencyBridge}>
-                        <MarketDataProvider>{children}</MarketDataProvider>
+                        {children}
                       </NftMetadataProvider>
                     </NotificationsProvider>
                   </ToastProvider>

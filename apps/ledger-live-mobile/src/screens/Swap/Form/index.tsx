@@ -40,7 +40,15 @@ import { BaseNavigatorStackParamList } from "~/components/RootNavigator/types/Ba
 import { SwapFormNavigatorParamList } from "~/components/RootNavigator/types/SwapFormNavigator";
 import { formatCurrencyUnit } from "@ledgerhq/live-common/currencies/index";
 import type { DetailsSwapParamList } from "../types";
-import { getAvailableProviders } from "@ledgerhq/live-common/exchange/swap/index";
+import {
+  getAvailableProviders,
+  maybeTezosAccountUnrevealedAccount,
+  maybeTronEmptyAccount,
+} from "@ledgerhq/live-common/exchange/swap/index";
+import { DEFAULT_SWAP_RATES_LLM_INTERVAL_MS } from "@ledgerhq/live-common/exchange/swap/const/timeout";
+import { useSelectedSwapRate } from "./useSelectedSwapRate";
+import { walletSelector } from "~/reducers/wallet";
+import { NotEnoughBalance, NotEnoughBalanceSwap } from "@ledgerhq/errors";
 
 type Navigation = StackNavigatorProps<BaseNavigatorStackParamList, ScreenName.Account>;
 
@@ -55,6 +63,7 @@ export function SwapForm({
   const exchangeRate = useSelector(rateSelector);
   // mobile specific
   const [confirmed, setConfirmed] = useState(false);
+  const [swapAcceptedProviders, setSwapAcceptedProviders] = useState<string[]>([]);
 
   const setExchangeRate = useCallback(
     (rate?: ExchangeRate) => {
@@ -64,6 +73,7 @@ export function SwapForm({
   );
 
   const walletApiPartnerList = useFeature("swapWalletApiPartnerList");
+  const ptxSwapReceiveTRC20WithoutTrx = useFeature("ptxSwapReceiveTRC20WithoutTrx");
   const navigation = useNavigation<Navigation["navigation"]>();
 
   const onNoRates: OnNoRatesCallback = useCallback(
@@ -84,6 +94,14 @@ export function SwapForm({
     setExchangeRate,
     onNoRates,
     excludeFixedRates: true,
+    refreshRate: DEFAULT_SWAP_RATES_LLM_INTERVAL_MS / 1000,
+    // Disable refresh when modal is shown
+    allowRefresh: !confirmed,
+  });
+
+  const { provider } = useSelectedSwapRate({
+    defaultRate: (params as DetailsSwapParamList).rate,
+    availableRates: swapTransaction.swap.rates.value,
   });
 
   // @TODO: Try to check if we can directly have the right state from `useSwapTransaction`
@@ -121,10 +139,18 @@ export function SwapForm({
     );
   }, [exchangeRatesState.value, swapTransaction.swap.to.currency]);
 
-  const swapError = swapTransaction.fromAmountError || exchangeRatesState?.error;
+  const swapError =
+    swapTransaction.fromAmountError instanceof NotEnoughBalance
+      ? new NotEnoughBalanceSwap(swapTransaction.fromAmountError.message)
+      : swapTransaction.fromAmountError ||
+        exchangeRatesState?.error ||
+        maybeTezosAccountUnrevealedAccount(swapTransaction) ||
+        (ptxSwapReceiveTRC20WithoutTrx?.enabled
+          ? undefined
+          : maybeTronEmptyAccount(swapTransaction));
+
   const swapWarning = swapTransaction.fromAmountWarning;
   const pageState = usePageState(swapTransaction, swapError || swapWarning);
-  const provider = exchangeRate?.provider;
 
   const editRatesTrackingProps = JSON.stringify({
     ...sharedSwapTracking,
@@ -197,6 +223,8 @@ export function SwapForm({
     exchangeRate &&
     swapTransaction.swap.to.account;
 
+  const walletState = useSelector(walletSelector);
+
   const onSubmit = useCallback(() => {
     if (!exchangeRate) return;
     const { provider, providerURL, providerType } = exchangeRate;
@@ -230,7 +258,7 @@ export function SwapForm({
         const parentAccount = isTokenAccount(account)
           ? getParentAccount(account, accounts)
           : undefined;
-        const walletApiId = accountToWalletAPIAccount(account, parentAccount)?.id;
+        const walletApiId = accountToWalletAPIAccount(walletState, account, parentAccount)?.id;
         return walletApiId || accountId;
       };
 
@@ -242,10 +270,13 @@ export function SwapForm({
         customDappURL: providerURL,
       });
     } else {
-      swapTransaction.transaction ? (swapTransaction.transaction.useAllAmount = false) : null;
+      swapTransaction.transaction && swapTransaction.transaction.family !== "polkadot"
+        ? (swapTransaction.transaction.useAllAmount = false)
+        : null;
       setConfirmed(true);
     }
   }, [
+    walletState,
     exchangeRate,
     track,
     swapTransaction.transaction,
@@ -302,13 +333,12 @@ export function SwapForm({
   }, [params]);
 
   useEffect(() => {
-    const { rate } = params as DetailsSwapParamList;
-    if (rate) {
-      setExchangeRate(rate);
-    }
-  }, [params, setExchangeRate, swapTransaction]);
+    const fetchProviders = async () => {
+      setSwapAcceptedProviders(await getAvailableProviders());
+    };
+    fetchProviders();
+  }, []);
 
-  const swapAcceptedProviders = getAvailableProviders();
   const termsAccepted = (swapAcceptedProviders || []).includes(provider ?? "");
   const [deviceMeta, setDeviceMeta] = useState<DeviceMeta>();
 
@@ -317,7 +347,7 @@ export function SwapForm({
     return <Connect provider={provider} setResult={setDeviceMeta} />;
   }
 
-  if (getAvailableProviders().length) {
+  if (swapAcceptedProviders.length) {
     return (
       <KeyboardAwareScrollView testID="exchange-scrollView">
         <Flex flex={1} justifyContent="space-between" padding={6}>
@@ -351,7 +381,6 @@ export function SwapForm({
 
           <Flex paddingY={4}>
             <Max swapTx={swapTransaction} />
-
             <Button type="main" disabled={!isSwapReady} onPress={onSubmit} testID="exchange-button">
               {t("transfer.swap2.form.cta")}
             </Button>

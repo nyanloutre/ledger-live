@@ -1,12 +1,18 @@
 import querystring from "querystring";
 import { BigNumber } from "bignumber.js";
+import { log } from "@ledgerhq/logs";
+import type { OperationType } from "@ledgerhq/types-live";
+import { getEnv } from "@ledgerhq/live-env";
 import network from "@ledgerhq/live-network/network";
 import { encodeOperationId } from "@ledgerhq/coin-framework/operation";
-import { getEnv } from "@ledgerhq/live-env";
-import { getOperationType } from "./common";
-import type { OperationType } from "@ledgerhq/types-live";
 import { isValidAddress } from "../common";
-import { PolkadotOperation, PolkadotOperationExtra } from "../types";
+import type {
+  ExplorerExtrinsic,
+  PalletMethod,
+  PalletMethodName,
+  PolkadotOperation,
+  PolkadotOperationExtra,
+} from "../types";
 
 const LIMIT = 200;
 
@@ -48,6 +54,54 @@ const getWithdrawUnbondedAmount = (extrinsic: any) => {
 };
 
 /**
+ * Returns the operation type by using his palletMethod
+ * the method case depends from which indexer you are using
+ *
+ * @param {*} pallet
+ * @param {*} palletMethod
+ *
+ * @returns {string} - OperationType
+ */
+const getOperationType = (
+  pallet: string,
+  palletMethod: PalletMethodName | unknown,
+): OperationType => {
+  switch (palletMethod) {
+    case "transfer":
+    case "transferAllowDeath":
+    case "transferKeepAlive":
+      return "OUT";
+
+    case "bond":
+    case "bondExtra":
+    case "rebond":
+      return "BOND";
+
+    case "unbond":
+      return "UNBOND";
+
+    case "nominate":
+      return "NOMINATE";
+
+    case "chill":
+      return "CHILL";
+
+    case "withdrawUnbonded":
+      return "WITHDRAW_UNBONDED";
+
+    case "setController":
+      return "SET_CONTROLLER";
+
+    case "payoutStakers":
+      return "FEES";
+
+    default:
+      log("polkadot/api", `Unknown operation type ${pallet}.${palletMethod} - fallback to FEES`);
+      return "FEES";
+  }
+};
+
+/**
  * add Extra info for operation details
  *
  * @param {OperationType} type
@@ -55,9 +109,9 @@ const getWithdrawUnbondedAmount = (extrinsic: any) => {
  *
  * @returns {Object}
  */
-const getExtra = (type: OperationType, extrinsic: any): PolkadotOperationExtra => {
+const getExtra = (type: OperationType, extrinsic: ExplorerExtrinsic): PolkadotOperationExtra => {
   const extra: PolkadotOperationExtra = {
-    palletMethod: `${extrinsic.section}.${extrinsic.method}`,
+    palletMethod: `${extrinsic.section}.${extrinsic.method}` as PalletMethod,
   };
 
   switch (type) {
@@ -91,9 +145,9 @@ const getExtra = (type: OperationType, extrinsic: any): PolkadotOperationExtra =
 
     case "NOMINATE":
       extra.validators =
-        extrinsic.staking?.validators?.reduce((acc: any, current: any) => {
+        extrinsic.staking?.validators?.reduce((acc, current) => {
           return [...acc, current.address];
-        }, []) ?? [];
+        }, [] as string[]) ?? [];
       break;
   }
 
@@ -189,7 +243,7 @@ const rewardToOperation = (addr: string, accountId: string, reward: any): Polkad
     accountId,
     fee: new BigNumber(0),
     value: new BigNumber(reward.value),
-    type: type,
+    type,
     hash,
     blockHeight: reward.blockNumber,
     blockHash: null,
@@ -217,7 +271,7 @@ const slashToOperation = (addr: string, accountId: string, slash: any): Polkadot
     accountId,
     fee: new BigNumber(0),
     value: new BigNumber(slash.value),
-    type: type,
+    type,
     hash: hash,
     blockHeight: slash.blockNumber,
     blockHash: null,

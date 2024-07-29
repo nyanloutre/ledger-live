@@ -4,7 +4,7 @@
 import "../../__tests__/test-helpers/dom-polyfill";
 import invariant from "invariant";
 import { renderHook, act } from "@testing-library/react";
-import { getAccountUnit } from "../../account";
+import { getAccountCurrency } from "../../account";
 import { getAccountBridge, getCurrencyBridge } from "../../bridge";
 import { getCryptoCurrencyById } from "../../currencies";
 import { setEnv } from "@ledgerhq/live-env";
@@ -25,6 +25,7 @@ import { getCurrentCosmosPreloadData } from "./preloadedData";
 import preloadedMockData from "./preloadedData.mock";
 import * as hooks from "./react";
 import { CurrencyBridge } from "@ledgerhq/types-live";
+
 const localCache = {};
 const cache = makeBridgeCacheSystem({
   saveData(c, d) {
@@ -36,6 +37,7 @@ const cache = makeBridgeCacheSystem({
     return Promise.resolve(localCache[c.id]);
   },
 });
+
 describe("cosmos/react", () => {
   beforeAll(() => {
     LiveConfig.setConfig(liveConfig);
@@ -55,6 +57,7 @@ describe("cosmos/react", () => {
       expect(result.current).toStrictEqual(preloadedMockData);
     });
   });
+
   describe("useCosmosFormattedDelegations", () => {
     it("should return formatted delegations", async () => {
       const { account, prepare } = setup();
@@ -65,7 +68,7 @@ describe("cosmos/react", () => {
       expect(account.cosmosResources?.delegations?.some(d => d.amount[0] === 0)).toBe(false);
       expect(Array.isArray(result.current)).toBe(true);
       expect(result.current.length).toBe((delegations as CosmosDelegation[]).length);
-      const { code } = getAccountUnit(account);
+      const { code } = getAccountCurrency(account).units[0];
       expect(result.current[0].formattedAmount.split(" ")[1]).toBe(code);
       expect(result.current[0].formattedPendingRewards.split(" ")[1]).toBe(code);
       expect(typeof result.current[0].rank).toBe("number");
@@ -73,6 +76,7 @@ describe("cosmos/react", () => {
         (delegations as CosmosDelegation[])[0].validatorAddress,
       );
     });
+
     describe("mode: claimReward", () => {
       it("should only return delegations which have some pending rewards", async () => {
         const { account, prepare } = setup();
@@ -84,6 +88,7 @@ describe("cosmos/react", () => {
       });
     });
   });
+
   describe("useCosmosFamilyDelegationsQuerySelector", () => {
     it("should return delegations filtered by query as options", async () => {
       const { account, transaction, prepare } = setup();
@@ -155,6 +160,7 @@ describe("cosmos/react", () => {
       ).toBe(sourceValidator);
     });
   });
+
   describe("useSortedValidators", () => {
     it("should reutrn sorted validators", async () => {
       const { account, prepare } = setup();

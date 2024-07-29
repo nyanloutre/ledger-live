@@ -11,10 +11,8 @@ import type {
   Transaction,
   TransactionStatus,
 } from "./types";
-import {
-  getCryptoCurrencyById,
-  parseCurrencyUnit,
-} from "@ledgerhq/coin-framework/currencies/index";
+import { getCryptoCurrencyById } from "@ledgerhq/cryptoassets/index";
+import { parseCurrencyUnit } from "@ledgerhq/coin-framework/currencies/index";
 import { botTest, genericTestDestination, pickSiblings } from "@ledgerhq/coin-framework/bot/specs";
 import { bitcoinPickingStrategy } from "./types";
 import type {
@@ -395,20 +393,7 @@ const bitcoinCash: AppSpec<Transaction> = {
   }),
   minViableAmount: genericMinimalAmount,
 };
-const peercoin: AppSpec<Transaction> = {
-  name: "Peercoin",
-  currency: getCryptoCurrencyById("peercoin"),
-  dependency: "Bitcoin Legacy",
-  appQuery: {
-    model: DeviceModelId.nanoS,
-    appName: "Peercoin",
-    appVersion: "2.1.0-rc",
-  },
-  genericDeviceAction: acceptTransaction,
-  test: genericTest,
-  mutations: bitcoinLikeMutations(),
-  minViableAmount: genericMinimalAmount,
-};
+
 const pivx: AppSpec<Transaction> = {
   name: "PivX",
   currency: getCryptoCurrencyById("pivx"),
@@ -440,37 +425,7 @@ const qtum: AppSpec<Transaction> = {
   }),
   minViableAmount: minQtum,
 };
-const vertcoin: AppSpec<Transaction> = {
-  name: "Vertcoin",
-  currency: getCryptoCurrencyById("vertcoin"),
-  dependency: "Bitcoin Legacy",
-  appQuery: {
-    model: DeviceModelId.nanoS,
-    appName: "Vertcoin",
-    appVersion: "2.1.0-rc",
-  },
-  genericDeviceAction: acceptTransaction,
-  test: genericTest,
-  mutations: bitcoinLikeMutations(),
-  minViableAmount: genericMinimalAmount,
-};
-const minViacoin = parseCurrencyUnit(getCryptoCurrencyById("viacoin").units[0], "0.001");
-const viacoin: AppSpec<Transaction> = {
-  name: "Viacoin",
-  currency: getCryptoCurrencyById("viacoin"),
-  dependency: "Bitcoin Legacy",
-  appQuery: {
-    model: DeviceModelId.nanoS,
-    appName: "Viacoin",
-    appVersion: "2.1.0-rc",
-  },
-  genericDeviceAction: acceptTransaction,
-  test: genericTest,
-  mutations: bitcoinLikeMutations({
-    minimalAmount: minViacoin,
-  }),
-  minViableAmount: minViacoin,
-};
+
 const minDash = parseCurrencyUnit(getCryptoCurrencyById("dash").units[0], "0.001");
 const dash: AppSpec<Transaction> = {
   name: "Dash",
@@ -618,11 +573,8 @@ export default {
   dogecoin,
   komodo,
   litecoin,
-  peercoin,
   pivx,
   qtum,
-  vertcoin,
-  viacoin,
   zcash,
   zencash,
   decred,

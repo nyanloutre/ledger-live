@@ -1,15 +1,47 @@
 declare module "storyly-web" {
-  interface StorylyOptions {
-    layout: string;
-    token: string;
-    events: {
-      closeStoryGroup: () => void;
+  type StorylyData = Array<{
+    title: string;
+    image: URL;
+    pinned: boolean;
+    id: number;
+  }>;
+
+  type Story = {
+    group_id: number;
+    id: number;
+    index: number;
+    media: {
+      actionUrl?: string;
     };
+    seen: boolean;
+    title: string;
+  };
+
+  /**
+   * Storyly Options
+   */
+  interface StorylyOptions {
+    layout: "classic" | "modern";
+    token: string;
+    events?: {
+      closeStoryGroup?(): void;
+      isReady?(data: StorylyData): void;
+      actionClicked?(story: Story): void;
+    };
+    lang?: Language;
+    segments?: string[];
+    props?: StorylyStyleProps;
   }
 
+  /**
+   * Storyly Ref
+   */
   interface StorylyRef {
     init: (options: StorylyOptions) => void;
+    setSegments: (options: StorylyOptions["segments"]) => void;
+    setLang: (options: { language: StorylyOptions["lang"] }) => void;
     openStory: (props: openStoryParams) => void;
+    close: () => void;
   }
 
   interface openStoryParams {
@@ -32,5 +64,5 @@ declare module "storyly-web" {
   >;
 
   export default StorylyWeb;
-  export { StorylyRef, StorylyOptions, openStoryParams };
+  export { StorylyRef, StorylyOptions, StorylyData, openStoryParams };
 }

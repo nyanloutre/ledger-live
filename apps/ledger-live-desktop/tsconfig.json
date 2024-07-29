@@ -11,10 +11,11 @@
     "rootDir": ".",
     "paths": {
       "~/*": ["src/*"],
-      "tests/*": ["tests/*"]
+      "tests/*": ["tests/*"],
+      "LLD/*": ["src/newArch/*"]
     },
     "outDir": "dist",
-    "typeRoots": ["index-types.d.ts"]
+    "typeRoots": ["index-types.d.ts", "./node_modules/@types", "./node_modules/@testing-library"]
   },
   "exclude": ["**/node_modules/*"],
   "include": [
@@ -26,6 +27,7 @@
     "package.json",
     "release-notes.json",
     "tests",
-    "index-types.d.ts"
+    "index-types.d.ts",
+    "tests/jestSetup.ts"
   ]
 }

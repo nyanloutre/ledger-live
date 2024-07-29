@@ -1,7 +1,8 @@
 import BigNumber from "bignumber.js";
 import { Account } from "@ledgerhq/types-live";
-import { CryptoCurrency, EthereumLikeInfo } from "@ledgerhq/types-cryptoassets";
+import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 import { Transaction as EvmTransaction, FeeData } from "../../types";
+import { EvmConfigInfo } from "../../config";
 
 export type NodeApi = {
   getTransaction: (
@@ -12,6 +13,9 @@ export type NodeApi = {
     blockHeight: number | undefined;
     blockHash: string | undefined;
     nonce: number;
+    gasUsed: string;
+    gasPrice: string;
+    value: string;
   }>;
   getCoinBalance: (currency: CryptoCurrency, address: string) => Promise<BigNumber>;
   getTokenBalance: (
@@ -32,9 +36,13 @@ export type NodeApi = {
     currency: CryptoCurrency,
     transaction: EvmTransaction,
   ) => Promise<BigNumber>;
+  getScrollAdditionalFees: (
+    currency: CryptoCurrency,
+    transaction: EvmTransaction,
+  ) => Promise<BigNumber>;
 };
 
-type NodeConfig = EthereumLikeInfo["node"];
+type NodeConfig = EvmConfigInfo["node"];
 
 /**
  * Type guard

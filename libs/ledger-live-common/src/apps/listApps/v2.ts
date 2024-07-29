@@ -6,7 +6,7 @@ import { App, DeviceInfo, idsToLanguage, languageIds } from "@ledgerhq/types-liv
 import { LocalTracer } from "@ledgerhq/logs";
 import type { ListAppsEvent, ListAppsResult, ListAppResponse } from "../types";
 import hwListApps from "../../hw/listApps";
-import staxFetchImageSize from "../../hw/staxFetchImageSize";
+import customLockScreenFetchSize from "../../hw/customLockScreenFetchSize";
 import {
   listCryptoCurrencies,
   currenciesByMarketcap,
@@ -16,9 +16,10 @@ import ManagerAPI from "../../manager/api";
 
 import { getDeviceName } from "../../device/use-cases/getDeviceNameUseCase";
 import { getLatestFirmwareForDeviceUseCase } from "../../device/use-cases/getLatestFirmwareForDeviceUseCase";
-import { getProviderIdUseCase } from "../../device-core/managerApi/use-cases/getProviderIdUseCase";
-import { ManagerApiRepository } from "../../device-core/managerApi/repositories/ManagerApiRepository";
+import { getProviderIdUseCase } from "../../device/use-cases/getProviderIdUseCase";
 import { mapApplicationV2ToApp } from "../polyfill";
+import { ManagerApiRepository } from "../../device/factories/HttpManagerApiRepositoryFactory";
+import { isCustomLockScreenSupported } from "../../device/use-cases/isCustomLockScreenSupported";
 
 // Hash discrepancies for these apps do NOT indicate a potential update,
 // these apps have a mechanism that makes their hash change every time.
@@ -30,10 +31,10 @@ const emptyHashData = "0".repeat(64);
 type ListAppsParams = {
   transport: Transport;
   deviceInfo: DeviceInfo;
-  deviceProxyModel?: DeviceModelId;
-  managerDevModeEnabled?: boolean;
+  managerDevModeEnabled: boolean;
   forceProvider: number;
   managerApiRepository: ManagerApiRepository;
+  deviceProxyModel?: DeviceModelId;
 };
 
 export const listApps = ({
@@ -271,15 +272,15 @@ export const listApps = ({
 
       /**
        * Obtain remaining metadata:
-       * - Ledger Stax custom picture: number of blocks taken in storage
+       * - Ledger Stax/Europa custom picture: number of blocks taken in storage
        * - Installed language pack
        * - Device name
        * */
 
-      // Stax specific, account for the size of the CLS for the storage bar.
+      // Stax/Europa specific, account for the size of the CLS for the storage bar.
       let customImageBlocks = 0;
-      if (deviceModelId === DeviceModelId.stax && !deviceInfo.isRecoveryMode) {
-        const customImageSize = await staxFetchImageSize(transport);
+      if (isCustomLockScreenSupported(deviceModelId) && !deviceInfo.isRecoveryMode) {
+        const customImageSize = await customLockScreenFetchSize(transport);
         if (customImageSize) {
           customImageBlocks = Math.ceil(customImageSize / bytesPerBlock);
         }

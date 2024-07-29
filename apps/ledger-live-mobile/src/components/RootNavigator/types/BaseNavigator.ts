@@ -1,4 +1,10 @@
-import type { Operation, AccountLike, Account, DeviceInfo } from "@ledgerhq/types-live";
+import type {
+  Operation,
+  AccountLike,
+  Account,
+  DeviceInfo,
+  FirmwareUpdateContext,
+} from "@ledgerhq/types-live";
 import type { NavigatorScreenParams, ParamListBase } from "@react-navigation/native";
 import type { CryptoCurrency, TokenCurrency } from "@ledgerhq/types-cryptoassets";
 import { DeviceModelId } from "@ledgerhq/types-devices";
@@ -9,6 +15,7 @@ import { MappedSwapOperation } from "@ledgerhq/live-common/exchange/swap/types";
 import { Device } from "@ledgerhq/live-common/hw/actions/types";
 import { AppResult } from "@ledgerhq/live-common/hw/actions/app";
 import { NavigatorName, ScreenName } from "~/const";
+import type { FirmwareUpdateProps } from "~/screens/FirmwareUpdate";
 import type { AccountSettingsNavigatorParamList } from "./AccountSettingsNavigator";
 import type { AccountsNavigatorParamList } from "./AccountsNavigator";
 import type { ImportAccountsNavigatorParamList } from "./ImportAccountsNavigator";
@@ -63,6 +70,7 @@ import type { NoFundsNavigatorParamList } from "./NoFundsNavigator";
 import type { StakeNavigatorParamList } from "./StakeNavigator";
 import type { ExploreTabNavigatorStackParamList } from "./ExploreTabNavigator";
 import { AnalyticsOptInPromptNavigatorParamList } from "./AnalyticsOptInPromptNavigator";
+import { LandingPagesNavigatorParamList } from "./LandingPagesNavigator";
 
 export type NavigateInput<
   ParamList extends ParamListBase = ParamListBase,
@@ -141,6 +149,7 @@ export type BaseNavigatorStackParamList = {
     device: Device;
     deviceName: string;
     deviceInfo: DeviceInfo;
+    onNameChange(name: string): void;
   };
   [ScreenName.MarketCurrencySelect]: undefined;
   [ScreenName.PortfolioOperationHistory]: undefined;
@@ -172,6 +181,9 @@ export type BaseNavigatorStackParamList = {
   [ScreenName.CurrencySettings]: {
     currencyId: string;
     headerTitle?: string | undefined;
+  };
+  [ScreenName.EditCurrencyUnits]: {
+    currency: CryptoCurrency;
   };
   [ScreenName.MarketDetail]: {
     currencyId: string;
@@ -287,4 +299,15 @@ export type BaseNavigatorStackParamList = {
   [ScreenName.RedirectToOnboardingRecoverFlow]: undefined;
 
   [NavigatorName.AnalyticsOptInPrompt]: NavigatorScreenParams<AnalyticsOptInPromptNavigatorParamList>;
+  [ScreenName.MockedAddAssetButton]: undefined;
+  [ScreenName.WalletSyncActivationSettings]: undefined;
+
+  [ScreenName.FirmwareUpdate]: {
+    deviceInfo?: DeviceInfo | null;
+    firmwareUpdateContext?: FirmwareUpdateContext | null;
+    device?: Device | null;
+    onBackFromUpdate: FirmwareUpdateProps["onBackFromUpdate"];
+    isBeforeOnboarding?: boolean;
+  };
+  [NavigatorName.LandingPages]: NavigatorScreenParams<LandingPagesNavigatorParamList>;
 };

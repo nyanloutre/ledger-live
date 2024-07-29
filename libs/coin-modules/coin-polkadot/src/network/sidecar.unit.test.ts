@@ -1,19 +1,46 @@
 import BigNumber from "bignumber.js";
 import { HttpResponse, http } from "msw";
+import coinConfig from "../config";
 import { getAccount, getRegistry } from "./sidecar";
-import mockServer from "./sidecar.mock";
+import mockServer, { SIDECAR_BASE_URL_TEST } from "./sidecar.mock";
+
+jest.mock("./node", () => ({
+  fetchConstants: jest.fn(),
+  fetchStakingInfo: jest.fn(),
+  fetchValidators: jest.fn(),
+  fetchNominations: jest.fn(),
+}));
 
 describe("getAccount", () => {
   let balanceResponseStub = {};
 
   beforeAll(() => {
+    coinConfig.setCoinConfig(() => ({
+      status: {
+        type: "active",
+      },
+      node: {
+        url: "https://httpbin.org/",
+      },
+      sidecar: {
+        url: SIDECAR_BASE_URL_TEST,
+      },
+      metadataShortener: {
+        url: "",
+      },
+      metadataHash: {
+        url: "",
+      },
+      runtimeUpgraded: false,
+    }));
+
     mockServer.listen();
   });
 
   beforeEach(() => {
     mockServer.resetHandlers();
     mockServer.use(
-      http.get("https://polkadot-sidecar.coin.ledger.com/accounts/:addr/balance-info", () => {
+      http.get(`${SIDECAR_BASE_URL_TEST}/accounts/:addr/balance-info`, () => {
         return HttpResponse.json(balanceResponseStub);
       }),
     );
@@ -69,6 +96,25 @@ describe("getAccount", () => {
 
 describe("getRegistry", () => {
   beforeAll(() => {
+    coinConfig.setCoinConfig(() => ({
+      status: {
+        type: "active",
+      },
+      node: {
+        url: "https://httpbin.org/",
+      },
+      sidecar: {
+        url: SIDECAR_BASE_URL_TEST,
+      },
+      metadataShortener: {
+        url: "",
+      },
+      metadataHash: {
+        url: "",
+      },
+      runtimeUpgraded: false,
+    }));
+
     mockServer.listen();
   });
 

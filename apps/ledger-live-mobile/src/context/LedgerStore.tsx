@@ -11,14 +11,16 @@ import {
   getBle,
   getPostOnboardingState,
   getProtect,
+  getMarketState,
 } from "../db";
 import { importSettings, setSupportedCounterValues } from "~/actions/settings";
-import { importStore as importAccounts } from "~/actions/accounts";
+import { importStore as importAccountsRaw } from "~/actions/accounts";
 import { importBle } from "~/actions/ble";
 import { updateProtectData, updateProtectStatus } from "~/actions/protect";
 import { INITIAL_STATE as settingsState } from "~/reducers/settings";
 import { listCachedCurrencyIds, hydrateCurrency } from "~/bridge/cache";
 import { getCryptoCurrencyById, listSupportedFiats } from "@ledgerhq/live-common/currencies/index";
+import { importMarket } from "~/actions/market";
 
 export default class LedgerStoreProvider extends Component<
   {
@@ -99,11 +101,16 @@ export default class LedgerStoreProvider extends Component<
 
     this.props.store.dispatch(importSettings(settingsData));
     const accountsData = await getAccounts();
-    this.props.store.dispatch(importAccounts(accountsData));
+    this.props.store.dispatch(importAccountsRaw(accountsData));
 
     const postOnboardingState = await getPostOnboardingState();
     if (postOnboardingState) {
       this.props.store.dispatch(importPostOnboardingState({ newState: postOnboardingState }));
+    }
+
+    const marketState = await getMarketState();
+    if (marketState) {
+      this.props.store.dispatch(importMarket(marketState));
     }
 
     const protect = await getProtect();

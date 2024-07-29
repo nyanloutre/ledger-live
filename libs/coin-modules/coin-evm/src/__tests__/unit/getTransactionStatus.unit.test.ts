@@ -59,6 +59,7 @@ const legacyTx: EvmTransactionLegacy = {
   gasPrice: new BigNumber(100),
   type: 0,
 };
+
 const eip1559Tx: EvmTransactionEIP1559 = {
   amount: new BigNumber(100),
   useAllAmount: false,
@@ -75,6 +76,7 @@ const eip1559Tx: EvmTransactionEIP1559 = {
   maxPriorityFeePerGas: new BigNumber(100),
   type: 2,
 };
+
 const erc721Nft: ProtoNFT = {
   contract: "0xNftContract",
   tokenId: "1",
@@ -886,15 +888,14 @@ describe("EVM Family", () => {
         it("should return the expected informations", async () => {
           const res = await getTransactionStatus(account, legacyTx);
 
-          expect(res).toEqual(
-            expect.objectContaining({
-              errors: expect.any(Object),
-              warnings: expect.any(Object),
-              estimatedFees: new BigNumber(2100000),
-              amount: legacyTx.amount,
-              totalSpent: new BigNumber(2100000).plus(legacyTx.amount),
-            }),
-          );
+          expect(res).toEqual({
+            errors: expect.any(Object),
+            warnings: expect.any(Object),
+            estimatedFees: new BigNumber(2100000),
+            totalFees: new BigNumber(2100000),
+            amount: legacyTx.amount,
+            totalSpent: new BigNumber(2100000).plus(legacyTx.amount),
+          });
         });
       });
     });
@@ -922,8 +923,8 @@ describe("EVM Family", () => {
           it("should throw error", () => {
             const originalTx: EvmTransactionLegacy = {
               ...legacyTx,
-              gasPrice: undefined,
-            } as any;
+              gasPrice: undefined as any,
+            };
 
             expect(() => {
               validateEditTransaction({
@@ -939,8 +940,8 @@ describe("EVM Family", () => {
           it("should not have error and warning", () => {
             const invalidUpdatedTx: EvmTransactionLegacy = {
               ...updatedLegacyTx,
-              gasPrice: undefined,
-            } as any;
+              gasPrice: undefined as any,
+            };
 
             const res = validateEditTransaction({
               transaction: invalidUpdatedTx,
@@ -1014,8 +1015,8 @@ describe("EVM Family", () => {
           it("should throw error", () => {
             const originalTx: EvmTransactionEIP1559 = {
               ...eip1559Tx,
-              maxFeePerGas: undefined,
-            } as any;
+              maxFeePerGas: undefined as any,
+            };
 
             expect(() => {
               validateEditTransaction({
@@ -1066,8 +1067,8 @@ describe("EVM Family", () => {
           it("should not have error and warning", () => {
             const invalidUpdatedTx: EvmTransactionEIP1559 = {
               ...eip1559Tx,
-              maxPriorityFeePerGas: undefined,
-            } as any;
+              maxPriorityFeePerGas: undefined as any,
+            };
 
             const res = validateEditTransaction({
               transaction: invalidUpdatedTx,
@@ -1177,6 +1178,7 @@ describe("EVM Family", () => {
         errors: {},
         warnings: {},
         estimatedFees: new BigNumber(2100000),
+        totalFees: new BigNumber(100),
         amount: eip1559Tx.amount,
         totalSpent: new BigNumber(2100000).plus(eip1559Tx.amount),
       };

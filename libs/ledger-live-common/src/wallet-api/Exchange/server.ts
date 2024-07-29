@@ -2,6 +2,7 @@
 import { RPCHandler, customWrapper } from "@ledgerhq/wallet-api-server";
 import {
   createAccountNotFound,
+  createCurrencyNotFound,
   deserializeTransaction,
   ServerError,
 } from "@ledgerhq/wallet-api-core";
@@ -20,7 +21,9 @@ import {
   ExchangeStartResult,
   ExchangeType,
   ExchangeStartSellParams,
+  SwapLiveError,
 } from "@ledgerhq/wallet-api-exchange-module";
+import { decodePayloadProtobuf } from "@ledgerhq/hw-app-exchange";
 import { TrackingAPI } from "./tracking";
 import { AppManifest } from "../types";
 import {
@@ -28,7 +31,7 @@ import {
   getWalletAPITransactionSignFlowInfos,
 } from "../converters";
 import { getAccountBridge } from "../../bridge";
-import { Exchange } from "../../exchange/swap/types";
+import { Exchange } from "../../exchange/types";
 import { Transaction } from "../../generated/types";
 import {
   ExchangeError,
@@ -38,6 +41,7 @@ import {
 } from "./error";
 
 export { ExchangeType };
+import { BigNumber } from "bignumber.js";
 
 type Handlers = {
   "custom.exchange.start": RPCHandler<
@@ -45,6 +49,7 @@ type Handlers = {
     ExchangeStartParams | ExchangeStartSwapParams | ExchangeStartSellParams
   >;
   "custom.exchange.complete": RPCHandler<ExchangeCompleteResult, ExchangeCompleteParams>;
+  "custom.exchange.error": RPCHandler<void, SwapLiveError>;
 };
 
 export type CompleteExchangeUiRequest = {
@@ -56,8 +61,8 @@ export type CompleteExchangeUiRequest = {
   feesStrategy: string;
   exchangeType: number;
   swapId?: string;
-  rate?: number;
   amountExpectedTo?: number;
+  magnitudeAwareRate?: BigNumber;
 };
 
 type ExchangeStartParamsUiRequest =
@@ -77,13 +82,18 @@ type ExchangeStartParamsUiRequest =
 type ExchangeUiHooks = {
   "custom.exchange.start": (params: {
     exchangeParams: ExchangeStartParamsUiRequest;
-    onSuccess: (nonce: string) => void;
-    onCancel: (error: Error) => void;
+    onSuccess: (nonce: string, device?: ExchangeStartResult["device"]) => void;
+    onCancel: (error: Error, device?: ExchangeStartResult["device"]) => void;
   }) => void;
   "custom.exchange.complete": (params: {
     exchangeParams: CompleteExchangeUiRequest;
     onSuccess: (hash: string) => void;
     onCancel: (error: Error) => void;
+  }) => void;
+  "custom.exchange.error": (params: {
+    error: SwapLiveError | undefined;
+    onSuccess: () => void;
+    onCancel: () => void;
   }) => void;
 };
 
@@ -94,6 +104,7 @@ export const handlers = ({
   uiHooks: {
     "custom.exchange.start": uiExchangeStart,
     "custom.exchange.complete": uiExchangeComplete,
+    "custom.exchange.error": uiError,
   },
 }: {
   accounts: AccountLike[];
@@ -129,9 +140,9 @@ export const handlers = ({
       return new Promise((resolve, reject) =>
         uiExchangeStart({
           exchangeParams,
-          onSuccess: (nonce: string) => {
+          onSuccess: (nonce: string, device) => {
             tracking.startExchangeSuccess(manifest);
-            resolve({ transactionId: nonce });
+            resolve({ transactionId: nonce, device });
           },
           onCancel: error => {
             tracking.completeExchangeFail(manifest);
@@ -160,26 +171,50 @@ export const handlers = ({
           throw new ServerError(createAccountNotFound(params.fromAccountId));
         }
 
-        let toAccount;
+        const fromParentAccount = getParentAccount(fromAccount, accounts);
 
-        if (params.exchangeType === "SWAP" && params.toAccountId) {
+        let exchange: Exchange;
+
+        if (params.exchangeType === "SWAP") {
           const realToAccountId = getAccountIdFromWalletAccountId(params.toAccountId);
           if (!realToAccountId) {
             return Promise.reject(new Error(`accountId ${params.toAccountId} unknown`));
           }
 
-          toAccount = accounts.find(a => a.id === realToAccountId);
+          const toAccount = accounts.find(a => a.id === realToAccountId);
 
           if (!toAccount) {
             throw new ServerError(createAccountNotFound(params.toAccountId));
           }
+
+          // TODO: check logic for EmptyTokenAccount
+          let toParentAccount = getParentAccount(toAccount, accounts);
+          let newTokenAccount;
+          if (params.tokenCurrency) {
+            const currency = findTokenById(params.tokenCurrency);
+            if (!currency) {
+              throw new ServerError(createCurrencyNotFound(params.tokenCurrency));
+            }
+            if (toAccount.type === "Account") {
+              newTokenAccount = makeEmptyTokenAccount(toAccount, currency);
+              toParentAccount = toAccount;
+            } else {
+              newTokenAccount = makeEmptyTokenAccount(toParentAccount, currency);
+            }
+          }
+
+          exchange = {
+            fromAccount,
+            fromParentAccount,
+            toAccount: newTokenAccount ? newTokenAccount : toAccount,
+            toParentAccount,
+          };
+        } else {
+          exchange = {
+            fromAccount,
+            fromParentAccount,
+          };
         }
-
-        const fromParentAccount = getParentAccount(fromAccount, accounts);
-        const toParentAccount = toAccount ? getParentAccount(toAccount, accounts) : undefined;
-
-        const currency = params.tokenCurrency ? findTokenById(params.tokenCurrency) : null;
-        const newTokenAccount = currency ? makeEmptyTokenAccount(toAccount, currency) : null;
 
         const mainFromAccount = getMainAccount(fromAccount, fromParentAccount);
         const mainFromAccountFamily = mainFromAccount.currency.family;
@@ -226,6 +261,15 @@ export const handlers = ({
           },
         );
 
+        let amountExpectedTo;
+        let magnitudeAwareRate;
+        if (params.exchangeType === "SWAP") {
+          // Get amountExpectedTo and magnitudeAwareRate from binary payload
+          const decodePayload = await decodePayloadProtobuf(params.hexBinaryPayload);
+          amountExpectedTo = new BigNumber(decodePayload.amountToWallet.toString());
+          magnitudeAwareRate = tx.amount && amountExpectedTo.dividedBy(tx.amount);
+        }
+
         return new Promise((resolve, reject) =>
           uiExchangeComplete({
             exchangeParams: {
@@ -234,15 +278,11 @@ export const handlers = ({
               transaction: tx,
               signature: params.hexSignature,
               binaryPayload: params.hexBinaryPayload,
-              exchange: {
-                fromAccount,
-                fromParentAccount,
-                toAccount: newTokenAccount ? newTokenAccount : toAccount,
-                toParentAccount: newTokenAccount ? toAccount : toParentAccount,
-              },
+              exchange,
               feesStrategy: params.feeStrategy,
               swapId: params.exchangeType === "SWAP" ? params.swapId : undefined,
-              rate: params.exchangeType === "SWAP" ? params.rate : undefined,
+              amountExpectedTo,
+              magnitudeAwareRate,
             },
             onSuccess: (transactionHash: string) => {
               tracking.completeExchangeSuccess(manifest);
@@ -256,6 +296,19 @@ export const handlers = ({
         );
       },
     ),
+    "custom.exchange.error": customWrapper<SwapLiveError, void>(async params => {
+      return new Promise((resolve, reject) =>
+        uiError({
+          error: params,
+          onSuccess: () => {
+            resolve();
+          },
+          onCancel: () => {
+            reject();
+          },
+        }),
+      );
+    }),
   }) as const satisfies Handlers;
 
 function extractSwapStartParam(

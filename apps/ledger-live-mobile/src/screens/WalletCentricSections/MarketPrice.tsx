@@ -4,18 +4,18 @@ import { useTranslation } from "react-i18next";
 import { useNavigation } from "@react-navigation/native";
 import counterValueFormatter from "@ledgerhq/live-common/market/utils/countervalueFormatter";
 import { CryptoOrTokenCurrency } from "@ledgerhq/types-cryptoassets";
-import { SingleCoinProviderData } from "@ledgerhq/live-common/market/MarketDataProvider";
 import { withDiscreetMode } from "~/context/DiscreetModeContext";
 import { ScreenName } from "~/const";
-import OldDeltaVariation from "../Market/DeltaVariation";
-import NewDeltaVariation from "LLM/features/Market/components/DeltaVariation";
+import DeltaVariation from "LLM/features/Market/components/DeltaVariation";
 import Touchable from "~/components/Touchable";
 import { useSettings } from "~/hooks";
-import { useFeature } from "@ledgerhq/live-common/featureFlags/index";
+import { CurrencyData, KeysPriceChange } from "@ledgerhq/live-common/market/utils/types";
+import { useTimeRange } from "~/actions/settings";
+import { PortfolioRange } from "@ledgerhq/types-live";
 
 type Props = {
   currency: CryptoOrTokenCurrency;
-  selectedCoinData: SingleCoinProviderData["selectedCoinData"];
+  selectedCoinData: CurrencyData;
   counterCurrency: string | undefined;
 };
 
@@ -23,8 +23,8 @@ const MarketPrice = ({ currency, selectedCoinData, counterCurrency }: Props) => 
   const { t } = useTranslation();
   const { locale } = useSettings();
   const navigation = useNavigation();
-  const marketNewArch = useFeature("llmMarketNewArch");
-  const DeltaVariation = marketNewArch ? NewDeltaVariation : OldDeltaVariation;
+
+  const [range] = useTimeRange();
 
   const goToMarketPage = useCallback(() => {
     navigation.navigate(ScreenName.MarketDetail, {
@@ -32,6 +32,12 @@ const MarketPrice = ({ currency, selectedCoinData, counterCurrency }: Props) => 
     });
   }, [currency, navigation]);
 
+  const getPrice = (selectedCoinData: CurrencyData, range: PortfolioRange) => {
+    const key: KeysPriceChange = range === "all" ? KeysPriceChange.year : KeysPriceChange[range];
+    return selectedCoinData.priceChangePercentage[key];
+  };
+
+  const priceChange = getPrice(selectedCoinData, range);
   return (
     <Flex flex={1} mt={6}>
       <Touchable
@@ -56,9 +62,9 @@ const MarketPrice = ({ currency, selectedCoinData, counterCurrency }: Props) => 
           </Flex>
           <Flex flex={1} flexDirection="column" pl={7} alignItems={"flex-start"}>
             <Text variant="small" fontWeight="medium" lineHeight="20px" color="neutral.c70">
-              {t("portfolio.marketPriceSection.currencyPriceChange")}
+              {t(`portfolio.marketPriceSection.currencyPriceChange.${range}`)}
             </Text>
-            <DeltaVariation percent value={selectedCoinData?.priceChangePercentage || 0} />
+            <DeltaVariation percent value={priceChange || 0} />
           </Flex>
           <IconsLegacy.ChevronRightMedium size={24} />
         </Flex>

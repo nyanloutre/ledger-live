@@ -47,9 +47,6 @@ setSupportedCurrencies([
   "komodo",
   "pivx",
   "zencash",
-  "vertcoin",
-  "peercoin",
-  "viacoin",
   "crypto_org",
   "crypto_org_croeseid",
   "celo",
@@ -139,7 +136,6 @@ const getMockAccount = (currencyId: string, address: string): Account => {
   const currency = getCryptoCurrencyById(currencyId);
 
   return {
-    name: "mockAccount",
     type: "Account",
     id: encodeAccountId({
       type: "js",
@@ -154,15 +150,12 @@ const getMockAccount = (currencyId: string, address: string): Account => {
     operations: [],
     currency,
     creationDate: new Date(0),
-    unit: currency.units[0],
     balance: new BigNumber(0),
     spendableBalance: new BigNumber(0),
     blockHeight: 0,
     freshAddressPath: "",
-    freshAddresses: [],
     seedIdentifier: "",
     index: 0,
-    starred: false,
     used: true,
     operationsCount: 0,
     pendingOperations: [],
@@ -234,13 +227,16 @@ const testSyncAccount = async (account: Account) => {
   }
 
   const currencyIds = currencies?.split(",");
-  // throw error if there's invalid currency ids passed in the cli
-  currencyIds?.forEach(currencyId => {
-    if (!findCryptoCurrencyById(currencyId)) {
-      throw new Error(`Invalid currency id: ${currencyId}`);
-    }
-  });
 
+  for (const currencyId of currencyIds || []) {
+    if (!findCryptoCurrencyById(currencyId)) {
+      continue;
+    }
+  }
+
+  // Basically the inputAccounts only exist after the second run
+  // So we first try to sync the default addresses
+  // And in the 2nd run we use the input file (which is the ouput of the first sync run)
   const migrationAddresses = inputAccounts.length ? inputAccounts : defaultAddresses;
   const filteredAddresses = (migrationAddresses as { currencyId: string }[]).filter(
     ({ currencyId }) => {

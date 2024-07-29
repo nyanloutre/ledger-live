@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useTheme } from "styled-components/native";
 import { useSelector } from "react-redux";
+import { Button, IconsLegacy } from "@ledgerhq/native-ui";
 
 import { ScreenName, NavigatorName } from "~/const";
 import * as families from "~/families";
@@ -52,9 +53,6 @@ import VerifyAccount from "~/screens/VerifyAccount";
 import { LiveApp } from "~/screens/Platform";
 import AccountsNavigator from "./AccountsNavigator";
 import MarketNavigator from "LLM/features/Market/Navigator";
-import MarketCurrencySelect from "~/screens/Market/MarketCurrencySelect";
-import MarketDetail from "~/screens/Market/MarketDetail";
-import useFeature from "@ledgerhq/live-common/featureFlags/useFeature";
 import {
   BleDevicePairingFlow,
   bleDevicePairingFlowHeaderOptions,
@@ -85,6 +83,10 @@ import { RootDrawer } from "../RootDrawer/RootDrawer";
 import EditTransactionNavigator from "~/families/evm/EditTransactionFlow/EditTransactionNavigator";
 import { DrawerProps } from "../RootDrawer/types";
 import AnalyticsOptInPromptNavigator from "./AnalyticsOptInPromptNavigator";
+import LandingPagesNavigator from "./LandingPagesNavigator";
+import FirmwareUpdateScreen from "~/screens/FirmwareUpdate";
+import EditCurrencyUnits from "~/screens/Settings/CryptoAssets/Currencies/EditCurrencyUnits";
+import WalletSyncNavigator from "LLM/features/WalletSync/Navigator";
 
 const Stack = createStackNavigator<BaseNavigatorStackParamList>();
 
@@ -98,7 +100,6 @@ export default function BaseNavigator() {
     }>
   >();
   const { colors } = useTheme();
-  const marketNewArch = useFeature("llmMarketNewArch");
   const stackNavigationConfig = useMemo(() => getStackNavigatorConfig(colors, true), [colors]);
   const noNanoBuyNanoWallScreenOptions = useNoNanoBuyNanoWallScreenOptions();
   const isAccountsEmpty = useSelector(hasNoAccountsSelector);
@@ -165,6 +166,14 @@ export default function BaseNavigator() {
             headerRight: () => null,
           })}
           {...noNanoBuyNanoWallScreenOptions}
+        />
+
+        <Stack.Screen
+          name={ScreenName.EditCurrencyUnits}
+          component={EditCurrencyUnits}
+          options={{
+            title: t("account.settings.accountUnits.title"),
+          }}
         />
         <Stack.Screen
           name={NavigatorName.ReceiveFunds}
@@ -387,20 +396,8 @@ export default function BaseNavigator() {
             cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
           }}
         />
-        {marketNewArch?.enabled ? (
-          MarketNavigator({ Stack })
-        ) : (
-          <Stack.Screen
-            name={ScreenName.MarketCurrencySelect}
-            component={MarketCurrencySelect}
-            options={{
-              title: t("market.filters.currency"),
-              headerLeft: () => null,
-              // FIXME: ONLY ON BOTTOM TABS AND DRAWER NAVIGATION
-              // unmountOnBlur: true,
-            }}
-          />
-        )}
+        {WalletSyncNavigator({ Stack })}
+        {MarketNavigator({ Stack })}
         <Stack.Screen
           name={ScreenName.PortfolioOperationHistory}
           component={PortfolioHistory}
@@ -455,15 +452,6 @@ export default function BaseNavigator() {
           component={AccountsNavigator}
           options={{ headerShown: false }}
         />
-        {!marketNewArch?.enabled ? (
-          <Stack.Screen
-            name={ScreenName.MarketDetail}
-            component={MarketDetail}
-            options={{
-              headerShown: false,
-            }}
-          />
-        ) : null}
         <Stack.Screen
           name={NavigatorName.CustomImage}
           component={CustomImageNavigator}
@@ -542,6 +530,21 @@ export default function BaseNavigator() {
           name={NavigatorName.AnalyticsOptInPrompt}
           options={{ headerShown: false }}
           component={AnalyticsOptInPromptNavigator}
+        />
+        <Stack.Screen
+          name={NavigatorName.LandingPages}
+          options={{ headerShown: false }}
+          component={LandingPagesNavigator}
+        />
+        <Stack.Screen
+          name={ScreenName.FirmwareUpdate}
+          component={FirmwareUpdateScreen}
+          options={{
+            gestureEnabled: false,
+            headerTitle: () => null,
+            headerLeft: () => null,
+            headerRight: () => <Button Icon={IconsLegacy.CloseMedium} />,
+          }}
         />
       </Stack.Navigator>
     </>

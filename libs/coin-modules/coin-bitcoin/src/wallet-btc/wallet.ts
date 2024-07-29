@@ -175,7 +175,7 @@ class BitcoinLikeWallet {
     feePerByte: number;
     utxoPickingStrategy: PickingStrategy;
     sequence: number;
-    opReturnData?: Buffer;
+    opReturnData?: Buffer | undefined;
   }): Promise<TransactionInfo> {
     const changeAddress = await params.fromAccount.xpub.getNewAddress(1, 1);
     const txInfo = await params.fromAccount.xpub.buildTx({
@@ -195,14 +195,12 @@ class BitcoinLikeWallet {
     btc: BitcoinSigner;
     fromAccount: Account;
     txInfo: TransactionInfo;
-    lockTime?: number;
-    sigHashType?: number;
-    segwit?: boolean;
-    hasTimestamp?: boolean;
-    initialTimestamp?: number;
-    additionals?: Array<string>;
-    expiryHeight?: Buffer;
-    hasExtraData?: boolean;
+    lockTime?: number | undefined;
+    sigHashType?: number | undefined;
+    segwit?: boolean | undefined;
+    additionals?: Array<string> | undefined;
+    expiryHeight?: Buffer | undefined;
+    hasExtraData?: boolean | undefined;
     onDeviceSignatureRequested?: () => void;
     onDeviceSignatureGranted?: () => void;
     onDeviceStreaming?: (arg0: { progress: number; total: number; index: number }) => void;
@@ -211,14 +209,12 @@ class BitcoinLikeWallet {
       btc,
       fromAccount,
       txInfo,
-      initialTimestamp,
       additionals,
       hasExtraData,
       onDeviceSignatureRequested,
       onDeviceSignatureGranted,
       onDeviceStreaming,
     } = params;
-    let hasTimestamp = params.hasTimestamp;
     let length = txInfo.outputs.reduce((sum, output) => {
       return sum + 8 + output.script.length + 1;
     }, 1);
@@ -257,20 +253,14 @@ class BitcoinLikeWallet {
       number | null | undefined,
     ][];
     const inputs: Inputs = txInfo.inputs.map(i => {
-      if (additionals && additionals.includes("peercoin")) {
-        // remove timestamp for new version of peercoin input, refer to https://github.com/peercoin/rfcs/issues/5 and https://github.com/LedgerHQ/ledgerjs/issues/701
-        const version = i.txHex.substring(0, 8);
-        hasTimestamp = version === "01000000" || version === "02000000";
-      }
       log("hw", `splitTransaction`, {
         transactionHex: i.txHex,
         isSegwitSupported: true,
-        hasTimestamp,
         hasExtraData,
         additionals,
       });
       return [
-        btc.splitTransaction(i.txHex, true, hasTimestamp, hasExtraData, additionals),
+        btc.splitTransaction(i.txHex, true, hasExtraData, additionals),
         i.output_index,
         null,
         i.sequence,
@@ -286,7 +276,6 @@ class BitcoinLikeWallet {
       ...(params.lockTime && { lockTime: params.lockTime }),
       ...(params.sigHashType && { sigHashType: params.sigHashType }),
       ...(params.segwit && { segwit: params.segwit }),
-      initialTimestamp,
       ...(params.expiryHeight && { expiryHeight: params.expiryHeight }),
       ...(txInfo.outputs[lastOutputIndex]?.isChange && {
         changePath: `${fromAccount.params.path}/${fromAccount.params.index}'/${txInfo.changeAddress.account}/${txInfo.changeAddress.index}`,
@@ -301,7 +290,6 @@ class BitcoinLikeWallet {
       ...(params.lockTime && { lockTime: params.lockTime }),
       ...(params.sigHashType && { sigHashType: params.sigHashType }),
       ...(params.segwit && { segwit: params.segwit }),
-      initialTimestamp,
       ...(params.expiryHeight && { expiryHeight: params.expiryHeight }),
       ...(txInfo.outputs[lastOutputIndex]?.isChange && {
         changePath: `${fromAccount.params.path}/${fromAccount.params.index}'/${txInfo.changeAddress.account}/${txInfo.changeAddress.index}`,

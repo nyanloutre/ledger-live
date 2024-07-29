@@ -1,20 +1,24 @@
-import { v4 } from "uuid";
-import { useEffect, useRef } from "react";
-import isEqual from "lodash/isEqual";
-import { useSelector } from "react-redux";
-import { accountToWalletAPIAccount } from "@ledgerhq/live-common/wallet-api/converters";
-import { getProviderName } from "@ledgerhq/live-common/exchange/swap/utils/index";
+import { getFeesCurrency, getMainAccount } from "@ledgerhq/live-common/account/index";
+import { formatCurrencyUnit } from "@ledgerhq/live-common/currencies/index";
 import { SwapTransactionType } from "@ledgerhq/live-common/exchange/swap/types";
+import { getProviderName } from "@ledgerhq/live-common/exchange/swap/utils/index";
+import { accountToWalletAPIAccount } from "@ledgerhq/live-common/wallet-api/converters";
+import { getEnv } from "@ledgerhq/live-env";
+import BigNumber from "bignumber.js";
+import isEqual from "lodash/isEqual";
+import { useEffect, useMemo, useRef } from "react";
+import { useSelector } from "react-redux";
+import { rateSelector } from "~/renderer/actions/swap";
+import { walletSelector } from "~/renderer/reducers/wallet";
 import {
   SwapProps,
   SwapWebManifestIDs,
   SwapWebProps,
 } from "~/renderer/screens/exchange/Swap2/Form/SwapWebView";
-import { rateSelector } from "~/renderer/actions/swap";
-import { getEnv } from "@ledgerhq/live-env";
+import { useMaybeAccountUnit } from "../useAccountUnit";
 
 export type UseSwapLiveAppHookProps = {
-  manifestID: string | null;
+  manifestID?: string;
   isSwapLiveAppEnabled: boolean;
   swapTransaction: SwapTransactionType;
   swapError?: Error;
@@ -39,13 +43,24 @@ export const useSwapLiveAppHook = (props: UseSwapLiveAppHookProps) => {
   const provider = exchangeRate?.provider;
   const exchangeRatesState = swapTransaction.swap?.rates;
   const swapWebPropsRef = useRef<SwapWebProps["swapState"] | undefined>(undefined);
+  const mainFromAccount =
+    swapTransaction.swap.from.account &&
+    getMainAccount(swapTransaction.swap.from.account, swapTransaction.swap.from.parentAccount);
+  const estimatedFeesUnit = mainFromAccount && getFeesCurrency(mainFromAccount);
+
+  const unit = useMaybeAccountUnit(mainFromAccount);
+  const estimatedFees = useMemo(() => {
+    return unit && BigNumber(formatCurrencyUnit(unit, swapTransaction.status.estimatedFees));
+  }, [swapTransaction.status.estimatedFees, unit]);
+
+  const walletState = useSelector(walletSelector);
 
   useEffect(() => {
     if (isSwapLiveAppEnabled) {
       const providerRedirectURLSearch = getProviderRedirectURLSearch();
       const { parentAccount: fromParentAccount } = swapTransaction.swap.from;
       const fromParentAccountId = fromParentAccount
-        ? accountToWalletAPIAccount(fromParentAccount)?.id
+        ? accountToWalletAPIAccount(walletState, fromParentAccount)?.id
         : undefined;
       const providerRedirectURL = `ledgerlive://discover/${getProviderName(
         provider ?? "",
@@ -64,24 +79,30 @@ export const useSwapLiveAppHook = (props: UseSwapLiveAppHookProps) => {
         error: !!swapError,
         loading,
         providerRedirectURL,
-        swapApiBase: `${SWAP_API_BASE}/swap`,
+        swapApiBase: SWAP_API_BASE,
+        estimatedFees: estimatedFees?.toString(),
+        estimatedFeesUnit: estimatedFeesUnit?.id,
       };
 
       if (!isEqual(newSwapWebProps, swapWebPropsRef.current)) {
         swapWebPropsRef.current = newSwapWebProps;
-        updateSwapWebProps({ ...newSwapWebProps, cacheKey: v4() });
+        updateSwapWebProps(newSwapWebProps);
       }
     }
   }, [
+    walletState,
     provider,
     manifestID,
     isSwapLiveAppEnabled,
     getExchangeSDKParams,
     getProviderRedirectURLSearch,
     swapTransaction.swap.from,
+    swapTransaction.swap.from.amount,
     swapError,
     swapTransaction.bridgePending,
     exchangeRatesState.status,
     updateSwapWebProps,
+    estimatedFees,
+    estimatedFeesUnit?.id,
   ]);
 };

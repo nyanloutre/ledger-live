@@ -88,29 +88,14 @@ const envDefinitions = {
     desc: "Node endpoint for celo",
   },
   COSMOS_GAS_AMPLIFIER: {
-    def: 1.5,
+    def: 1.3, // Same as Keplr
     parser: intParser,
     desc: "Cosmos gas estimate multiplier",
-  },
-  API_RIPPLE_RPC: {
-    parser: stringParser,
-    def: "https://xrplcluster.com/ledgerlive",
-    desc: "XRP Ledger full history open JSON-RPC endpoint",
   },
   API_FILECOIN_ENDPOINT: {
     parser: stringParser,
     def: "https://filecoin.coin.ledger.com",
     desc: "Filecoin API url",
-  },
-  API_NEAR_ARCHIVE_NODE: {
-    def: "https://near.coin.ledger.com/node/",
-    parser: stringParser,
-    desc: "Archive node endpoint for NEAR",
-  },
-  API_NEAR_INDEXER: {
-    def: "https://near.coin.ledger.com/indexer/",
-    parser: stringParser,
-    desc: "Datahub Indexer API for NEAR",
   },
   API_STACKS_ENDPOINT: {
     parser: stringParser,
@@ -126,6 +111,16 @@ const envDefinitions = {
     parser: stringParser,
     def: "https://polkadot-sidecar.coin.ledger.com",
     desc: "Polkadot Sidecar API url",
+  },
+  API_POLKADOT_SIDECAR_CREDENTIALS: {
+    parser: stringParser,
+    def: "",
+    desc: "Polkadot Sidecar API credentials",
+  },
+  API_POLKADOT_NODE: {
+    parser: stringParser,
+    def: "https://polkadot-fullnodes.api.live.ledger.com",
+    desc: "Polkadot Node",
   },
   ELROND_API_ENDPOINT: {
     parser: stringParser,
@@ -224,11 +219,9 @@ const envDefinitions = {
   },
   BUY_API_BASE: {
     def: "https://buy.api.live.ledger.com/buy/v1",
-
     parser: stringParser,
     desc: "Buy crypto API base url - version 1",
   },
-
   CARDANO_API_ENDPOINT: {
     def: "https://cardano.coin.ledger.com/api",
     parser: stringParser,
@@ -568,6 +561,11 @@ const envDefinitions = {
     parser: boolParser,
     desc: "dev flag to skip onboarding flow",
   },
+  SPECULOS_API_PORT: {
+    def: 0,
+    parser: intParser,
+    desc: "API port for speculos",
+  },
   SPECULOS_PID_OFFSET: {
     def: 0,
     parser: intParser,
@@ -589,6 +587,11 @@ const envDefinitions = {
     def: "https://swap.ledger.com/v5",
     parser: stringParser,
     desc: "Swap API base",
+  },
+  SWAP_USER_IP: {
+    def: "",
+    parser: stringParser,
+    desc: "Swap IP",
   },
   SYNC_ALL_INTERVAL: {
     def: 8 * 60 * 1000,
@@ -630,6 +633,11 @@ const envDefinitions = {
     parser: boolParser,
     desc: "is walletconnect enabled",
   },
+  CLOUD_SYNC_API: {
+    def: "https://cloud-sync-backend.api.aws.stg.ldg-tech.com",
+    parser: stringParser,
+    desc: "wallet sync api base url",
+  },
   WITH_DEVICE_POLLING_DELAY: {
     def: 500,
     parser: floatParser,
@@ -659,6 +667,11 @@ const envDefinitions = {
     def: 100,
     parser: intParser,
     desc: "safe max on maximum number of queries to synchronize a tezos account",
+  },
+  TRUSTCHAIN_API: {
+    def: "https://trustchain-backend.api.aws.stg.ldg-tech.com",
+    parser: stringParser,
+    desc: "Trustchain API",
   },
   PLATFORM_DEBUG: {
     def: false,
@@ -784,6 +797,11 @@ const envDefinitions = {
     def: 20,
     parser: intParser,
     desc: "Configure the low battery percentage threshold",
+  },
+  LOG_DRAWERS: {
+    def: false,
+    parser: boolParser,
+    desc: "Enable logs for drawers",
   },
 };
 

@@ -108,6 +108,7 @@ const remapSocketError = (context?: string) =>
     }
   });
 
+/** @deprecated use getAppsCatalogForDevice (from ledger-live-common/src/device/use-cases) instead */
 const applicationsByDevice: (params: {
   provider: number;
   current_se_firmware_final_version: Id;
@@ -132,6 +133,7 @@ const applicationsByDevice: (params: {
     }`,
 );
 
+/** @deprecated use getAppsCatalogForDevice (from ledger-live-common/src/device/use-cases) instead */
 const listApps: () => Promise<Array<Application>> = makeLRUCache(
   async () => {
     const { data } = await network({
@@ -500,24 +502,24 @@ const installMcu = (
   }).pipe(remapSocketError(context));
 };
 
-function retrieveMcuVersion(finalFirmware: FinalFirmware): Promise<McuVersion | undefined> {
-  return fetchMcusUseCase()
-    .then(mcus =>
-      mcus.filter(deviceInfo => {
-        const provider = getProviderId(deviceInfo);
-        return mcu => mcu.providers.includes(provider);
-      }),
-    )
-    .then(mcus => mcus.filter(mcu => mcu.from_bootloader_version !== "none"))
-    .then(mcus =>
-      findBestMCU(
-        finalFirmware.mcu_versions.map(id => mcus.find(mcu => mcu.id === id)).filter(Boolean),
-      ),
-    );
+async function retrieveMcuVersion({
+  mcu_versions,
+}: FinalFirmware): Promise<McuVersion | undefined> {
+  const mcus = await fetchMcusUseCase();
+  const provider = getProviderId(undefined);
+  const availableMcus = mcus.filter(
+    ({ id, providers, from_bootloader_version }: McuVersion) =>
+      providers.includes(provider) &&
+      from_bootloader_version !== "none" &&
+      mcu_versions.includes(id),
+  );
+  return findBestMCU(availableMcus);
 }
 
 const API = {
+  /** @deprecated use getAppsCatalogForDevice (from ledger-live-common/src/device/use-cases) instead */
   applicationsByDevice,
+  /** @deprecated use getAppsCatalogForDevice (from ledger-live-common/src/device/use-cases) instead */
   listApps,
   listInstalledApps,
   listCategories,

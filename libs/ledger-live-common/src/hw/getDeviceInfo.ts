@@ -9,9 +9,11 @@ import { PROVIDERS } from "../manager/provider";
 import { isDashboardName } from "./isDashboardName";
 import { DeviceNotOnboarded } from "../errors";
 import type { DeviceInfo } from "@ledgerhq/types-live";
+
 const ManagerAllowedFlag = 0x08;
 const PinValidatedFlag = 0x80;
-export default async function getDeviceInfo(transport: Transport): Promise<DeviceInfo> {
+
+export default async function (transport: Transport): Promise<DeviceInfo> {
   const tracer = new LocalTracer("hw", {
     ...transport.getTraceContext(),
     function: "getDeviceInfo",
@@ -66,7 +68,7 @@ export default async function getDeviceInfo(transport: Transport): Promise<Devic
   } = res;
   const isOSU = rawVersion.includes("-osu");
   const version = rawVersion.replace("-osu", "");
-  const m = rawVersion.match(/([0-9]+.[0-9]+)(.[0-9]+)?(-(.*))?/);
+  const m = rawVersion.match(/([0-9]+.[0-9]+(.[0-9]+){0,1})?(-(.*))?/);
   const [, majMin, , , postDash] = m || [];
   const providerName = PROVIDERS[postDash] ? postDash : null;
   const flag = flags.length > 0 ? flags[0] : 0;

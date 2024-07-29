@@ -3,22 +3,22 @@ import { Account } from "@ledgerhq/types-live";
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 import { SignerContext } from "@ledgerhq/coin-framework/signer";
 import { getCryptoCurrencyById, listCryptoCurrencies } from "@ledgerhq/cryptoassets";
-import type { EvmAddress, EvmSignature, EvmSigner } from "../../types/signer";
+import type { EvmSigner } from "../../types/signer";
 import { buildSignOperation, applyEIP155 } from "../../signOperation";
 import { Transaction as EvmTransaction } from "../../types";
 import { makeAccount } from "../fixtures/common.fixtures";
 import * as nodeApi from "../../api/node/rpc.common";
 import { getEstimatedFees } from "../../logic";
 import { DEFAULT_NONCE } from "../../createTransaction";
+import { getCoinConfig } from "../../config";
+
+jest.mock("../../config");
+const mockGetConfig = jest.mocked(getCoinConfig);
 
 const currency: CryptoCurrency = {
   ...getCryptoCurrencyById("ethereum"),
   ethereumLikeInfo: {
     chainId: 1,
-    node: {
-      type: "external" as const,
-      uri: "my-rpc.com",
-    },
   },
 };
 const account: Account = makeAccount(
@@ -44,9 +44,9 @@ const transactionEIP1559: EvmTransaction = {
 
 const estimatedFees = getEstimatedFees(transactionEIP1559);
 
-const mockSignerContext: SignerContext<EvmSigner, EvmAddress | EvmSignature> = (
+const mockSignerContext: SignerContext<EvmSigner> = <T>(
   _: string,
-  fn: (signer: EvmSigner) => Promise<EvmAddress | EvmSignature>,
+  fn: (signer: EvmSigner) => Promise<T>,
 ) => {
   return fn({
     setLoadConfig: jest.fn(),
@@ -64,6 +64,17 @@ const mockSignerContext: SignerContext<EvmSigner, EvmAddress | EvmSignature> = (
 };
 
 describe("EVM Family", () => {
+  mockGetConfig.mockImplementation((): any => {
+    return {
+      info: {
+        node: {
+          type: "external",
+          uri: "my-rpc.com",
+        },
+      },
+    };
+  });
+
   describe("signOperation.ts", () => {
     describe("signOperation", () => {
       beforeAll(() => {

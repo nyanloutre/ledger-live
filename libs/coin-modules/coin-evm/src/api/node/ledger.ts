@@ -5,12 +5,13 @@ import { getEnv } from "@ledgerhq/live-env";
 import { delay } from "@ledgerhq/live-promise";
 import axios, { AxiosRequestConfig } from "axios";
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
-import { Batcher } from "@ledgerhq/coin-framework/batcher/types";
-import { makeBatcher } from "@ledgerhq/coin-framework/batcher/index";
+import { Batcher } from "@ledgerhq/live-network/batcher/types";
+import { makeBatcher } from "@ledgerhq/live-network/batcher/index";
 import { GasEstimationError, LedgerNodeUsedIncorrectly } from "../../errors";
 import OptimismGasPriceOracleAbi from "../../abis/optimismGasPriceOracle.abi.json";
 import { getSerializedTransaction } from "../../transaction";
 import { LedgerExplorerOperation } from "../../types";
+import { getCoinConfig } from "../../config";
 import { getGasOptions } from "../gasTracker/ledger";
 import { padHexString } from "../../logic";
 import { NodeApi, isLedgerNodeConfig } from "./types";
@@ -60,7 +61,8 @@ const tokenBalancesBatchersMap = new Map<
  * Get a transaction by hash
  */
 export const getTransaction: NodeApi["getTransaction"] = async (currency, hash) => {
-  const { node } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+  const { node } = config || /* istanbul ignore next */ {};
   if (!isLedgerNodeConfig(node)) {
     throw new LedgerNodeUsedIncorrectly();
   }
@@ -75,6 +77,9 @@ export const getTransaction: NodeApi["getTransaction"] = async (currency, hash) 
     blockHeight: ledgerTransaction.block.height,
     blockHash: ledgerTransaction.block.hash,
     nonce: ledgerTransaction.nonce_value,
+    gasPrice: ledgerTransaction.gas_price,
+    gasUsed: ledgerTransaction.gas_used,
+    value: ledgerTransaction.value,
   };
 };
 
@@ -82,7 +87,8 @@ export const getTransaction: NodeApi["getTransaction"] = async (currency, hash) 
  * Get the balance of an address
  */
 export const getCoinBalance: NodeApi["getCoinBalance"] = async (currency, address) => {
-  const { node } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+  const { node } = config || /* istanbul ignore next */ {};
   if (!isLedgerNodeConfig(node)) {
     throw new LedgerNodeUsedIncorrectly();
   }
@@ -103,7 +109,8 @@ export const getBatchTokenBalances = async (
   params: { currency: CryptoCurrency },
 ): Promise<BigNumber[]> => {
   const { currency } = params;
-  const { node } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+  const { node } = config || /* istanbul ignore next */ {};
   if (!isLedgerNodeConfig(node)) {
     throw new LedgerNodeUsedIncorrectly();
   }
@@ -131,7 +138,8 @@ export const getTokenBalance: NodeApi["getTokenBalance"] = async (
   address,
   contractAddress,
 ) => {
-  const { node } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+  const { node } = config || /* istanbul ignore next */ {};
   if (!isLedgerNodeConfig(node)) {
     throw new LedgerNodeUsedIncorrectly();
   }
@@ -149,7 +157,8 @@ export const getTokenBalance: NodeApi["getTokenBalance"] = async (
  * Get account nonce
  */
 export const getTransactionCount: NodeApi["getTransactionCount"] = async (currency, address) => {
-  const { node } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+  const { node } = config || /* istanbul ignore next */ {};
   if (!isLedgerNodeConfig(node)) {
     throw new LedgerNodeUsedIncorrectly();
   }
@@ -173,7 +182,8 @@ export const getGasEstimation: NodeApi["getGasEstimation"] = async (
   transaction,
 ): Promise<BigNumber> => {
   const { currency } = account;
-  const { node } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+  const { node } = config || /* istanbul ignore next */ {};
   if (!isLedgerNodeConfig(node)) {
     throw new LedgerNodeUsedIncorrectly();
   }
@@ -213,7 +223,8 @@ export const getGasEstimation: NodeApi["getGasEstimation"] = async (
  * regarding the network status
  */
 export const getFeeData: NodeApi["getFeeData"] = async (currency, transaction) => {
-  const { node } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+  const { node } = config || /* istanbul ignore next */ {};
   if (!isLedgerNodeConfig(node)) {
     throw new LedgerNodeUsedIncorrectly();
   }
@@ -223,7 +234,6 @@ export const getFeeData: NodeApi["getFeeData"] = async (currency, transaction) =
       ...currency,
       ethereumLikeInfo: {
         ...currency.ethereumLikeInfo!,
-        gasTracker: { type: "ledger", explorerId: node.explorerId },
       },
     },
     /**
@@ -233,7 +243,10 @@ export const getFeeData: NodeApi["getFeeData"] = async (currency, transaction) =
      * It's most probably always 2 since it's the default type value for a new transaction
      * cf. libs/coin-evm/src/createTransaction.ts:23
      */
-    options: { useEIP1559: transaction.type === 2 },
+    options: {
+      useEIP1559: transaction.type === 2,
+      overrideGasTracker: { type: "ledger", explorerId: node.explorerId },
+    },
   });
 
   return medium;
@@ -246,7 +259,8 @@ export const broadcastTransaction: NodeApi["broadcastTransaction"] = async (
   currency,
   signedTxHex,
 ) => {
-  const { node } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+  const { node } = config || /* istanbul ignore next */ {};
   if (!isLedgerNodeConfig(node)) {
     throw new LedgerNodeUsedIncorrectly();
   }
@@ -269,7 +283,8 @@ export const getBlockByHeight: NodeApi["getBlockByHeight"] = async (
   currency,
   blockHeight = "latest",
 ) => {
-  const { node } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+  const { node } = config || /* istanbul ignore next */ {};
   if (!isLedgerNodeConfig(node)) {
     throw new LedgerNodeUsedIncorrectly();
   }
@@ -322,17 +337,17 @@ export const getBlockByHeight: NodeApi["getBlockByHeight"] = async (
  *
  * @see https://help.optimism.io/hc/en-us/articles/4411895794715-How-do-transaction-fees-on-Optimism-work-
  */
-//
 export const getOptimismAdditionalFees: NodeApi["getOptimismAdditionalFees"] = async (
   currency,
   transaction,
 ) => {
-  const { node } = currency.ethereumLikeInfo || /* istanbul ignore next */ {};
+  const config = getCoinConfig(currency).info;
+  const { node } = config || /* istanbul ignore next */ {};
   if (!isLedgerNodeConfig(node)) {
     throw new LedgerNodeUsedIncorrectly();
   }
 
-  if (!["optimism", "optimism_goerli"].includes(currency.id)) {
+  if (!["optimism", "optimism_sepolia"].includes(currency.id)) {
     return new BigNumber(0);
   }
 
@@ -379,6 +394,72 @@ export const getOptimismAdditionalFees: NodeApi["getOptimismAdditionalFees"] = a
   return new BigNumber(result.response);
 };
 
+/**
+ * ⚠️ Blockchain specific
+ *
+ * For a layer 2 like Scroll, additional fees are needed in order to
+ * take into account layer 1 settlement estimated cost.
+ * This gas price is served through a smart contract oracle.
+ *
+ * @see https://docs.scroll.io/en/developers/transaction-fees-on-scroll/
+ */
+export const getScrollAdditionalFees: NodeApi["getScrollAdditionalFees"] = async (
+  currency,
+  transaction,
+) => {
+  const config = getCoinConfig(currency).info;
+  const { node } = config || /* istanbul ignore next */ {};
+  if (!isLedgerNodeConfig(node)) {
+    throw new LedgerNodeUsedIncorrectly();
+  }
+
+  if (!["scroll", "scroll_sepolia"].includes(currency.id)) {
+    return new BigNumber(0);
+  }
+
+  // Fake signature is added to get the best approximation possible for the gas on L1
+  const serializedTransaction = ((): string | null => {
+    try {
+      return getSerializedTransaction(transaction, {
+        r: "0xffffffffffffffffffffffffffffffffffffffff",
+        s: "0xffffffffffffffffffffffffffffffffffffffff",
+        v: 0,
+      });
+    } catch (e) {
+      return null;
+    }
+  })();
+  if (!serializedTransaction) {
+    return new BigNumber(0);
+  }
+
+  const optimismGasOracle = new ethers.utils.Interface(OptimismGasPriceOracleAbi);
+  const data = optimismGasOracle.encodeFunctionData("getL1Fee(bytes)", [serializedTransaction]);
+
+  const [result] = await fetchWithRetries<
+    Array<{
+      info: {
+        contract: string;
+        data: string;
+        blockNumber: number | null;
+      };
+      response: string;
+    }>
+  >({
+    method: "POST",
+    url: `${getEnv("EXPLORER")}/blockchain/v4/${node.explorerId}/contract/read`,
+    data: [
+      {
+        // @see https://community.optimism.io/docs/developers/build/transaction-fees/#displaying-fees-to-users
+        contract: "0x5300000000000000000000000000000000000002",
+        data,
+      },
+    ],
+  });
+
+  return new BigNumber(result.response);
+};
+
 const node: NodeApi = {
   getBlockByHeight,
   getCoinBalance,
@@ -389,6 +470,7 @@ const node: NodeApi = {
   getFeeData,
   broadcastTransaction,
   getOptimismAdditionalFees,
+  getScrollAdditionalFees,
 };
 
 export default node;

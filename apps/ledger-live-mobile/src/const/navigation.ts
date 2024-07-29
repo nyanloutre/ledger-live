@@ -24,6 +24,7 @@ export enum ScreenName {
   CryptoAssetsSettings = "CryptoAssetsSettings",
   CurrenciesList = "CurrenciesList",
   CurrencySettings = "CurrencySettings",
+  EditCurrencyUnits = "EditCurrencyUnits",
   DebugBLE = "DebugBLE",
   DebugBLEBenchmark = "DebugBLEBenchmark",
   DebugBLEDevicePairing = "DebugBLEDevicePairing",
@@ -34,6 +35,9 @@ export enum ScreenName {
   DebugCustomImageGraphics = "DebugCustomImageGraphics",
   DebugDebugging = "DebugDebugging",
   DebugQueuedDrawers = "DebugQueuedDrawers",
+  DebugQueuedDrawerScreen0 = "DebugQueuedDrawerScreen0",
+  DebugQueuedDrawerScreen1 = "DebugQueuedDrawerScreen1",
+  DebugQueuedDrawerScreen2 = "DebugQueuedDrawerScreen2",
   DebugEnv = "DebugEnv",
   DebugExport = "DebugExport",
   DebugFeatureFlags = "DebugFeatureFlags",
@@ -72,7 +76,6 @@ export enum ScreenName {
   DeviceConnect = "DeviceConnect",
   DisplayResult = "DisplayResult",
   EditAccountName = "EditAccountName",
-  EditAccountUnits = "EditAccountUnits",
   EditDeviceName = "EditDeviceName",
   Exchange = "Exchange",
   ExchangeBuy = "ExchangeBuy",
@@ -92,9 +95,8 @@ export enum ScreenName {
   GetDevice = "GetDevice",
   HelpSettings = "HelpSettings",
   HiddenNftCollections = "HiddenNftCollections",
-  Manager = "Manager",
-  ManagerDevice = "ManagerDevice",
-  ManagerMain = "ManagerMain",
+  MyLedgerChooseDevice = "MyLedgerChooseDevice",
+  MyLedgerDevice = "MyLedgerDevice",
   MigrateAccountsConnectDevice = "MigrateAccountsConnectDevice",
   MigrateAccountsOverview = "MigrateAccountsOverview",
   MigrateAccountsProgress = "MigrateAccountsProgress",
@@ -124,8 +126,8 @@ export enum ScreenName {
   RegionSettings = "RegionSettings",
   RepairDevice = "RepairDevice",
   Resources = "Resources",
-  RippleEditFee = "RippleEditFee",
-  RippleEditTag = "RippleEditTag",
+  XrpEditFee = "XrpEditFee",
+  XrpEditTag = "XrpEditTag",
   ScanAccounts = "ScanAccounts",
   ScanRecipient = "ScanRecipient",
   SendAmountCoin = "SendAmountCoin",
@@ -485,7 +487,7 @@ export enum ScreenName {
 
   CustomImageStep0Welcome = "CustomImageStep0Welcome",
   CustomImageStep1Crop = "CustomImageStep1Crop",
-  CustomImageStep2Preview = "CustomImageStep2Preview",
+  CustomImageStep2ChooseContrast = "CustomImageStep2ChooseContrast",
   CustomImageStep3Transfer = "CustomImageStep3Transfer",
   CustomImageErrorScreen = "CustomImageErrorScreen",
   CustomImagePreviewPreEdit = "CustomImagePreviewPreEdit",
@@ -495,6 +497,7 @@ export enum ScreenName {
   PostOnboardingHub = "PostOnboardingHub",
   PostOnboardingDebugScreen = "PostOnboardingDebugScreen",
   PostOnboardingMockActionScreen = "PostOnboardingMockActionScreen",
+  PostOnboardingDeeplinkHandler = "PostOnboardingDeeplinkHandler",
   WalletNftGallery = "WalletNftGallery",
   NoFunds = "NoFunds",
   Stake = "Stake",
@@ -503,6 +506,16 @@ export enum ScreenName {
 
   AnalyticsOptInPromptMain = "AnalyticsOptInPromptMain",
   AnalyticsOptInPromptDetails = "AnalyticsOptInPromptDetails",
+
+  WalletSyncActivationSettings = "WalletSyncActivationSettings",
+  MockedAddAssetButton = "MockedAddAssetButton",
+  GenericLandingPage = "GenericLandingPage",
+
+  // Web3Hub
+  Web3HubMain = "Web3HubMain",
+  Web3HubSearch = "Web3HubSearch",
+  Web3HubTabs = "Web3HubTabs",
+  Web3HubApp = "Web3HubApp",
 }
 
 export enum NavigatorName {
@@ -536,8 +549,7 @@ export enum NavigatorName {
   ClaimRewards = "ClaimRewards",
   Freeze = "Freeze",
   ImportAccounts = "ImportAccounts",
-  Manager = "ManagerNavigator",
-  ManagerStack = "ManagerStack",
+  MyLedger = "MyLedger",
   NftNavigator = "NftNavigator",
   Onboarding = "Onboarding",
   OnboardingCarefulWarning = "OnboardingCarefulWarning",
@@ -612,4 +624,9 @@ export enum NavigatorName {
   SyncOnboarding = "SyncOnboarding",
 
   AnalyticsOptInPrompt = "AnalyticsOptInPrompt",
+  WalletSyncActivationSettings = "WalletSyncActivationSettings",
+  LandingPages = "LandingPages",
+
+  // Web3Hub
+  Web3Hub = "Web3Hub",
 }

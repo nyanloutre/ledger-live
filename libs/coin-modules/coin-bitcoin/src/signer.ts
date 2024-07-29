@@ -27,7 +27,6 @@ export interface BitcoinSigner {
   splitTransaction(
     transactionHex: string,
     isSegwitSupported: boolean | null | undefined,
-    hasTimestamp: boolean | null | undefined,
     hasExtraData: boolean | null | undefined,
     additionals: Array<string> | null | undefined,
   ): SignerTransaction;
@@ -67,16 +66,17 @@ export type SignerTransaction = {
 export type CreateTransaction = {
   inputs: Array<[SignerTransaction, number, string | null | undefined, number | null | undefined]>;
   associatedKeysets: string[];
-  changePath?: string;
+  changePath?: string | undefined;
   outputScriptHex: string;
-  lockTime?: number;
-  sigHashType?: number;
-  segwit?: boolean;
-  initialTimestamp?: number;
+  lockTime?: number | undefined;
+  sigHashType?: number | undefined;
+  segwit?: boolean | undefined;
   additionals: Array<string>;
-  expiryHeight?: Buffer;
-  useTrustedInputForSegwit?: boolean;
-  onDeviceStreaming?: (arg0: { progress: number; total: number; index: number }) => void;
-  onDeviceSignatureRequested?: () => void;
-  onDeviceSignatureGranted?: () => void;
+  expiryHeight?: Buffer | undefined;
+  useTrustedInputForSegwit?: boolean | undefined;
+  onDeviceStreaming?:
+    | ((arg: { progress: number; total: number; index: number }) => void)
+    | undefined;
+  onDeviceSignatureRequested?: (() => void) | undefined;
+  onDeviceSignatureGranted?: (() => void) | undefined;
 };

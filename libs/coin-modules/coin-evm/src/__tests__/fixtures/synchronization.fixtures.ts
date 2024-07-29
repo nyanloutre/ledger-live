@@ -6,6 +6,7 @@ import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 import { getCryptoCurrencyById } from "@ledgerhq/cryptoassets/currencies";
 import { encodeSubOperationId } from "@ledgerhq/coin-framework/operation";
 import * as logic from "../../logic";
+import { getCoinConfig } from "../../config";
 import {
   makeAccount,
   makeNft,
@@ -20,23 +21,48 @@ export const currency: CryptoCurrency = Object.freeze({
   ...getCryptoCurrencyById("ethereum"),
   ethereumLikeInfo: {
     chainId: 1,
-    node: {
-      type: "external" as const,
-      uri: "https://my-rpc.com",
-    },
-    explorer: {
-      type: "etherscan" as const,
-      uri: "https://api.com",
-    },
   },
 });
+
+jest.mock("../../config");
+const mockGetConfig = jest.mocked(getCoinConfig);
+
+mockGetConfig.mockImplementation((): any => {
+  return {
+    info: {
+      node: {
+        type: "external",
+        uri: "https://my-rpc.com",
+      },
+      explorer: {
+        type: "etherscan",
+        uri: "https://api.com",
+      },
+    },
+  };
+});
+
+export const swapHistory = [
+  {
+    status: "pending",
+    provider: "moonpay",
+    operationId: "js:2:ethereum:0xkvn:+ethereum%2Ferc20%2Fusd__coin-OUT",
+    swapId: "swap1",
+    receiverAccountId: "js:2:ethereum:0xkvn:",
+    fromAmount: new BigNumber("200000"),
+    toAmount: new BigNumber("129430000"),
+  },
+];
 
 export const tokenCurrencies = [
   Object.freeze(getTokenById("ethereum/erc20/usd__coin")),
   Object.freeze(getTokenById("ethereum/erc20/usd_tether__erc20_")),
 ];
 
-export const tokenAccount = makeTokenAccount("0xkvn", tokenCurrencies[0]);
+export const tokenAccount = {
+  ...makeTokenAccount("0xkvn", tokenCurrencies[0]),
+  swapHistory,
+};
 export const account = Object.freeze({
   ...makeAccount("0xkvn", currency, [tokenAccount]),
   syncHash: logic.getSyncHash(currency),

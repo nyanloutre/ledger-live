@@ -17,8 +17,29 @@ import {
 import { getEstimatedFees } from "../../logic";
 import { GasOptions, Transaction as EvmTransaction, EvmNftTransaction } from "../../types";
 import * as nftAPI from "../../api/nft";
+import { getCoinConfig } from "../../config";
+
+jest.mock("../../config");
+const mockGetConfig = jest.mocked(getCoinConfig);
 
 describe("EVM Family", () => {
+  beforeAll(() => {
+    mockGetConfig.mockImplementation((): any => {
+      return {
+        info: {
+          node: {
+            type: "external",
+            uri: "https://my-rpc.com",
+          },
+          explorer: {
+            type: "etherscan",
+            uri: "https://api.com",
+          },
+        },
+      };
+    });
+  });
+
   describe("prepareTransaction.ts", () => {
     beforeEach(() => {
       // These mocks will be overriden in some tests
@@ -556,7 +577,7 @@ describe("EVM Family", () => {
           it("should call getFeeData once", async () => {
             const tx = await prepareTransaction(account, {
               ...transaction,
-              gasOptions: undefined,
+              gasOptions: undefined as any,
             });
 
             expect(nodeApi.getFeeData).toBeCalledTimes(1);

@@ -21,7 +21,19 @@ const targets = [
 ];
 
 // Coins using coin-framework
-const familiesWPackage = ["algorand", "bitcoin", "evm", "near", "polkadot"];
+const familiesWPackage = [
+  "algorand",
+  "bitcoin",
+  "cardano",
+  "evm",
+  "near",
+  "polkadot",
+  "solana",
+  "stellar",
+  "tezos",
+  "tron",
+  "xrp",
+];
 
 cd(path.join(__dirname, "..", "src"));
 await rimraf("generated");
@@ -145,11 +157,12 @@ async function getDeviceTransactionConfig(families) {
   }
 
   const libsDir = path.join(__dirname, "../..");
-  const family = "polkadot";
   const target = "deviceTransactionConfig.ts";
-  if (fs.existsSync(path.join(libsDir, `coin-modules/coin-${family}/src/bridge`, target))) {
-    imports += `import { ExtraDeviceTransactionField as ExtraDeviceTransactionField_${family} } from "@ledgerhq/coin-${family}/bridge/deviceTransactionConfig";\n`;
-    exprts += `\n  | ExtraDeviceTransactionField_${family}`;
+  for (const family of ["polkadot", "tron"]) {
+    if (fs.existsSync(path.join(libsDir, `coin-modules/coin-${family}/src/bridge`, target))) {
+      imports += `import { ExtraDeviceTransactionField as ExtraDeviceTransactionField_${family} } from "@ledgerhq/coin-${family}/bridge/deviceTransactionConfig";\n`;
+      exprts += `\n  | ExtraDeviceTransactionField_${family}`;
+    }
   }
 
   const str = `${imports}
@@ -174,14 +187,17 @@ async function genTypesFile(families) {
         return "";
       }
 
-      if (fs.existsSync(path.join(libsDir, `coin-modules/coin-${family}/src/types/index.ts`))) return "/index";
+      if (fs.existsSync(path.join(libsDir, `coin-modules/coin-${family}/src/types/index.ts`)))
+        return "/index";
 
       return "";
     })();
-    imprts += `import { Transaction as ${family}Transaction } from "${importPath}${family}/types${typesAsFolder}";
-import { TransactionRaw as ${family}TransactionRaw } from "${importPath}${family}/types${typesAsFolder}";
-import { TransactionStatus as ${family}TransactionStatus } from "${importPath}${family}/types${typesAsFolder}";
-import { TransactionStatusRaw as ${family}TransactionStatusRaw } from "${importPath}${family}/types${typesAsFolder}";
+    imprts += `import type {
+  Transaction as ${family}Transaction,
+  TransactionRaw as ${family}TransactionRaw,
+  TransactionStatus as ${family}TransactionStatus,
+  TransactionStatusRaw as ${family}TransactionStatusRaw,
+} from "${importPath}${family}/types${typesAsFolder}";
 `;
     exprtsT += `
   | ${family}Transaction`;

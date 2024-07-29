@@ -70,7 +70,7 @@ export default function AddAccountsSelectCrypto({ navigation, route }: Props) {
   const avaxCChain = useFeature("currencyAvalancheCChain");
   const stacks = useFeature("currencyStacks");
   const optimism = useFeature("currencyOptimism");
-  const optimismGoerli = useFeature("currencyOptimismGoerli");
+  const optimismSepolia = useFeature("currencyOptimismSepolia");
   const arbitrum = useFeature("currencyArbitrum");
   const arbitrumSepolia = useFeature("currencyArbitrumSepolia");
   const rsk = useFeature("currencyRsk");
@@ -96,7 +96,11 @@ export default function AddAccountsSelectCrypto({ navigation, route }: Props) {
   const neonEvm = useFeature("currencyNeonEvm");
   const lukso = useFeature("currencyLukso");
   const linea = useFeature("currencyLinea");
-  const lineaGoerli = useFeature("currencyLineaGoerli");
+  const lineaSepolia = useFeature("currencyLineaSepolia");
+  const blast = useFeature("currencyBlast");
+  const blastSepolia = useFeature("currencyBlastSepolia");
+  const scroll = useFeature("currencyScroll");
+  const scrollSepolia = useFeature("currencyScrollSepolia");
 
   const featureFlaggedCurrencies = useMemo(
     (): Partial<Record<CryptoCurrencyId, Feature<unknown> | null>> => ({
@@ -113,7 +117,7 @@ export default function AddAccountsSelectCrypto({ navigation, route }: Props) {
       avalanche_c_chain: avaxCChain,
       stacks,
       optimism,
-      optimism_goerli: optimismGoerli,
+      optimism_sepolia: optimismSepolia,
       arbitrum,
       arbitrum_sepolia: arbitrumSepolia,
       rsk,
@@ -139,7 +143,11 @@ export default function AddAccountsSelectCrypto({ navigation, route }: Props) {
       neon_evm: neonEvm,
       lukso,
       linea,
-      linea_goerli: lineaGoerli,
+      linea_sepolia: lineaSepolia,
+      blast,
+      blast_sepolia: blastSepolia,
+      scroll,
+      scroll_sepolia: scrollSepolia,
     }),
     [
       axelar,
@@ -155,7 +163,7 @@ export default function AddAccountsSelectCrypto({ navigation, route }: Props) {
       avaxCChain,
       stacks,
       optimism,
-      optimismGoerli,
+      optimismSepolia,
       arbitrum,
       arbitrumSepolia,
       rsk,
@@ -181,7 +189,11 @@ export default function AddAccountsSelectCrypto({ navigation, route }: Props) {
       neonEvm,
       lukso,
       linea,
-      lineaGoerli,
+      lineaSepolia,
+      blast,
+      blastSepolia,
+      scroll,
+      scrollSepolia,
     ],
   );
 

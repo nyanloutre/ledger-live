@@ -1,3 +1,55 @@
+# 2.84.1
+
+### 🐛 Fix
+
+Some users reported issues when trying to top up their CL Card. This has been fixed.
+
+# 2.84.0
+
+### 🗑 Removed features
+
+Viacoin (VIA), Peercoin (PPC), and Vertcoin (VTC) are no longer supported.
+
+### 🐛 Fix
+
+We fixed a bug that caused an error when trying to send or stake Injective (INJ).
+
+# 2.83.0
+
+### 🚀 Features
+
+The portfolio page now displays top-performing crypto over a specified period.
+
+### 🐛 Fix
+
+Swapping the entire Polkadot (DOT) balance would result in an error. This has been fixed.
+
+# 2.81.2
+
+### 🐛 Fix
+
+We fixed a bug that caused the app to reject passwords.
+
+# 2.80.0
+
+### 🐛 Fixes
+
+Some users were unable to stake Polkadot (DOT) despite having enough balance. This has been fixed.
+
+We've fixed a bug that prevented some Near (NEAR) transactions from being broadcast immediately.
+
+# 2.79.1
+
+This release includes minor bug fixes and security improvements.
+
+# 2.79.0
+
+### 🐛 Fixes
+
+We've resolved the bug that caused an error when sending ATOM.
+
+This release also includes minor bug fixes and improvements.
+
 # 2.77.2
 
 ### 🐛 Fix

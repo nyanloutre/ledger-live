@@ -30,6 +30,7 @@ export type ExchangeStartSwapParams = {
 
 export type ExchangeStartResult = {
   transactionId: string;
+  device?: { deviceId?: string; modelId?: string };
 };
 
 export type ExchangeCompleteBaseParams = {
@@ -54,7 +55,6 @@ export type ExchangeCompleteSwapParams = ExchangeCompleteBaseParams & {
   exchangeType: "SWAP";
   toAccountId: string;
   swapId: string;
-  rate: number;
 };
 
 export type ExchangeCompleteParams =
@@ -64,4 +64,17 @@ export type ExchangeCompleteParams =
 
 export type ExchangeCompleteResult = {
   transactionHash: string;
+};
+
+export type SwapLiveError = {
+  type?: string;
+  cause: {
+    message?: string;
+    swapCode?: string;
+    response?: {
+      data?: {
+        error?: { messageKey?: string; message?: string };
+      };
+    };
+  };
 };

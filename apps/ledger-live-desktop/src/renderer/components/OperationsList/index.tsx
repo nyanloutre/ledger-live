@@ -72,7 +72,7 @@ export class OperationsList extends PureComponent<Props, State> {
     setDrawer(OperationDetails, {
       operationId: operation.id,
       accountId: account.id,
-      parentId: parentAccount?.id as string | undefined | null,
+      parentId: parentAccount?.id,
     });
 
   // TODO: convert of async/await if fetching with the api
@@ -107,12 +107,12 @@ export class OperationsList extends PureComponent<Props, State> {
           filterOperation,
         })
       : accounts
-      ? groupAccountsOperationsByDay(accounts, {
-          count: nbToShow,
-          withSubAccounts,
-          filterOperation,
-        })
-      : undefined;
+        ? groupAccountsOperationsByDay(accounts, {
+            count: nbToShow,
+            withSubAccounts,
+            filterOperation,
+          })
+        : undefined;
 
     const all = flattenAccounts(accounts || []).concat(
       [account as AccountLike, parentAccount as AccountLike].filter(Boolean),

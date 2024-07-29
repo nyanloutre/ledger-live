@@ -11,9 +11,13 @@ const transformIncludePatterns = [
   "react-native-modal",
   "react-native-animatable",
   "@sentry/react-native",
+  "@hashgraph/sdk",
   "react-native-startup-time",
   "@segment/analytics-react-native",
   "uuid",
+  "react-native-ble-plx",
+  "react-native-android-location-services-dialog-box",
+  "react-native-vector-icons",
 ];
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
@@ -50,8 +54,8 @@ module.exports = {
     "^react/(.*)$": "<rootDir>/node_modules/react/$1",
     "^react-native/(.*)$": "<rootDir>/node_modules/react-native/$1",
     "^react-native$": "<rootDir>/node_modules/react-native",
-    "^victory-native$": "victory",
     "styled-components":
       "<rootDir>/node_modules/styled-components/native/dist/styled-components.native.cjs.js",
+    "^react-redux": "<rootDir>/node_modules/react-redux",
   },
 };

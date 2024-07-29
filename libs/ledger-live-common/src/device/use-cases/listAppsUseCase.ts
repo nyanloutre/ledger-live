@@ -9,8 +9,8 @@ import { DeviceModelId } from "@ledgerhq/devices";
 import { App } from "@ledgerhq/types-live";
 import installApp from "../../hw/installApp";
 import uninstallApp from "../../hw/uninstallApp";
-import { ManagerApiRepository } from "../../device-core/managerApi/repositories/ManagerApiRepository";
 import { HttpManagerApiRepositoryFactory } from "../factories/HttpManagerApiRepositoryFactory";
+import { ManagerApiRepository } from "@ledgerhq/device-core";
 
 export const execWithTransport =
   (transport: Transport): Exec =>
@@ -44,6 +44,7 @@ export function listAppsUseCase(
         deviceProxyModel: getEnv("DEVICE_PROXY_MODEL") as DeviceModelId,
         managerApiRepository,
         forceProvider: getEnv("FORCE_PROVIDER"),
+        managerDevModeEnabled: getEnv("MANAGER_DEV_MODE"),
       })
     : listAppsV1(transport, deviceInfo, managerApiRepository);
 }

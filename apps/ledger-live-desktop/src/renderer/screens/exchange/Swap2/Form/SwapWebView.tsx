@@ -1,30 +1,37 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { context } from "~/renderer/drawers/Provider";
-import WebviewErrorDrawer, { SwapLiveError } from "./WebviewErrorDrawer/index";
+import WebviewErrorDrawer from "./WebviewErrorDrawer/index";
 
-import { counterValueCurrencySelector, languageSelector } from "~/renderer/reducers/settings";
-import useTheme from "~/renderer/hooks/useTheme";
-import { Web3AppWebview } from "~/renderer/components/Web3AppWebview";
-import { WebviewAPI, WebviewProps, WebviewState } from "~/renderer/components/Web3AppWebview/types";
-import { initialWebviewState } from "~/renderer/components/Web3AppWebview/helpers";
+import { getAccountCurrency } from "@ledgerhq/live-common/account/helpers";
 import { handlers as loggerHandlers } from "@ledgerhq/live-common/wallet-api/CustomLogger/server";
-import { TopBar } from "~/renderer/components/WebPlatformPlayer/TopBar";
-import { updateAccountWithUpdater } from "~/renderer/actions/accounts";
+import { getAccountIdFromWalletAccountId } from "@ledgerhq/live-common/wallet-api/converters";
+import { SubAccount } from "@ledgerhq/types-live";
 import { SwapOperation } from "@ledgerhq/types-live/lib/swap";
 import BigNumber from "bignumber.js";
-import { SubAccount } from "@ledgerhq/types-live";
-import { getAccountCurrency } from "@ledgerhq/live-common/account/helpers";
-import { getAccountIdFromWalletAccountId } from "@ledgerhq/live-common/wallet-api/converters";
+import { updateAccountWithUpdater } from "~/renderer/actions/accounts";
+import { Web3AppWebview } from "~/renderer/components/Web3AppWebview";
+import { initialWebviewState } from "~/renderer/components/Web3AppWebview/helpers";
+import { WebviewAPI, WebviewProps, WebviewState } from "~/renderer/components/Web3AppWebview/types";
+import { TopBar } from "~/renderer/components/WebPlatformPlayer/TopBar";
+import useTheme from "~/renderer/hooks/useTheme";
+import {
+  counterValueCurrencySelector,
+  discreetModeSelector,
+  enablePlatformDevToolsSelector,
+  languageSelector,
+} from "~/renderer/reducers/settings";
 import { useRedirectToSwapHistory } from "../utils/index";
 
-import { captureException } from "~/sentry/internal";
-import { usePTXCustomHandlers } from "~/renderer/components/WebPTXPlayer/CustomHandlers";
+import { formatCurrencyUnit } from "@ledgerhq/live-common/currencies/index";
+import { SwapExchangeRateAmountTooLow } from "@ledgerhq/live-common/errors";
+import { SwapLiveError } from "@ledgerhq/live-common/exchange/swap/types";
 import { LiveAppManifest } from "@ledgerhq/live-common/platform/types";
-import { useFeature } from "@ledgerhq/live-common/featureFlags/index";
-
-const isDevelopment = process.env.NODE_ENV === "development";
+import { CryptoCurrency, TokenCurrency } from "@ledgerhq/types-cryptoassets";
+import { usePTXCustomHandlers } from "~/renderer/components/WebPTXPlayer/CustomHandlers";
+import { captureException } from "~/sentry/internal";
+import { CustomSwapQuotesState } from "../hooks/useSwapLiveAppQuoteState";
 
 export class UnableToLoadSwapLiveError extends Error {
   constructor(message: string) {
@@ -34,10 +41,6 @@ export class UnableToLoadSwapLiveError extends Error {
     this.message = message;
   }
 }
-
-type CustomHandlersParams<Params> = {
-  params: Params;
-};
 
 export type SwapProps = {
   provider: string;
@@ -56,12 +59,18 @@ export type SwapProps = {
   providerRedirectURL: string;
   toNewTokenId: string;
   swapApiBase: string;
+  estimatedFees: string;
+  estimatedFeesUnit: string;
 };
 
 export type SwapWebProps = {
   manifest: LiveAppManifest;
   swapState?: Partial<SwapProps>;
   liveAppUnavailable(): void;
+  isMaxEnabled?: boolean;
+  sourceCurrency?: TokenCurrency | CryptoCurrency;
+  targetCurrency?: TokenCurrency | CryptoCurrency;
+  setQuoteState: (next: CustomSwapQuotesState) => void;
 };
 
 export const SwapWebManifestIDs = {
@@ -69,25 +78,20 @@ export const SwapWebManifestIDs = {
   Demo1: "swap-live-app-demo-1",
 };
 
-export const useSwapLiveAppManifestID = () => {
-  const demo0 = useFeature("ptxSwapLiveAppDemoZero");
-  const demo1 = useFeature("ptxSwapLiveAppDemoOne");
-  switch (true) {
-    case demo1?.enabled:
-      return demo1?.params?.manifest_id ?? SwapWebManifestIDs.Demo1;
-    case demo0?.enabled:
-      return demo0?.params?.manifest_id ?? SwapWebManifestIDs.Demo0;
-    default:
-      return null;
-  }
-};
-
 const SwapWebAppWrapper = styled.div`
   width: 100%;
   flex: 1;
 `;
 
-const SwapWebView = ({ manifest, swapState, liveAppUnavailable }: SwapWebProps) => {
+const SwapWebView = ({
+  manifest,
+  swapState,
+  liveAppUnavailable,
+  isMaxEnabled,
+  sourceCurrency,
+  targetCurrency,
+  setQuoteState,
+}: SwapWebProps) => {
   const {
     colors: {
       palette: { type: themeType },
@@ -97,12 +101,30 @@ const SwapWebView = ({ manifest, swapState, liveAppUnavailable }: SwapWebProps) 
   const webviewAPIRef = useRef<WebviewAPI>(null);
   const { setDrawer } = React.useContext(context);
   const [webviewState, setWebviewState] = useState<WebviewState>(initialWebviewState);
+  const discreetMode = useSelector(discreetModeSelector);
   const fiatCurrency = useSelector(counterValueCurrencySelector);
   const locale = useSelector(languageSelector);
   const redirectToHistory = useRedirectToSwapHistory();
+  const enablePlatformDevTools = useSelector(enablePlatformDevToolsSelector);
 
   const hasSwapState = !!swapState;
   const customPTXHandlers = usePTXCustomHandlers(manifest);
+
+  const { fromCurrency, addressFrom, addressTo } = useMemo(() => {
+    const [, , fromCurrency, addressFrom] =
+      getAccountIdFromWalletAccountId(swapState?.fromAccountId || "")?.split(":") || [];
+
+    const [, , toCurrency, addressTo] =
+      getAccountIdFromWalletAccountId(swapState?.toAccountId || "")?.split(":") || [];
+
+    return {
+      fromCurrency,
+      addressFrom,
+      toCurrency,
+      addressTo,
+    };
+  }, [swapState?.fromAccountId, swapState?.toAccountId]);
+
   const customHandlers = useMemo(() => {
     return {
       ...loggerHandlers,
@@ -110,16 +132,72 @@ const SwapWebView = ({ manifest, swapState, liveAppUnavailable }: SwapWebProps) 
       "custom.swapStateGet": () => {
         return Promise.resolve(swapState);
       },
+      "custom.setQuote": (quote: {
+        params?: {
+          amountTo?: number;
+          code?: string;
+          parameter: { minAmount: string; maxAmount: string };
+        };
+      }) => {
+        const toUnit = targetCurrency?.units[0];
+        const fromUnit = sourceCurrency?.units[0];
+
+        if (!quote.params) {
+          setQuoteState({
+            amountTo: undefined,
+            swapError: undefined,
+          });
+          return Promise.resolve();
+        }
+
+        if (quote.params?.code && fromUnit) {
+          switch (quote.params.code) {
+            case "minAmountError":
+              setQuoteState({
+                amountTo: undefined,
+                swapError: new SwapExchangeRateAmountTooLow(undefined, {
+                  minAmountFromFormatted: formatCurrencyUnit(
+                    fromUnit,
+                    new BigNumber(quote.params.parameter.minAmount).times(10 ** fromUnit.magnitude),
+                    {
+                      alwaysShowSign: false,
+                      disableRounding: true,
+                      showCode: true,
+                    },
+                  ),
+                }),
+              });
+              return Promise.resolve();
+            case "maxAmountError":
+              setQuoteState({
+                amountTo: undefined,
+                swapError: new SwapExchangeRateAmountTooLow(undefined, {
+                  minAmountFromFormatted: formatCurrencyUnit(
+                    fromUnit,
+                    new BigNumber(quote.params.parameter.maxAmount).times(10 ** fromUnit.magnitude),
+                    {
+                      alwaysShowSign: false,
+                      disableRounding: true,
+                      showCode: true,
+                    },
+                  ),
+                }),
+              });
+              return Promise.resolve();
+          }
+        }
+
+        if (toUnit && quote?.params?.amountTo) {
+          const amountTo = BigNumber(quote?.params?.amountTo).times(10 ** toUnit.magnitude);
+          setQuoteState({ amountTo, swapError: undefined });
+        }
+
+        return Promise.resolve();
+      },
       // TODO: when we need bidirectional communication
       // "custom.swapStateSet": (params: CustomHandlersParams<unknown>) => {
       //   return Promise.resolve();
       // },
-      "custom.throwExchangeErrorToLedgerLive": ({
-        params,
-      }: CustomHandlersParams<SwapLiveError>) => {
-        onSwapWebviewError(params);
-        return Promise.resolve();
-      },
       "custom.saveSwapToHistory": ({
         params,
       }: {
@@ -166,16 +244,12 @@ const SwapWebView = ({ manifest, swapState, liveAppUnavailable }: SwapWebProps) 
         );
         return Promise.resolve();
       },
-      "custom.throwGenericErrorToLedgerLive": () => {
-        onSwapWebviewError();
-        return Promise.resolve();
-      },
       "custom.swapRedirectToHistory": () => {
         redirectToHistory();
       },
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [swapState?.cacheKey]);
+  }, [swapState]);
 
   useEffect(() => {
     if (webviewState.url.includes("/unknown-error")) {
@@ -184,6 +258,49 @@ const SwapWebView = ({ manifest, swapState, liveAppUnavailable }: SwapWebProps) 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [webviewState.url]);
+
+  const hashString = useMemo(() => {
+    const searchParams = new URLSearchParams();
+
+    const swapParams = {
+      addressFrom: addressFrom,
+      addressTo: addressTo,
+      amountFrom: swapState?.fromAmount,
+      from: sourceCurrency?.id,
+      hasError: swapState?.error ? "true" : undefined, // append param only if error is true
+      isMaxEnabled: isMaxEnabled,
+      loading: swapState?.loading,
+      networkFees: swapState?.estimatedFees,
+      networkFeesCurrency: fromCurrency,
+      provider: swapState?.provider,
+      to: targetCurrency?.id,
+      toAccountId: swapState?.toAccountId,
+      fromAccountId: swapState?.fromAccountId,
+    };
+
+    Object.entries(swapParams).forEach(([key, value]) => {
+      if (value != null) {
+        // Convert all values to string as URLSearchParams expects string values
+        searchParams.append(key, String(value));
+      }
+    });
+
+    return searchParams.toString();
+  }, [
+    addressFrom,
+    addressTo,
+    fromCurrency,
+    isMaxEnabled,
+    sourceCurrency?.id,
+    swapState?.error,
+    swapState?.estimatedFees,
+    swapState?.fromAmount,
+    swapState?.loading,
+    swapState?.provider,
+    swapState?.toAccountId,
+    swapState?.fromAccountId,
+    targetCurrency?.id,
+  ]);
 
   // return loader???
   if (!hasSwapState) {
@@ -197,8 +314,8 @@ const SwapWebView = ({ manifest, swapState, liveAppUnavailable }: SwapWebProps) 
 
   const onStateChange: WebviewProps["onStateChange"] = state => {
     setWebviewState(state);
+
     if (!state.loading && state.isAppUnavailable) {
-      console.error("onSwapLiveAppUnavailable", state);
       liveAppUnavailable();
       captureException(
         new UnableToLoadSwapLiveError(
@@ -210,24 +327,27 @@ const SwapWebView = ({ manifest, swapState, liveAppUnavailable }: SwapWebProps) 
 
   return (
     <>
-      {isDevelopment && (
+      {enablePlatformDevTools && (
         <TopBar
-          manifest={{ ...manifest, url: `${manifest.url}#${swapState.cacheKey}` }}
+          manifest={{ ...manifest, url: `${manifest.url}#${hashString}` }}
           webviewAPIRef={webviewAPIRef}
           webviewState={webviewState}
         />
       )}
+
       <SwapWebAppWrapper>
         <Web3AppWebview
-          manifest={{ ...manifest, url: `${manifest.url}#${swapState.cacheKey}` }}
+          manifest={{ ...manifest, url: `${manifest.url}#${hashString}` }}
           inputs={{
             theme: themeType,
             lang: locale,
             currencyTicker: fiatCurrency.ticker,
+            discreetMode,
           }}
           onStateChange={onStateChange}
           ref={webviewAPIRef}
           customHandlers={customHandlers as never}
+          hideLoader
         />
       </SwapWebAppWrapper>
     </>
