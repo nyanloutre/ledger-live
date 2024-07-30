@@ -258,6 +258,12 @@ export default class Transport {
   ): Promise<Buffer> => {
     const tracer = this.tracer.withUpdatedContext({ function: "send" });
 
+    let string = "";
+    Buffer.concat([Buffer.from([cla, ins, p1, p2]), Buffer.from([data.length]), data]).forEach(
+      elem => (string += "0x" + elem.toString(16).padStart(2, "0") + ", "),
+    );
+    console.log("send", string);
+
     if (data.length >= 256) {
       tracer.trace("data.length exceeded 256 bytes limit", { dataLength: data.length });
       throw new TransportError(
@@ -278,6 +284,15 @@ export default class Transport {
     if (!statusList.some(s => s === sw)) {
       throw new TransportStatusError(sw);
     }
+
+    console.log("response");
+    let string1 = "";
+    response.forEach((element, index) => {
+      // number to hex with 2 digits
+      const hex = element.toString(16).padStart(2, "0");
+      string1 += `0x${hex}, `;
+    });
+    console.log(string1);
 
     return response;
   };

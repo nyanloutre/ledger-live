@@ -17,6 +17,8 @@ export class DefaultContextModule implements ContextModule {
   public async getContexts(transaction: TransactionContext): Promise<ClearSignContext[]> {
     const promises = this._loaders.map(fetcher => fetcher.load(transaction));
     const responses = await Promise.all(promises);
+    console.log("getContexts: responses");
+    console.log(responses);
     return responses.flat();
   }
 }
