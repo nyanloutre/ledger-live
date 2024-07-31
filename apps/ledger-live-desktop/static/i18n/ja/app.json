@@ -303,7 +303,7 @@
   "swap2" : {
     "title" : "スワップ",
     "tabs" : {
-      "exchange" : "取引",
+      "exchange" : "スワップ",
       "history" : "履歴"
     },
     "form" : {
@@ -385,6 +385,7 @@
         "title" : "トランザクションのブロードキャスト成功",
         "description" : "承認のため、スワップオペレーションがネットワークに送信されました。取引が確認され、プロバイダーが{{targetCurrency}}を処理・送信するまでお待ちください。",
         "disclaimer" : "<0><0>{{provider}}</0>サポート</0>が必要な場合に備えて、スワップID番号を書き留めてください。",
+        "tellAboutYourExperience" : "お客様のご体験についてお聞かせください",
         "seeDetails" : "詳細を表示"
       }
     },
@@ -4025,6 +4026,24 @@
           "collection" : "コレクションのスパム報告"
         }
       },
+      "debugRefreshMetadata" : {
+        "debugRefreshTitle" : "NFTスパム報告を許可する（ベータ版）",
+        "debugRefreshDesc" : "NFTをスパムとして報告する、またはスパムとして表示を停止するためのフォームを表示します",
+        "refresh" : "更新",
+        "contractAddress" : "コントラクトアドレス",
+        "contractAddressDesc" : "更新されたNFTのcontract_address、またはコントラクト自体",
+        "chainId" : "チェーンID",
+        "chainIdDesc" : "更新されたNFTまたはコントラクトのチェーンID（例：ethereum）",
+        "tokenId" : "トークンID",
+        "tokenIdDesc" : "更新されたNFTのトークンID",
+        "success" : "更新は正常に送信されました。有効になるまでに5～10分かかる場合があります。",
+        "error" : "更新の送信中にエラーが発生しました。後でもう一度お試しください。",
+        "refreshType" : {
+          "desc" : "何を更新しますか？",
+          "nft" : "個々のNFTのメタデータを更新する",
+          "contract" : "コントラクトのメタデータを更新する"
+        }
+      },
       "experimentalApps" : "試験的なアプリを許可する",
       "experimentalAppsDesc" : "試験的とタグ付けされたプラットフォームアプリの表示と実行を許可する",
       "catalogUrl" : "カタログアプリプロバイダーを設定",
@@ -4197,9 +4216,17 @@
           "modal" : {
             "flow" : "フローを選択",
             "step" : "ステップを選択",
-            "activated" : "有効化/無効化してバックアップを取得/非取得",
-            "instance" : "インスタンスの生成",
+            "instance" : "メンバーの生成",
             "cta" : "適用"
+          }
+        },
+        "testSimpleHash" : {
+          "title" : "SimpleHashツール",
+          "description" : "SimpleHashを使用した便利なツールをいくつか利用できます",
+          "cta" : "開く",
+          "tabs" : {
+            "spam" : "スパム報告",
+            "refresh" : "メタデータを更新"
           }
         }
       }
@@ -6313,7 +6340,7 @@
         "description" : "別のLedgerを使用して暗号化キーを保護または削除する。"
       },
       "instance" : {
-        "label_one" : "1個の同期されたインスタンス",
+        "label" : "1個の同期されたインスタンス",
         "label_other" : "{{count}}個の同期されたインスタンス",
         "cta" : "管理"
       }
@@ -6326,7 +6353,8 @@
     "error" : {
       "title" : "問題が発生しました。",
       "description" : "後でもう一度お試しください。",
-      "cta" : "再試行"
+      "cta" : "再試行",
+      "fetching" : "データの取得中に問題が発生しました。"
     },
     "unsecuredError" : {
       "title" : "同期はこのLedgerによって保護されていません",
@@ -6335,18 +6363,26 @@
       "cta" : "別のLedgerを接続する",
       "ctaDelete" : "暗号化キーを削除する"
     },
+    "autoRemoveError" : {
+      "title" : "現在のインスタンスは削除できません",
+      "description" : "セキュリティ上の理由から、暗号化キーを削除せずに現在使用しているインスタンスを削除することはできません。",
+      "info" : "暗号化キーを削除するとデバイスの同期が解除され、同期されたデータはすべて削除されます。ただし、これはお客様の資金には影響しません。アカウントはいつでも再同期できます。",
+      "cta" : "わかりました",
+      "ctaDelete" : "暗号化キーを削除する"
+    },
     "success" : {
       "backup" : {
         "title" : "成功",
-        "desc" : "Ledger Syncが正常に有効になりました。 ",
-        "synchAnother" : "別のLedger Liveアプリと同期する"
+        "desc" : "Ledger Syncが正常に有効になりました。"
       },
       "synch" : {
         "title" : "同期が成功しました",
         "desc" : "アカウントの変更が、すべてのアプリとプラットフォームに自動的に反映されるようになります。"
-      }
+      },
+      "synchAnother" : "別のLedger Liveアプリと同期する",
+      "close" : "閉じる"
     },
-    "manageBackups" : {
+    "manageBackup" : {
       "title" : "キーの管理",
       "options" : {
         "deleteBackup" : {
@@ -6400,6 +6436,10 @@
       "remove" : "削除",
       "deleteInstanceSuccess" : "{{instanceName}}の同期は解除されています",
       "deleteInstanceError" : "{{instanceName}}の同期解除で問題が発生しました"
+    },
+    "deviceAction" : {
+      "title" : "Ledger{{wording}}で続ける",
+      "description" : "Ledgerの信頼できるディスプレイに表示される指示に従ってください。"
     }
   }
 }
