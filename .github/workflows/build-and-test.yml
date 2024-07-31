@@ -23,32 +23,32 @@ jobs:
   build-desktop:
     name: "Build Desktop"
     needs: determine-affected
-    if: ${{contains(join(needs.determine-affected.outputs.paths,','), 'ledger-live-desktop')}}
+    if: ${{contains(needs.determine-affected.outputs.paths, 'ledger-live-desktop')}}
     uses: ./.github/workflows/build-desktop-reusable.yml
 
   test-desktop:
     name: "Test Desktop"
     needs: determine-affected
-    if: ${{contains(join(needs.determine-affected.outputs.paths,','), 'ledger-live-desktop')}}
+    if: ${{contains(needs.determine-affected.outputs.paths, 'ledger-live-desktop')}}
     uses: ./.github/workflows/test-desktop-reusable.yml
 
   # LLM
   build-mobile:
     name: "Build Mobile"
     needs: determine-affected
-    if: ${{contains(join(needs.determine-affected.outputs.paths,','), 'ledger-live-mobile')}}
+    if: ${{contains(needs.determine-affected.outputs.paths, 'ledger-live-mobile')}}
     uses: ./.github/workflows/build-mobile-reusable.yml
 
   test-mobile:
     name: "Test Mobile"
     needs: determine-affected
-    if: ${{contains(join(needs.determine-affected.outputs.paths,','), 'ledger-live-mobile')}}
+    if: ${{contains(needs.determine-affected.outputs.paths, 'ledger-live-mobile')}}
     uses: ./.github/workflows/test-mobile-reusable.yml
 
   test-mobile-e2e:
     name: "Test Mobile E2E"
     needs: determine-affected
-    if: ${{contains(join(needs.determine-affected.outputs.paths,','), 'ledger-live-mobile')}}
+    if: ${{contains(needs.determine-affected.outputs.paths, 'ledger-live-mobile')}}
     uses: ./.github/workflows/test-mobile-e2e-reusable.yml
     secrets: inherit
 
@@ -56,13 +56,13 @@ jobs:
   test-libraries:
     name: "Test Libraries"
     needs: determine-affected
-    if: ${{contains(join(needs.determine-affected.outputs.paths,','), 'libs')}}
+    if: ${{contains(needs.determine-affected.outputs.paths, 'libs')}}
     uses: ./.github/workflows/test-libs-reusable.yml
 
   test-design-system:
     name: "Test Design System"
     needs: determine-affected
-    if: ${{contains(join(needs.determine-affected.outputs.paths,','), 'libs/ui')}}
+    if: ${{contains(needs.determine-affected.outputs.paths, 'libs/ui')}}
     uses: ./.github/workflows/test-design-system-reusable.yml
 
   ok:
