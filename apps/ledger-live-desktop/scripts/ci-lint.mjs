@@ -37,12 +37,12 @@ const lint = async () => {
       --token=${token} \\
       --team="foo" \\
       -- --format="json" \\
-      -o="lint.json"`;
+      -o="lint-desktop.json"`;
   } else {
     await $`pnpm lint \\
       --filter="ledger-live-desktop" \\
       -- --format="json" \\
-      -o="lint.json"`;
+      -o="lint-desktop.json"`;
   }
 
   const lintJson = require("../lint-desktop.json");
