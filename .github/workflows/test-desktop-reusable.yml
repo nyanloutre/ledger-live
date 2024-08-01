@@ -25,6 +25,7 @@ on:
         required: false
 
 permissions:
+  id-token: write
   contents: read
   pull-requests: write
 
@@ -179,7 +180,7 @@ jobs:
       - name: "download linter results"
         uses: actions/download-artifact@v4
         with:
-          name: lint
+          name: lint-desktop
       - name: download images artifacts
         uses: actions/download-artifact@v4
         with:
