@@ -140,7 +140,7 @@ jobs:
           name: mac-js-bundle-metafiles
           path: mac-js-bundle-metafiles
 
-      - uses: actions/github-script@v6
+      - uses: actions/github-script@v7
         name: Produce statuses of builds
         id: statuses
         with:

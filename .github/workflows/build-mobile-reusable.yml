@@ -144,7 +144,7 @@ jobs:
           baseBranch: ${{ inputs.base_ref || 'develop' }}
           prNumber: ${{ inputs.prNumber }}
           mode: mobile
-      - uses: actions/github-script@v6
+      - uses: actions/github-script@v7
         name: get statuses of runs
         id: status
         with:
