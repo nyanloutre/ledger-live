@@ -1,7 +1,7 @@
 name: "@Desktop • Build App (external)"
-run-name: "@Desktop • Build App (external) triggered by ${{ inputs.login }}  ${{ format('on ref {0}', github.ref_name) }}"
 
 on:
+  workflow_call:
   workflow_dispatch:
     inputs:
       ref:
@@ -16,10 +16,6 @@ on:
       base_ref:
         description: The base branch to merge the head into when checking out the code
         required: false
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref_name != 'develop' && github.ref || github.run_id }}
-  cancel-in-progress: true
 
 jobs:
   build-desktop-app:
