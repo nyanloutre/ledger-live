@@ -53,15 +53,13 @@ jobs:
         if: always()
         run: |
           failure=false
-          check () {
-            local result=$1
+          for job in $(echo ${{ toJson(needs) }} | jq -r 'keys[]'); do
+            result=$(echo ${{ toJson(needs) }} | jq -r --arg job "$job" '.[$job].result')
             if [ "$result" != "success" ] && [ "$result" != "skipped" ]; then
               failure=true
+              break
             fi
-          }
-          check ${{needs.build-desktop-external.result}}
-          check ${{needs.test-desktop-external.result}}
-          check ${{needs.build-mobile-external.result}}
+          done
           if [ "$failure" = "true" ]; then
             echo "failure=true" >> $GITHUB_OUTPUT
           else
