@@ -19,7 +19,7 @@ const currencies: Currency[] = [
 ];
 
 for (const currency of currencies) {
-  test.describe("Add Accounts", () => {
+  test.describe("Add Accounts test", () => {
     test.use({
       userdata: "skip-onboarding",
       speculosCurrency: currency,

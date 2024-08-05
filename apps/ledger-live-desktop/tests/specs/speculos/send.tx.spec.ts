@@ -37,10 +37,10 @@ const transactionE2E = [
   new Transaction(Account.DOGE_1, Account.DOGE_2, "0.01", Fee.SLOW),
 ];
 
-//Warning 🚨: Test may fail due to the GetAppAndVersion issue - Jira: LIVE-12581 or insufficient funds
+test.describe("Send tests", () => {
+  //Warning 🚨: Test may fail due to the GetAppAndVersion issue - Jira: LIVE-12581 or insufficient funds
 
-for (const transaction of transactionE2E) {
-  test.describe("Send from 1 account to another", () => {
+  for (const transaction of transactionE2E) {
     test.use({
       userdata: "speculos-tests-app",
       speculosCurrency: transaction.accountToDebit.currency,
@@ -78,10 +78,7 @@ for (const transaction of transactionE2E) {
         await app.drawer.expectReceiverInfos(transaction);
       },
     );
-  });
-}
-
-test.describe("Send token (subAccount) - invalid input", () => {
+  }
   const tokenTransactionInvalid = {
     transaction: new Transaction(Account.ALGO_USDT_1, Account.ALGO_USDT_2, "0.1", Fee.MEDIUM),
     expectedErrorMessage: "Recipient account has not opted in the selected ASA.",
@@ -114,9 +111,7 @@ test.describe("Send token (subAccount) - invalid input", () => {
       await app.layout.checkErrorMessage(tokenTransactionInvalid.expectedErrorMessage);
     },
   );
-});
 
-test.describe("Send token (subAccount) - valid input", () => {
   const tokenTransactionValid = new Transaction(
     Account.ALGO_USDT_1,
     Account.ALGO_USDT_3,
@@ -147,9 +142,7 @@ test.describe("Send token (subAccount) - valid input", () => {
       await app.layout.checkInputErrorNotVisible();
     },
   );
-});
 
-test.describe("Check invalid address input error", () => {
   const transactionInvalidAddress = new Transaction(
     Account.ETH_1,
     Account.BTC_1,
@@ -181,10 +174,8 @@ test.describe("Check invalid address input error", () => {
       await app.send.checkInvalidAddressError(transactionInvalidAddress);
     },
   );
-});
 
-for (const transaction of transactionsInputsInvalid) {
-  test.describe("Check invalid amount input error", () => {
+  for (const transaction of transactionsInputsInvalid) {
     test.use({
       userdata: "speculos-tests-app",
       speculosCurrency: transaction.transaction.accountToDebit.currency,
@@ -212,10 +203,8 @@ for (const transaction of transactionsInputsInvalid) {
         await app.layout.checkErrorMessage(transaction.expectedErrorMessage);
       },
     );
-  });
-}
+  }
 
-test.describe("Verify send max user flow", () => {
   const transactionInputValid = new Transaction(
     Account.ETH_1,
     Account.ETH_2,

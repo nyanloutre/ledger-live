@@ -18,7 +18,7 @@ const accounts: Account[] = [
 
 //Warning 🚨: Test may fail due to the GetAppAndVersion issue - Jira: LIVE-12581
 for (const account of accounts) {
-  test.describe("Receive", () => {
+  test.describe("Verify address", () => {
     test.use({
       userdata: "speculos-tests-app",
       speculosCurrency: account.currency,
