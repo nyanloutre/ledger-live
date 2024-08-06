@@ -3786,6 +3786,9 @@ importers:
 
   libs/ledgerjs/packages/cryptoassets:
     dependencies:
+      '@ledgerhq/live-env':
+        specifier: workspace:^
+        version: link:../../../env
       axios:
         specifier: 1.7.3
         version: 1.7.3
