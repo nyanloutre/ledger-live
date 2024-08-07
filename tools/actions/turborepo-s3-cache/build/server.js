@@ -61399,22 +61399,27 @@ function startServer() {
         const filename = `${artifactId}.gz`;
         console.log("REQUEST");
         console.log(req);
-        const command = new PutObjectCommand({
-          Bucket: bucket,
-          Key: filename,
-          Body: req,
-          ContentLength: req.headers["content-length"]
-        });
+        const bodyBuffer = Buffer.from(req);
+        const contentLength = bodyBuffer.length;
+        console.log("ContentLength", contentLength);
+        console.log("headers", req.headers);
         try {
+          const command = new PutObjectCommand({
+            Bucket: bucket,
+            Key: filename,
+            Body: req
+          });
           yield client.send(command);
           return res.end();
         } catch (error) {
+          console.log(error);
           const errorDetails = {
             message: error.message,
             stack: error.stack,
             name: error.name,
             code: error.code
           };
+          console.log(errorDetails);
           console.error("Error uploading artifact:", errorDetails);
           return res.status(500).json(errorDetails);
         }
