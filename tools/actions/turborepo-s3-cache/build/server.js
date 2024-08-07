@@ -62451,16 +62451,16 @@ function startServer() {
       asyncHandler_default((req, res) => __async(this, null, function* () {
         const artifactId = req.params.artifactId;
         const filename = `${artifactId}.gz`;
-        const upload = new Upload({
-          client,
-          params: {
-            Bucket: bucket,
-            Key: filename,
-            Body: req
-            // req is a readable stream
-          }
-        });
         try {
+          const upload = new Upload({
+            client,
+            params: {
+              Bucket: bucket,
+              Key: filename,
+              Body: req
+              // req is a readable stream
+            }
+          });
           yield upload.done();
           return res.end();
         } catch (error) {

@@ -1,5 +1,5 @@
 import { getInput } from "@actions/core";
-import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 import { Readable } from "stream";
 import express from "express";
@@ -63,15 +63,15 @@ async function startServer() {
       const artifactId = req.params.artifactId;
       const filename = `${artifactId}.gz`;
 
-      const upload = new Upload({
-        client,
-        params: {
-          Bucket: bucket,
-          Key: filename,
-          Body: req, // req is a readable stream
-        },
-      });
       try {
+        const upload = new Upload({
+          client,
+          params: {
+            Bucket: bucket,
+            Key: filename,
+            Body: req, // req is a readable stream
+          },
+        });
         await upload.done();
         return res.end();
       } catch (error) {
