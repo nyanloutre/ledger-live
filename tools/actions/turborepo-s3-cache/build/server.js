@@ -4601,18 +4601,18 @@ var require_webidl = __commonJS({
     webidl.errors.exception = function(message) {
       return new TypeError(`${message.header}: ${message.message}`);
     };
-    webidl.errors.conversionFailed = function(context) {
-      const plural = context.types.length === 1 ? "" : " one of";
-      const message = `${context.argument} could not be converted to${plural}: ${context.types.join(", ")}.`;
+    webidl.errors.conversionFailed = function(context2) {
+      const plural = context2.types.length === 1 ? "" : " one of";
+      const message = `${context2.argument} could not be converted to${plural}: ${context2.types.join(", ")}.`;
       return webidl.errors.exception({
-        header: context.prefix,
+        header: context2.prefix,
         message
       });
     };
-    webidl.errors.invalidArgument = function(context) {
+    webidl.errors.invalidArgument = function(context2) {
       return webidl.errors.exception({
-        header: context.prefix,
-        message: `"${context.value}" is an invalid ${context.type}.`
+        header: context2.prefix,
+        message: `"${context2.value}" is an invalid ${context2.type}.`
       });
     };
     webidl.brandCheck = function(V2, I3, opts = void 0) {
@@ -10061,15 +10061,15 @@ var require_api_request = __commonJS({
         }
         addSignal(this, signal);
       }
-      onConnect(abort, context) {
+      onConnect(abort, context2) {
         if (!this.callback) {
           throw new RequestAbortedError();
         }
         this.abort = abort;
-        this.context = context;
+        this.context = context2;
       }
       onHeaders(statusCode, rawHeaders, resume, statusMessage) {
-        const { callback, opaque, abort, context, responseHeaders, highWaterMark } = this;
+        const { callback, opaque, abort, context: context2, responseHeaders, highWaterMark } = this;
         const headers = responseHeaders === "raw" ? util.parseRawHeaders(rawHeaders) : util.parseHeaders(rawHeaders);
         if (statusCode < 200) {
           if (this.onInfo) {
@@ -10096,7 +10096,7 @@ var require_api_request = __commonJS({
               trailers: this.trailers,
               opaque,
               body,
-              context
+              context: context2
             });
           }
         }
@@ -10216,15 +10216,15 @@ var require_api_stream = __commonJS({
         }
         addSignal(this, signal);
       }
-      onConnect(abort, context) {
+      onConnect(abort, context2) {
         if (!this.callback) {
           throw new RequestAbortedError();
         }
         this.abort = abort;
-        this.context = context;
+        this.context = context2;
       }
       onHeaders(statusCode, rawHeaders, resume, statusMessage) {
-        const { factory, opaque, context, callback, responseHeaders } = this;
+        const { factory, opaque, context: context2, callback, responseHeaders } = this;
         const headers = responseHeaders === "raw" ? util.parseRawHeaders(rawHeaders) : util.parseHeaders(rawHeaders);
         if (statusCode < 200) {
           if (this.onInfo) {
@@ -10252,7 +10252,7 @@ var require_api_stream = __commonJS({
             statusCode,
             headers,
             opaque,
-            context
+            context: context2
           });
           if (!res || typeof res.write !== "function" || typeof res.end !== "function" || typeof res.on !== "function") {
             throw new InvalidReturnValueError("expected Writable");
@@ -10444,17 +10444,17 @@ var require_api_pipeline = __commonJS({
         this.res = null;
         addSignal(this, signal);
       }
-      onConnect(abort, context) {
+      onConnect(abort, context2) {
         const { ret, res } = this;
         assert(!res, "pipeline cannot be retried");
         if (ret.destroyed) {
           throw new RequestAbortedError();
         }
         this.abort = abort;
-        this.context = context;
+        this.context = context2;
       }
       onHeaders(statusCode, rawHeaders, resume) {
-        const { opaque, handler, context } = this;
+        const { opaque, handler, context: context2 } = this;
         if (statusCode < 200) {
           if (this.onInfo) {
             const headers = this.responseHeaders === "raw" ? util.parseRawHeaders(rawHeaders) : util.parseHeaders(rawHeaders);
@@ -10472,7 +10472,7 @@ var require_api_pipeline = __commonJS({
             headers,
             opaque,
             body: this.res,
-            context
+            context: context2
           });
         } catch (err) {
           this.res.on("error", util.nop);
@@ -10556,7 +10556,7 @@ var require_api_upgrade = __commonJS({
         this.context = null;
         addSignal(this, signal);
       }
-      onConnect(abort, context) {
+      onConnect(abort, context2) {
         if (!this.callback) {
           throw new RequestAbortedError();
         }
@@ -10567,7 +10567,7 @@ var require_api_upgrade = __commonJS({
         throw new SocketError("bad upgrade", null);
       }
       onUpgrade(statusCode, rawHeaders, socket) {
-        const { callback, opaque, context } = this;
+        const { callback, opaque, context: context2 } = this;
         assert.strictEqual(statusCode, 101);
         removeSignal(this);
         this.callback = null;
@@ -10576,7 +10576,7 @@ var require_api_upgrade = __commonJS({
           headers,
           socket,
           opaque,
-          context
+          context: context2
         });
       }
       onError(err) {
@@ -10643,18 +10643,18 @@ var require_api_connect = __commonJS({
         this.abort = null;
         addSignal(this, signal);
       }
-      onConnect(abort, context) {
+      onConnect(abort, context2) {
         if (!this.callback) {
           throw new RequestAbortedError();
         }
         this.abort = abort;
-        this.context = context;
+        this.context = context2;
       }
       onHeaders() {
         throw new SocketError("bad connect", null);
       }
       onUpgrade(statusCode, rawHeaders, socket) {
-        const { callback, opaque, context } = this;
+        const { callback, opaque, context: context2 } = this;
         removeSignal(this);
         this.callback = null;
         let headers = rawHeaders;
@@ -10666,7 +10666,7 @@ var require_api_connect = __commonJS({
           headers,
           socket,
           opaque,
-          context
+          context: context2
         });
       }
       onError(err) {
@@ -20002,14 +20002,14 @@ var loggerMiddleware, loggerMiddlewareOptions, getLoggerPlugin;
 var init_loggerMiddleware = __esm({
   "../../../node_modules/.pnpm/@aws-sdk+middleware-logger@3.609.0/node_modules/@aws-sdk/middleware-logger/dist-es/loggerMiddleware.js"() {
     "use strict";
-    loggerMiddleware = () => (next, context) => (args) => __async(void 0, null, function* () {
+    loggerMiddleware = () => (next, context2) => (args) => __async(void 0, null, function* () {
       var _b, _c;
       try {
         const response = yield next(args);
-        const { clientName, commandName, logger: logger2, dynamoDbDocumentClientOptions = {} } = context;
+        const { clientName, commandName, logger: logger2, dynamoDbDocumentClientOptions = {} } = context2;
         const { overrideInputFilterSensitiveLog, overrideOutputFilterSensitiveLog } = dynamoDbDocumentClientOptions;
-        const inputFilterSensitiveLog = overrideInputFilterSensitiveLog != null ? overrideInputFilterSensitiveLog : context.inputFilterSensitiveLog;
-        const outputFilterSensitiveLog = overrideOutputFilterSensitiveLog != null ? overrideOutputFilterSensitiveLog : context.outputFilterSensitiveLog;
+        const inputFilterSensitiveLog = overrideInputFilterSensitiveLog != null ? overrideInputFilterSensitiveLog : context2.inputFilterSensitiveLog;
+        const outputFilterSensitiveLog = overrideOutputFilterSensitiveLog != null ? overrideOutputFilterSensitiveLog : context2.outputFilterSensitiveLog;
         const _a2 = response.output, { $metadata } = _a2, outputWithoutMetadata = __objRest(_a2, ["$metadata"]);
         (_b = logger2 == null ? void 0 : logger2.info) == null ? void 0 : _b.call(logger2, {
           clientName,
@@ -20020,9 +20020,9 @@ var init_loggerMiddleware = __esm({
         });
         return response;
       } catch (error) {
-        const { clientName, commandName, logger: logger2, dynamoDbDocumentClientOptions = {} } = context;
+        const { clientName, commandName, logger: logger2, dynamoDbDocumentClientOptions = {} } = context2;
         const { overrideInputFilterSensitiveLog } = dynamoDbDocumentClientOptions;
-        const inputFilterSensitiveLog = overrideInputFilterSensitiveLog != null ? overrideInputFilterSensitiveLog : context.inputFilterSensitiveLog;
+        const inputFilterSensitiveLog = overrideInputFilterSensitiveLog != null ? overrideInputFilterSensitiveLog : context2.inputFilterSensitiveLog;
         (_c = logger2 == null ? void 0 : logger2.error) == null ? void 0 : _c.call(logger2, {
           clientName,
           commandName,
@@ -20363,9 +20363,9 @@ var init_MiddlewareStack = __esm({
             identifyOnResolve = toggle;
           return identifyOnResolve;
         },
-        resolve: (handler, context) => {
+        resolve: (handler, context2) => {
           for (const middleware of getMiddlewareList().map((entry) => entry.middleware).reverse()) {
-            handler = middleware(handler, context);
+            handler = middleware(handler, context2);
           }
           if (identifyOnResolve) {
             console.log(stack.identify());
@@ -21576,14 +21576,14 @@ var init_collect_stream_body = __esm({
   "../../../node_modules/.pnpm/@smithy+smithy-client@3.1.12/node_modules/@smithy/smithy-client/dist-es/collect-stream-body.js"() {
     "use strict";
     init_dist_es16();
-    collectBody = (..._0) => __async(void 0, [..._0], function* (streamBody = new Uint8Array(), context) {
+    collectBody = (..._0) => __async(void 0, [..._0], function* (streamBody = new Uint8Array(), context2) {
       if (streamBody instanceof Uint8Array) {
         return Uint8ArrayBlobAdapter.mutate(streamBody);
       }
       if (!streamBody) {
         return Uint8ArrayBlobAdapter.mutate(new Uint8Array());
       }
-      const fromContext = context.streamCollector(streamBody);
+      const fromContext = context2.streamCollector(streamBody);
       return Uint8ArrayBlobAdapter.mutate(yield fromContext);
     });
   }
@@ -22516,7 +22516,7 @@ var init_getSmithyContext = __esm({
   "../../../node_modules/.pnpm/@smithy+util-middleware@3.0.3/node_modules/@smithy/util-middleware/dist-es/getSmithyContext.js"() {
     "use strict";
     init_dist_es();
-    getSmithyContext = (context) => context[SMITHY_CONTEXT_KEY] || (context[SMITHY_CONTEXT_KEY] = {});
+    getSmithyContext = (context2) => context2[SMITHY_CONTEXT_KEY] || (context2[SMITHY_CONTEXT_KEY] = {});
   }
 });
 
@@ -23196,11 +23196,11 @@ var init_httpAuthSchemeMiddleware = __esm({
     "use strict";
     init_dist_es();
     init_dist_es18();
-    httpAuthSchemeMiddleware = (config, mwOptions) => (next, context) => (args) => __async(void 0, null, function* () {
+    httpAuthSchemeMiddleware = (config, mwOptions) => (next, context2) => (args) => __async(void 0, null, function* () {
       var _a2;
-      const options = config.httpAuthSchemeProvider(yield mwOptions.httpAuthSchemeParametersProvider(config, context, args.input));
+      const options = config.httpAuthSchemeProvider(yield mwOptions.httpAuthSchemeParametersProvider(config, context2, args.input));
       const authSchemes = convertHttpAuthSchemesToMap(config.httpAuthSchemes);
-      const smithyContext = getSmithyContext(context);
+      const smithyContext = getSmithyContext(context2);
       const failureReasons = [];
       for (const option of options) {
         const scheme = authSchemes.get(option.schemeId);
@@ -23213,7 +23213,7 @@ var init_httpAuthSchemeMiddleware = __esm({
           failureReasons.push(`HttpAuthScheme \`${option.schemeId}\` did not have an IdentityProvider configured.`);
           continue;
         }
-        const { identityProperties = {}, signingProperties = {} } = ((_a2 = option.propertiesExtractor) == null ? void 0 : _a2.call(option, config, context)) || {};
+        const { identityProperties = {}, signingProperties = {} } = ((_a2 = option.propertiesExtractor) == null ? void 0 : _a2.call(option, config, context2)) || {};
         option.identityProperties = Object.assign(option.identityProperties || {}, identityProperties);
         option.signingProperties = Object.assign(option.signingProperties || {}, signingProperties);
         smithyContext.selectedHttpAuthScheme = {
@@ -24050,7 +24050,7 @@ var init_getEndpointFromInstructions = __esm({
     init_createConfigValueProvider();
     init_getEndpointFromConfig();
     init_toEndpointV1();
-    getEndpointFromInstructions = (commandInput, instructionsSupplier, clientConfig, context) => __async(void 0, null, function* () {
+    getEndpointFromInstructions = (commandInput, instructionsSupplier, clientConfig, context2) => __async(void 0, null, function* () {
       if (!clientConfig.endpoint) {
         const endpointFromConfig = yield getEndpointFromConfig(clientConfig.serviceId || "");
         if (endpointFromConfig) {
@@ -24061,7 +24061,7 @@ var init_getEndpointFromInstructions = __esm({
       if (typeof clientConfig.endpointProvider !== "function") {
         throw new Error("config.endpointProvider is not set.");
       }
-      const endpoint = clientConfig.endpointProvider(endpointParams, context);
+      const endpoint = clientConfig.endpointProvider(endpointParams, context2);
       return endpoint;
     });
     resolveParams = (commandInput, instructionsSupplier, clientConfig) => __async(void 0, null, function* () {
@@ -24112,20 +24112,20 @@ var init_endpointMiddleware = __esm({
     init_dist_es18();
     init_getEndpointFromInstructions();
     endpointMiddleware = ({ config, instructions }) => {
-      return (next, context) => (args) => __async(void 0, null, function* () {
+      return (next, context2) => (args) => __async(void 0, null, function* () {
         var _a2, _b, _c;
         const endpoint = yield getEndpointFromInstructions(args.input, {
           getEndpointParameterInstructions() {
             return instructions;
           }
-        }, __spreadValues({}, config), context);
-        context.endpointV2 = endpoint;
-        context.authSchemes = (_a2 = endpoint.properties) == null ? void 0 : _a2.authSchemes;
-        const authScheme = (_b = context.authSchemes) == null ? void 0 : _b[0];
+        }, __spreadValues({}, config), context2);
+        context2.endpointV2 = endpoint;
+        context2.authSchemes = (_a2 = endpoint.properties) == null ? void 0 : _a2.authSchemes;
+        const authScheme = (_b = context2.authSchemes) == null ? void 0 : _b[0];
         if (authScheme) {
-          context["signing_region"] = authScheme.signingRegion;
-          context["signing_service"] = authScheme.signingName;
-          const smithyContext = getSmithyContext(context);
+          context2["signing_region"] = authScheme.signingRegion;
+          context2["signing_service"] = authScheme.signingName;
+          const smithyContext = getSmithyContext(context2);
           const httpAuthOption = (_c = smithyContext == null ? void 0 : smithyContext.selectedHttpAuthScheme) == null ? void 0 : _c.httpAuthOption;
           if (httpAuthOption) {
             httpAuthOption.signingProperties = Object.assign(httpAuthOption.signingProperties || {}, {
@@ -24180,10 +24180,10 @@ var serializerMiddleware;
 var init_serializerMiddleware = __esm({
   "../../../node_modules/.pnpm/@smithy+middleware-serde@3.0.3/node_modules/@smithy/middleware-serde/dist-es/serializerMiddleware.js"() {
     "use strict";
-    serializerMiddleware = (options, serializer) => (next, context) => (args) => __async(void 0, null, function* () {
+    serializerMiddleware = (options, serializer) => (next, context2) => (args) => __async(void 0, null, function* () {
       var _a2;
-      const endpoint = ((_a2 = context.endpointV2) == null ? void 0 : _a2.url) && options.urlParser ? () => __async(void 0, null, function* () {
-        return options.urlParser(context.endpointV2.url);
+      const endpoint = ((_a2 = context2.endpointV2) == null ? void 0 : _a2.url) && options.urlParser ? () => __async(void 0, null, function* () {
+        return options.urlParser(context2.endpointV2.url);
       }) : options.endpoint;
       if (!endpoint) {
         throw new Error("No valid endpoint provider available.");
@@ -24374,11 +24374,11 @@ var init_httpSigningMiddleware = __esm({
     };
     defaultSuccessHandler = (httpResponse, signingProperties) => {
     };
-    httpSigningMiddleware = (config) => (next, context) => (args) => __async(void 0, null, function* () {
+    httpSigningMiddleware = (config) => (next, context2) => (args) => __async(void 0, null, function* () {
       if (!HttpRequest.isInstance(args.request)) {
         return next(args);
       }
-      const smithyContext = getSmithyContext(context);
+      const smithyContext = getSmithyContext(context2);
       const scheme = smithyContext.selectedHttpAuthScheme;
       if (!scheme) {
         throw new Error(`No HttpAuthScheme was selected: unable to sign request`);
@@ -25015,13 +25015,13 @@ var init_retryMiddleware = __esm({
     init_esm_node2();
     init_isStreamingPayload();
     init_util2();
-    retryMiddleware = (options) => (next, context) => (args) => __async(void 0, null, function* () {
+    retryMiddleware = (options) => (next, context2) => (args) => __async(void 0, null, function* () {
       var _a2;
       let retryStrategy = yield options.retryStrategy();
       const maxAttempts = yield options.maxAttempts();
       if (isRetryStrategyV2(retryStrategy)) {
         retryStrategy = retryStrategy;
-        let retryToken = yield retryStrategy.acquireInitialRetryToken(context["partition_id"]);
+        let retryToken = yield retryStrategy.acquireInitialRetryToken(context2["partition_id"]);
         let lastError = new Error();
         let attempts = 0;
         let totalRetryDelay = 0;
@@ -25044,7 +25044,7 @@ var init_retryMiddleware = __esm({
             const retryErrorInfo = getRetryErrorInfo(e5);
             lastError = asSdkError(e5);
             if (isRequest && isStreamingPayload(request2)) {
-              (_a2 = context.logger instanceof NoOpLogger ? console : context.logger) == null ? void 0 : _a2.warn("An error was encountered in a non-retryable streaming request.");
+              (_a2 = context2.logger instanceof NoOpLogger ? console : context2.logger) == null ? void 0 : _a2.warn("An error was encountered in a non-retryable streaming request.");
               throw lastError;
             }
             try {
@@ -25066,7 +25066,7 @@ var init_retryMiddleware = __esm({
       } else {
         retryStrategy = retryStrategy;
         if (retryStrategy == null ? void 0 : retryStrategy.mode)
-          context.userAgent = [...context.userAgent || [], ["cfg/retry-mode", retryStrategy.mode]];
+          context2.userAgent = [...context2.userAgent || [], ["cfg/retry-mode", retryStrategy.mode]];
         return retryStrategy.retry(next, args);
       }
     });
@@ -25324,8 +25324,8 @@ var init_normalizeProvider2 = __esm({
 });
 
 // ../../../node_modules/.pnpm/@smithy+core@2.3.2/node_modules/@smithy/core/dist-es/protocols/requestBuilder.js
-function requestBuilder(input, context) {
-  return new RequestBuilder(input, context);
+function requestBuilder(input, context2) {
+  return new RequestBuilder(input, context2);
 }
 var RequestBuilder;
 var init_requestBuilder = __esm({
@@ -25334,9 +25334,9 @@ var init_requestBuilder = __esm({
     init_dist_es2();
     init_dist_es17();
     RequestBuilder = class {
-      constructor(input, context) {
+      constructor(input, context2) {
         this.input = input;
-        this.context = context;
+        this.context = context2;
         this.query = {};
         this.method = "";
         this.headers = {};
@@ -26659,13 +26659,13 @@ var init_user_agent_middleware = __esm({
     init_dist_es33();
     init_dist_es2();
     init_constants6();
-    userAgentMiddleware = (options) => (next, context) => (args) => __async(void 0, null, function* () {
+    userAgentMiddleware = (options) => (next, context2) => (args) => __async(void 0, null, function* () {
       var _a2, _b;
       const { request: request2 } = args;
       if (!HttpRequest.isInstance(request2))
         return next(args);
       const { headers } = request2;
-      const userAgent = ((_a2 = context == null ? void 0 : context.userAgent) == null ? void 0 : _a2.map(escapeUserAgent)) || [];
+      const userAgent = ((_a2 = context2 == null ? void 0 : context2.userAgent) == null ? void 0 : _a2.map(escapeUserAgent)) || [];
       const defaultUserAgent2 = (yield options.defaultUserAgentProvider()).map(escapeUserAgent);
       const customUserAgent = ((_b = options == null ? void 0 : options.customUserAgent) == null ? void 0 : _b.map(escapeUserAgent)) || [];
       const prefix = getUserAgentPrefix();
@@ -27094,9 +27094,9 @@ var init_AwsSdkSigV4Signer = __esm({
     };
     validateSigningProperties = (signingProperties) => __async(void 0, null, function* () {
       var _a2, _b, _c;
-      const context = throwSigningPropertyError("context", signingProperties.context);
+      const context2 = throwSigningPropertyError("context", signingProperties.context);
       const config = throwSigningPropertyError("config", signingProperties.config);
-      const authScheme = (_c = (_b = (_a2 = context.endpointV2) == null ? void 0 : _a2.properties) == null ? void 0 : _b.authSchemes) == null ? void 0 : _c[0];
+      const authScheme = (_c = (_b = (_a2 = context2.endpointV2) == null ? void 0 : _a2.properties) == null ? void 0 : _b.authSchemes) == null ? void 0 : _c[0];
       const signerFunction = throwSigningPropertyError("signer", config.signer);
       const signer = yield signerFunction(authScheme);
       const signingRegion = signingProperties == null ? void 0 : signingProperties.signingRegion;
@@ -27314,7 +27314,7 @@ var init_common = __esm({
   "../../../node_modules/.pnpm/@aws-sdk+core@3.624.0/node_modules/@aws-sdk/core/dist-es/submodules/protocols/common.js"() {
     "use strict";
     init_dist_es17();
-    collectBodyString = (streamBody, context) => collectBody(streamBody, context).then((body) => context.utf8Encoder(body));
+    collectBodyString = (streamBody, context2) => collectBody(streamBody, context2).then((body) => context2.utf8Encoder(body));
   }
 });
 
@@ -27324,7 +27324,7 @@ var init_parseJsonBody = __esm({
   "../../../node_modules/.pnpm/@aws-sdk+core@3.624.0/node_modules/@aws-sdk/core/dist-es/submodules/protocols/json/parseJsonBody.js"() {
     "use strict";
     init_common();
-    parseJsonBody = (streamBody, context) => collectBodyString(streamBody, context).then((encoded) => {
+    parseJsonBody = (streamBody, context2) => collectBodyString(streamBody, context2).then((encoded) => {
       if (encoded.length) {
         try {
           return JSON.parse(encoded);
@@ -27339,9 +27339,9 @@ var init_parseJsonBody = __esm({
       }
       return {};
     });
-    parseJsonErrorBody = (errorBody, context) => __async(void 0, null, function* () {
+    parseJsonErrorBody = (errorBody, context2) => __async(void 0, null, function* () {
       var _a2;
-      const value = yield parseJsonBody(errorBody, context);
+      const value = yield parseJsonBody(errorBody, context2);
       value.message = (_a2 = value.message) != null ? _a2 : value.Message;
       return value;
     });
@@ -29108,7 +29108,7 @@ var init_parseXmlBody = __esm({
     init_dist_es17();
     import_fast_xml_parser = __toESM(require_fxp());
     init_common();
-    parseXmlBody = (streamBody, context) => collectBodyString(streamBody, context).then((encoded) => {
+    parseXmlBody = (streamBody, context2) => collectBodyString(streamBody, context2).then((encoded) => {
       if (encoded.length) {
         const parser = new import_fast_xml_parser.XMLParser({
           attributeNamePrefix: "",
@@ -29143,9 +29143,9 @@ var init_parseXmlBody = __esm({
       }
       return {};
     });
-    parseXmlErrorBody = (errorBody, context) => __async(void 0, null, function* () {
+    parseXmlErrorBody = (errorBody, context2) => __async(void 0, null, function* () {
       var _a2;
-      const value = yield parseXmlBody(errorBody, context);
+      const value = yield parseXmlBody(errorBody, context2);
       if (value.Error) {
         value.Error.message = (_a2 = value.Error.message) != null ? _a2 : value.Error.Message;
       }
@@ -29978,10 +29978,10 @@ function createAwsAuthSigv4HttpAuthOption2(authParameters) {
       name: "sso-oauth",
       region: authParameters.region
     },
-    propertiesExtractor: (config, context) => ({
+    propertiesExtractor: (config, context2) => ({
       signingProperties: {
         config,
-        context
+        context: context2
       }
     })
   };
@@ -29997,9 +29997,9 @@ var init_httpAuthSchemeProvider = __esm({
     "use strict";
     init_dist_es37();
     init_dist_es18();
-    defaultSSOOIDCHttpAuthSchemeParametersProvider = (config, context, input) => __async(void 0, null, function* () {
+    defaultSSOOIDCHttpAuthSchemeParametersProvider = (config, context2, input) => __async(void 0, null, function* () {
       return {
-        operation: getSmithyContext(context).operation,
+        operation: getSmithyContext(context2).operation,
         region: (yield normalizeProvider(config.region)()) || (() => {
           throw new Error("expected `region` to be configured for `aws.auth#sigv4`");
         })()
@@ -30355,10 +30355,10 @@ var init_endpointResolver = __esm({
     init_dist_es33();
     init_dist_es32();
     init_ruleset();
-    defaultEndpointResolver2 = (endpointParams, context = {}) => {
+    defaultEndpointResolver2 = (endpointParams, context2 = {}) => {
       return resolveEndpoint(ruleSet2, {
         endpointParams,
-        logger: context.logger
+        logger: context2.logger
       });
     };
     customEndpointFunctions.aws = awsEndpointFunctions;
@@ -30987,8 +30987,8 @@ var init_Aws_restJson1 = __esm({
     init_dist_es17();
     init_models_0();
     init_SSOOIDCServiceException();
-    se_CreateTokenCommand = (input, context) => __async(void 0, null, function* () {
-      const b5 = requestBuilder(input, context);
+    se_CreateTokenCommand = (input, context2) => __async(void 0, null, function* () {
+      const b5 = requestBuilder(input, context2);
       const headers = {
         "content-type": "application/json"
       };
@@ -31008,8 +31008,8 @@ var init_Aws_restJson1 = __esm({
       b5.m("POST").h(headers).b(body);
       return b5.build();
     });
-    se_CreateTokenWithIAMCommand = (input, context) => __async(void 0, null, function* () {
-      const b5 = requestBuilder(input, context);
+    se_CreateTokenWithIAMCommand = (input, context2) => __async(void 0, null, function* () {
+      const b5 = requestBuilder(input, context2);
       const headers = {
         "content-type": "application/json"
       };
@@ -31034,8 +31034,8 @@ var init_Aws_restJson1 = __esm({
       b5.m("POST").h(headers).q(query).b(body);
       return b5.build();
     });
-    se_RegisterClientCommand = (input, context) => __async(void 0, null, function* () {
-      const b5 = requestBuilder(input, context);
+    se_RegisterClientCommand = (input, context2) => __async(void 0, null, function* () {
+      const b5 = requestBuilder(input, context2);
       const headers = {
         "content-type": "application/json"
       };
@@ -31053,8 +31053,8 @@ var init_Aws_restJson1 = __esm({
       b5.m("POST").h(headers).b(body);
       return b5.build();
     });
-    se_StartDeviceAuthorizationCommand = (input, context) => __async(void 0, null, function* () {
-      const b5 = requestBuilder(input, context);
+    se_StartDeviceAuthorizationCommand = (input, context2) => __async(void 0, null, function* () {
+      const b5 = requestBuilder(input, context2);
       const headers = {
         "content-type": "application/json"
       };
@@ -31068,14 +31068,14 @@ var init_Aws_restJson1 = __esm({
       b5.m("POST").h(headers).b(body);
       return b5.build();
     });
-    de_CreateTokenCommand = (output, context) => __async(void 0, null, function* () {
+    de_CreateTokenCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode !== 200 && output.statusCode >= 300) {
-        return de_CommandError2(output, context);
+        return de_CommandError2(output, context2);
       }
       const contents = map({
         $metadata: deserializeMetadata3(output)
       });
-      const data = expectNonNull(expectObject(yield parseJsonBody(output.body, context)), "body");
+      const data = expectNonNull(expectObject(yield parseJsonBody(output.body, context2)), "body");
       const doc = take(data, {
         accessToken: expectString,
         expiresIn: expectInt32,
@@ -31086,14 +31086,14 @@ var init_Aws_restJson1 = __esm({
       Object.assign(contents, doc);
       return contents;
     });
-    de_CreateTokenWithIAMCommand = (output, context) => __async(void 0, null, function* () {
+    de_CreateTokenWithIAMCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode !== 200 && output.statusCode >= 300) {
-        return de_CommandError2(output, context);
+        return de_CommandError2(output, context2);
       }
       const contents = map({
         $metadata: deserializeMetadata3(output)
       });
-      const data = expectNonNull(expectObject(yield parseJsonBody(output.body, context)), "body");
+      const data = expectNonNull(expectObject(yield parseJsonBody(output.body, context2)), "body");
       const doc = take(data, {
         accessToken: expectString,
         expiresIn: expectInt32,
@@ -31106,14 +31106,14 @@ var init_Aws_restJson1 = __esm({
       Object.assign(contents, doc);
       return contents;
     });
-    de_RegisterClientCommand = (output, context) => __async(void 0, null, function* () {
+    de_RegisterClientCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode !== 200 && output.statusCode >= 300) {
-        return de_CommandError2(output, context);
+        return de_CommandError2(output, context2);
       }
       const contents = map({
         $metadata: deserializeMetadata3(output)
       });
-      const data = expectNonNull(expectObject(yield parseJsonBody(output.body, context)), "body");
+      const data = expectNonNull(expectObject(yield parseJsonBody(output.body, context2)), "body");
       const doc = take(data, {
         authorizationEndpoint: expectString,
         clientId: expectString,
@@ -31125,14 +31125,14 @@ var init_Aws_restJson1 = __esm({
       Object.assign(contents, doc);
       return contents;
     });
-    de_StartDeviceAuthorizationCommand = (output, context) => __async(void 0, null, function* () {
+    de_StartDeviceAuthorizationCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode !== 200 && output.statusCode >= 300) {
-        return de_CommandError2(output, context);
+        return de_CommandError2(output, context2);
       }
       const contents = map({
         $metadata: deserializeMetadata3(output)
       });
-      const data = expectNonNull(expectObject(yield parseJsonBody(output.body, context)), "body");
+      const data = expectNonNull(expectObject(yield parseJsonBody(output.body, context2)), "body");
       const doc = take(data, {
         deviceCode: expectString,
         expiresIn: expectInt32,
@@ -31144,54 +31144,54 @@ var init_Aws_restJson1 = __esm({
       Object.assign(contents, doc);
       return contents;
     });
-    de_CommandError2 = (output, context) => __async(void 0, null, function* () {
+    de_CommandError2 = (output, context2) => __async(void 0, null, function* () {
       const parsedOutput = __spreadProps(__spreadValues({}, output), {
-        body: yield parseJsonErrorBody(output.body, context)
+        body: yield parseJsonErrorBody(output.body, context2)
       });
       const errorCode = loadRestJsonErrorCode(output, parsedOutput.body);
       switch (errorCode) {
         case "AccessDeniedException":
         case "com.amazonaws.ssooidc#AccessDeniedException":
-          throw yield de_AccessDeniedExceptionRes(parsedOutput, context);
+          throw yield de_AccessDeniedExceptionRes(parsedOutput, context2);
         case "AuthorizationPendingException":
         case "com.amazonaws.ssooidc#AuthorizationPendingException":
-          throw yield de_AuthorizationPendingExceptionRes(parsedOutput, context);
+          throw yield de_AuthorizationPendingExceptionRes(parsedOutput, context2);
         case "ExpiredTokenException":
         case "com.amazonaws.ssooidc#ExpiredTokenException":
-          throw yield de_ExpiredTokenExceptionRes(parsedOutput, context);
+          throw yield de_ExpiredTokenExceptionRes(parsedOutput, context2);
         case "InternalServerException":
         case "com.amazonaws.ssooidc#InternalServerException":
-          throw yield de_InternalServerExceptionRes(parsedOutput, context);
+          throw yield de_InternalServerExceptionRes(parsedOutput, context2);
         case "InvalidClientException":
         case "com.amazonaws.ssooidc#InvalidClientException":
-          throw yield de_InvalidClientExceptionRes(parsedOutput, context);
+          throw yield de_InvalidClientExceptionRes(parsedOutput, context2);
         case "InvalidGrantException":
         case "com.amazonaws.ssooidc#InvalidGrantException":
-          throw yield de_InvalidGrantExceptionRes(parsedOutput, context);
+          throw yield de_InvalidGrantExceptionRes(parsedOutput, context2);
         case "InvalidRequestException":
         case "com.amazonaws.ssooidc#InvalidRequestException":
-          throw yield de_InvalidRequestExceptionRes(parsedOutput, context);
+          throw yield de_InvalidRequestExceptionRes(parsedOutput, context2);
         case "InvalidScopeException":
         case "com.amazonaws.ssooidc#InvalidScopeException":
-          throw yield de_InvalidScopeExceptionRes(parsedOutput, context);
+          throw yield de_InvalidScopeExceptionRes(parsedOutput, context2);
         case "SlowDownException":
         case "com.amazonaws.ssooidc#SlowDownException":
-          throw yield de_SlowDownExceptionRes(parsedOutput, context);
+          throw yield de_SlowDownExceptionRes(parsedOutput, context2);
         case "UnauthorizedClientException":
         case "com.amazonaws.ssooidc#UnauthorizedClientException":
-          throw yield de_UnauthorizedClientExceptionRes(parsedOutput, context);
+          throw yield de_UnauthorizedClientExceptionRes(parsedOutput, context2);
         case "UnsupportedGrantTypeException":
         case "com.amazonaws.ssooidc#UnsupportedGrantTypeException":
-          throw yield de_UnsupportedGrantTypeExceptionRes(parsedOutput, context);
+          throw yield de_UnsupportedGrantTypeExceptionRes(parsedOutput, context2);
         case "InvalidRequestRegionException":
         case "com.amazonaws.ssooidc#InvalidRequestRegionException":
-          throw yield de_InvalidRequestRegionExceptionRes(parsedOutput, context);
+          throw yield de_InvalidRequestRegionExceptionRes(parsedOutput, context2);
         case "InvalidClientMetadataException":
         case "com.amazonaws.ssooidc#InvalidClientMetadataException":
-          throw yield de_InvalidClientMetadataExceptionRes(parsedOutput, context);
+          throw yield de_InvalidClientMetadataExceptionRes(parsedOutput, context2);
         case "InvalidRedirectUriException":
         case "com.amazonaws.ssooidc#InvalidRedirectUriException":
-          throw yield de_InvalidRedirectUriExceptionRes(parsedOutput, context);
+          throw yield de_InvalidRedirectUriExceptionRes(parsedOutput, context2);
         default:
           const parsedBody = parsedOutput.body;
           return throwDefaultError3({
@@ -31202,7 +31202,7 @@ var init_Aws_restJson1 = __esm({
       }
     });
     throwDefaultError3 = withBaseException(SSOOIDCServiceException);
-    de_AccessDeniedExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_AccessDeniedExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -31215,7 +31215,7 @@ var init_Aws_restJson1 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_AuthorizationPendingExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_AuthorizationPendingExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -31228,7 +31228,7 @@ var init_Aws_restJson1 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_ExpiredTokenExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_ExpiredTokenExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -31241,7 +31241,7 @@ var init_Aws_restJson1 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_InternalServerExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_InternalServerExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -31254,7 +31254,7 @@ var init_Aws_restJson1 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_InvalidClientExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_InvalidClientExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -31267,7 +31267,7 @@ var init_Aws_restJson1 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_InvalidClientMetadataExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_InvalidClientMetadataExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -31280,7 +31280,7 @@ var init_Aws_restJson1 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_InvalidGrantExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_InvalidGrantExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -31293,7 +31293,7 @@ var init_Aws_restJson1 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_InvalidRedirectUriExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_InvalidRedirectUriExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -31306,7 +31306,7 @@ var init_Aws_restJson1 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_InvalidRequestExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_InvalidRequestExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -31319,7 +31319,7 @@ var init_Aws_restJson1 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_InvalidRequestRegionExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_InvalidRequestRegionExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -31334,7 +31334,7 @@ var init_Aws_restJson1 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_InvalidScopeExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_InvalidScopeExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -31347,7 +31347,7 @@ var init_Aws_restJson1 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_SlowDownExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_SlowDownExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -31360,7 +31360,7 @@ var init_Aws_restJson1 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_UnauthorizedClientExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_UnauthorizedClientExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -31373,7 +31373,7 @@ var init_Aws_restJson1 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_UnsupportedGrantTypeExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_UnsupportedGrantTypeExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -31769,10 +31769,10 @@ function createAwsAuthSigv4HttpAuthOption3(authParameters) {
       name: "awsssoportal",
       region: authParameters.region
     },
-    propertiesExtractor: (config, context) => ({
+    propertiesExtractor: (config, context2) => ({
       signingProperties: {
         config,
-        context
+        context: context2
       }
     })
   };
@@ -31788,9 +31788,9 @@ var init_httpAuthSchemeProvider2 = __esm({
     "use strict";
     init_dist_es37();
     init_dist_es18();
-    defaultSSOHttpAuthSchemeParametersProvider = (config, context, input) => __async(void 0, null, function* () {
+    defaultSSOHttpAuthSchemeParametersProvider = (config, context2, input) => __async(void 0, null, function* () {
       return {
-        operation: getSmithyContext(context).operation,
+        operation: getSmithyContext(context2).operation,
         region: (yield normalizeProvider(config.region)()) || (() => {
           throw new Error("expected `region` to be configured for `aws.auth#sigv4`");
         })()
@@ -31997,10 +31997,10 @@ var init_endpointResolver2 = __esm({
     init_dist_es33();
     init_dist_es32();
     init_ruleset2();
-    defaultEndpointResolver3 = (endpointParams, context = {}) => {
+    defaultEndpointResolver3 = (endpointParams, context2 = {}) => {
       return resolveEndpoint(ruleSet3, {
         endpointParams,
-        logger: context.logger
+        logger: context2.logger
       });
     };
     customEndpointFunctions.aws = awsEndpointFunctions;
@@ -32305,8 +32305,8 @@ var init_Aws_restJson12 = __esm({
     init_dist_es17();
     init_models_02();
     init_SSOServiceException();
-    se_GetRoleCredentialsCommand = (input, context) => __async(void 0, null, function* () {
-      const b5 = requestBuilder(input, context);
+    se_GetRoleCredentialsCommand = (input, context2) => __async(void 0, null, function* () {
+      const b5 = requestBuilder(input, context2);
       const headers = map({}, isSerializableHeaderValue2, {
         [_xasbt]: input[_aT]
       });
@@ -32319,8 +32319,8 @@ var init_Aws_restJson12 = __esm({
       b5.m("GET").h(headers).q(query).b(body);
       return b5.build();
     });
-    se_ListAccountRolesCommand = (input, context) => __async(void 0, null, function* () {
-      const b5 = requestBuilder(input, context);
+    se_ListAccountRolesCommand = (input, context2) => __async(void 0, null, function* () {
+      const b5 = requestBuilder(input, context2);
       const headers = map({}, isSerializableHeaderValue2, {
         [_xasbt]: input[_aT]
       });
@@ -32334,8 +32334,8 @@ var init_Aws_restJson12 = __esm({
       b5.m("GET").h(headers).q(query).b(body);
       return b5.build();
     });
-    se_ListAccountsCommand = (input, context) => __async(void 0, null, function* () {
-      const b5 = requestBuilder(input, context);
+    se_ListAccountsCommand = (input, context2) => __async(void 0, null, function* () {
+      const b5 = requestBuilder(input, context2);
       const headers = map({}, isSerializableHeaderValue2, {
         [_xasbt]: input[_aT]
       });
@@ -32348,8 +32348,8 @@ var init_Aws_restJson12 = __esm({
       b5.m("GET").h(headers).q(query).b(body);
       return b5.build();
     });
-    se_LogoutCommand = (input, context) => __async(void 0, null, function* () {
-      const b5 = requestBuilder(input, context);
+    se_LogoutCommand = (input, context2) => __async(void 0, null, function* () {
+      const b5 = requestBuilder(input, context2);
       const headers = map({}, isSerializableHeaderValue2, {
         [_xasbt]: input[_aT]
       });
@@ -32358,28 +32358,28 @@ var init_Aws_restJson12 = __esm({
       b5.m("POST").h(headers).b(body);
       return b5.build();
     });
-    de_GetRoleCredentialsCommand = (output, context) => __async(void 0, null, function* () {
+    de_GetRoleCredentialsCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode !== 200 && output.statusCode >= 300) {
-        return de_CommandError3(output, context);
+        return de_CommandError3(output, context2);
       }
       const contents = map({
         $metadata: deserializeMetadata4(output)
       });
-      const data = expectNonNull(expectObject(yield parseJsonBody(output.body, context)), "body");
+      const data = expectNonNull(expectObject(yield parseJsonBody(output.body, context2)), "body");
       const doc = take(data, {
         roleCredentials: _json
       });
       Object.assign(contents, doc);
       return contents;
     });
-    de_ListAccountRolesCommand = (output, context) => __async(void 0, null, function* () {
+    de_ListAccountRolesCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode !== 200 && output.statusCode >= 300) {
-        return de_CommandError3(output, context);
+        return de_CommandError3(output, context2);
       }
       const contents = map({
         $metadata: deserializeMetadata4(output)
       });
-      const data = expectNonNull(expectObject(yield parseJsonBody(output.body, context)), "body");
+      const data = expectNonNull(expectObject(yield parseJsonBody(output.body, context2)), "body");
       const doc = take(data, {
         nextToken: expectString,
         roleList: _json
@@ -32387,14 +32387,14 @@ var init_Aws_restJson12 = __esm({
       Object.assign(contents, doc);
       return contents;
     });
-    de_ListAccountsCommand = (output, context) => __async(void 0, null, function* () {
+    de_ListAccountsCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode !== 200 && output.statusCode >= 300) {
-        return de_CommandError3(output, context);
+        return de_CommandError3(output, context2);
       }
       const contents = map({
         $metadata: deserializeMetadata4(output)
       });
-      const data = expectNonNull(expectObject(yield parseJsonBody(output.body, context)), "body");
+      const data = expectNonNull(expectObject(yield parseJsonBody(output.body, context2)), "body");
       const doc = take(data, {
         accountList: _json,
         nextToken: expectString
@@ -32402,34 +32402,34 @@ var init_Aws_restJson12 = __esm({
       Object.assign(contents, doc);
       return contents;
     });
-    de_LogoutCommand = (output, context) => __async(void 0, null, function* () {
+    de_LogoutCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode !== 200 && output.statusCode >= 300) {
-        return de_CommandError3(output, context);
+        return de_CommandError3(output, context2);
       }
       const contents = map({
         $metadata: deserializeMetadata4(output)
       });
-      yield collectBody(output.body, context);
+      yield collectBody(output.body, context2);
       return contents;
     });
-    de_CommandError3 = (output, context) => __async(void 0, null, function* () {
+    de_CommandError3 = (output, context2) => __async(void 0, null, function* () {
       const parsedOutput = __spreadProps(__spreadValues({}, output), {
-        body: yield parseJsonErrorBody(output.body, context)
+        body: yield parseJsonErrorBody(output.body, context2)
       });
       const errorCode = loadRestJsonErrorCode(output, parsedOutput.body);
       switch (errorCode) {
         case "InvalidRequestException":
         case "com.amazonaws.sso#InvalidRequestException":
-          throw yield de_InvalidRequestExceptionRes2(parsedOutput, context);
+          throw yield de_InvalidRequestExceptionRes2(parsedOutput, context2);
         case "ResourceNotFoundException":
         case "com.amazonaws.sso#ResourceNotFoundException":
-          throw yield de_ResourceNotFoundExceptionRes(parsedOutput, context);
+          throw yield de_ResourceNotFoundExceptionRes(parsedOutput, context2);
         case "TooManyRequestsException":
         case "com.amazonaws.sso#TooManyRequestsException":
-          throw yield de_TooManyRequestsExceptionRes(parsedOutput, context);
+          throw yield de_TooManyRequestsExceptionRes(parsedOutput, context2);
         case "UnauthorizedException":
         case "com.amazonaws.sso#UnauthorizedException":
-          throw yield de_UnauthorizedExceptionRes(parsedOutput, context);
+          throw yield de_UnauthorizedExceptionRes(parsedOutput, context2);
         default:
           const parsedBody = parsedOutput.body;
           return throwDefaultError4({
@@ -32440,7 +32440,7 @@ var init_Aws_restJson12 = __esm({
       }
     });
     throwDefaultError4 = withBaseException(SSOServiceException);
-    de_InvalidRequestExceptionRes2 = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_InvalidRequestExceptionRes2 = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -32452,7 +32452,7 @@ var init_Aws_restJson12 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_ResourceNotFoundExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_ResourceNotFoundExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -32464,7 +32464,7 @@ var init_Aws_restJson12 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_TooManyRequestsExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_TooManyRequestsExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -32476,7 +32476,7 @@ var init_Aws_restJson12 = __esm({
       }, contents));
       return decorateServiceException(exception, parsedOutput.body);
     });
-    de_UnauthorizedExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_UnauthorizedExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const contents = map({});
       const data = parsedOutput.body;
       const doc = take(data, {
@@ -32938,10 +32938,10 @@ function createAwsAuthSigv4HttpAuthOption4(authParameters) {
       name: "sts",
       region: authParameters.region
     },
-    propertiesExtractor: (config, context) => ({
+    propertiesExtractor: (config, context2) => ({
       signingProperties: {
         config,
-        context
+        context: context2
       }
     })
   };
@@ -32958,9 +32958,9 @@ var init_httpAuthSchemeProvider3 = __esm({
     init_dist_es37();
     init_dist_es18();
     init_STSClient();
-    defaultSTSHttpAuthSchemeParametersProvider = (config, context, input) => __async(void 0, null, function* () {
+    defaultSTSHttpAuthSchemeParametersProvider = (config, context2, input) => __async(void 0, null, function* () {
       return {
-        operation: getSmithyContext(context).operation,
+        operation: getSmithyContext(context2).operation,
         region: (yield normalizeProvider(config.region)()) || (() => {
           throw new Error("expected `region` to be configured for `aws.auth#sigv4`");
         })()
@@ -33181,10 +33181,10 @@ var init_endpointResolver3 = __esm({
     init_dist_es33();
     init_dist_es32();
     init_ruleset3();
-    defaultEndpointResolver4 = (endpointParams, context = {}) => {
+    defaultEndpointResolver4 = (endpointParams, context2 = {}) => {
       return resolveEndpoint(ruleSet4, {
         endpointParams,
-        logger: context.logger
+        logger: context2.logger
       });
     };
     customEndpointFunctions.aws = awsEndpointFunctions;
@@ -33554,204 +33554,204 @@ var init_Aws_query = __esm({
     init_dist_es17();
     init_models_03();
     init_STSServiceException();
-    se_AssumeRoleCommand = (input, context) => __async(void 0, null, function* () {
+    se_AssumeRoleCommand = (input, context2) => __async(void 0, null, function* () {
       const headers = SHARED_HEADERS;
       let body;
-      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_AssumeRoleRequest(input, context)), {
+      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_AssumeRoleRequest(input, context2)), {
         [_A]: _AR2,
         [_V]: _
       }));
-      return buildHttpRpcRequest(context, headers, "/", void 0, body);
+      return buildHttpRpcRequest(context2, headers, "/", void 0, body);
     });
-    se_AssumeRoleWithSAMLCommand = (input, context) => __async(void 0, null, function* () {
+    se_AssumeRoleWithSAMLCommand = (input, context2) => __async(void 0, null, function* () {
       const headers = SHARED_HEADERS;
       let body;
-      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_AssumeRoleWithSAMLRequest(input, context)), {
+      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_AssumeRoleWithSAMLRequest(input, context2)), {
         [_A]: _ARWSAML,
         [_V]: _
       }));
-      return buildHttpRpcRequest(context, headers, "/", void 0, body);
+      return buildHttpRpcRequest(context2, headers, "/", void 0, body);
     });
-    se_AssumeRoleWithWebIdentityCommand = (input, context) => __async(void 0, null, function* () {
+    se_AssumeRoleWithWebIdentityCommand = (input, context2) => __async(void 0, null, function* () {
       const headers = SHARED_HEADERS;
       let body;
-      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_AssumeRoleWithWebIdentityRequest(input, context)), {
+      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_AssumeRoleWithWebIdentityRequest(input, context2)), {
         [_A]: _ARWWI,
         [_V]: _
       }));
-      return buildHttpRpcRequest(context, headers, "/", void 0, body);
+      return buildHttpRpcRequest(context2, headers, "/", void 0, body);
     });
-    se_DecodeAuthorizationMessageCommand = (input, context) => __async(void 0, null, function* () {
+    se_DecodeAuthorizationMessageCommand = (input, context2) => __async(void 0, null, function* () {
       const headers = SHARED_HEADERS;
       let body;
-      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_DecodeAuthorizationMessageRequest(input, context)), {
+      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_DecodeAuthorizationMessageRequest(input, context2)), {
         [_A]: _DAM,
         [_V]: _
       }));
-      return buildHttpRpcRequest(context, headers, "/", void 0, body);
+      return buildHttpRpcRequest(context2, headers, "/", void 0, body);
     });
-    se_GetAccessKeyInfoCommand = (input, context) => __async(void 0, null, function* () {
+    se_GetAccessKeyInfoCommand = (input, context2) => __async(void 0, null, function* () {
       const headers = SHARED_HEADERS;
       let body;
-      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_GetAccessKeyInfoRequest(input, context)), {
+      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_GetAccessKeyInfoRequest(input, context2)), {
         [_A]: _GAKI,
         [_V]: _
       }));
-      return buildHttpRpcRequest(context, headers, "/", void 0, body);
+      return buildHttpRpcRequest(context2, headers, "/", void 0, body);
     });
-    se_GetCallerIdentityCommand = (input, context) => __async(void 0, null, function* () {
+    se_GetCallerIdentityCommand = (input, context2) => __async(void 0, null, function* () {
       const headers = SHARED_HEADERS;
       let body;
-      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_GetCallerIdentityRequest(input, context)), {
+      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_GetCallerIdentityRequest(input, context2)), {
         [_A]: _GCI,
         [_V]: _
       }));
-      return buildHttpRpcRequest(context, headers, "/", void 0, body);
+      return buildHttpRpcRequest(context2, headers, "/", void 0, body);
     });
-    se_GetFederationTokenCommand = (input, context) => __async(void 0, null, function* () {
+    se_GetFederationTokenCommand = (input, context2) => __async(void 0, null, function* () {
       const headers = SHARED_HEADERS;
       let body;
-      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_GetFederationTokenRequest(input, context)), {
+      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_GetFederationTokenRequest(input, context2)), {
         [_A]: _GFT,
         [_V]: _
       }));
-      return buildHttpRpcRequest(context, headers, "/", void 0, body);
+      return buildHttpRpcRequest(context2, headers, "/", void 0, body);
     });
-    se_GetSessionTokenCommand = (input, context) => __async(void 0, null, function* () {
+    se_GetSessionTokenCommand = (input, context2) => __async(void 0, null, function* () {
       const headers = SHARED_HEADERS;
       let body;
-      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_GetSessionTokenRequest(input, context)), {
+      body = buildFormUrlencodedString(__spreadProps(__spreadValues({}, se_GetSessionTokenRequest(input, context2)), {
         [_A]: _GST,
         [_V]: _
       }));
-      return buildHttpRpcRequest(context, headers, "/", void 0, body);
+      return buildHttpRpcRequest(context2, headers, "/", void 0, body);
     });
-    de_AssumeRoleCommand = (output, context) => __async(void 0, null, function* () {
+    de_AssumeRoleCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode >= 300) {
-        return de_CommandError4(output, context);
+        return de_CommandError4(output, context2);
       }
-      const data = yield parseXmlBody(output.body, context);
+      const data = yield parseXmlBody(output.body, context2);
       let contents = {};
-      contents = de_AssumeRoleResponse(data.AssumeRoleResult, context);
+      contents = de_AssumeRoleResponse(data.AssumeRoleResult, context2);
       const response = __spreadValues({
         $metadata: deserializeMetadata5(output)
       }, contents);
       return response;
     });
-    de_AssumeRoleWithSAMLCommand = (output, context) => __async(void 0, null, function* () {
+    de_AssumeRoleWithSAMLCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode >= 300) {
-        return de_CommandError4(output, context);
+        return de_CommandError4(output, context2);
       }
-      const data = yield parseXmlBody(output.body, context);
+      const data = yield parseXmlBody(output.body, context2);
       let contents = {};
-      contents = de_AssumeRoleWithSAMLResponse(data.AssumeRoleWithSAMLResult, context);
+      contents = de_AssumeRoleWithSAMLResponse(data.AssumeRoleWithSAMLResult, context2);
       const response = __spreadValues({
         $metadata: deserializeMetadata5(output)
       }, contents);
       return response;
     });
-    de_AssumeRoleWithWebIdentityCommand = (output, context) => __async(void 0, null, function* () {
+    de_AssumeRoleWithWebIdentityCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode >= 300) {
-        return de_CommandError4(output, context);
+        return de_CommandError4(output, context2);
       }
-      const data = yield parseXmlBody(output.body, context);
+      const data = yield parseXmlBody(output.body, context2);
       let contents = {};
-      contents = de_AssumeRoleWithWebIdentityResponse(data.AssumeRoleWithWebIdentityResult, context);
+      contents = de_AssumeRoleWithWebIdentityResponse(data.AssumeRoleWithWebIdentityResult, context2);
       const response = __spreadValues({
         $metadata: deserializeMetadata5(output)
       }, contents);
       return response;
     });
-    de_DecodeAuthorizationMessageCommand = (output, context) => __async(void 0, null, function* () {
+    de_DecodeAuthorizationMessageCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode >= 300) {
-        return de_CommandError4(output, context);
+        return de_CommandError4(output, context2);
       }
-      const data = yield parseXmlBody(output.body, context);
+      const data = yield parseXmlBody(output.body, context2);
       let contents = {};
-      contents = de_DecodeAuthorizationMessageResponse(data.DecodeAuthorizationMessageResult, context);
+      contents = de_DecodeAuthorizationMessageResponse(data.DecodeAuthorizationMessageResult, context2);
       const response = __spreadValues({
         $metadata: deserializeMetadata5(output)
       }, contents);
       return response;
     });
-    de_GetAccessKeyInfoCommand = (output, context) => __async(void 0, null, function* () {
+    de_GetAccessKeyInfoCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode >= 300) {
-        return de_CommandError4(output, context);
+        return de_CommandError4(output, context2);
       }
-      const data = yield parseXmlBody(output.body, context);
+      const data = yield parseXmlBody(output.body, context2);
       let contents = {};
-      contents = de_GetAccessKeyInfoResponse(data.GetAccessKeyInfoResult, context);
+      contents = de_GetAccessKeyInfoResponse(data.GetAccessKeyInfoResult, context2);
       const response = __spreadValues({
         $metadata: deserializeMetadata5(output)
       }, contents);
       return response;
     });
-    de_GetCallerIdentityCommand = (output, context) => __async(void 0, null, function* () {
+    de_GetCallerIdentityCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode >= 300) {
-        return de_CommandError4(output, context);
+        return de_CommandError4(output, context2);
       }
-      const data = yield parseXmlBody(output.body, context);
+      const data = yield parseXmlBody(output.body, context2);
       let contents = {};
-      contents = de_GetCallerIdentityResponse(data.GetCallerIdentityResult, context);
+      contents = de_GetCallerIdentityResponse(data.GetCallerIdentityResult, context2);
       const response = __spreadValues({
         $metadata: deserializeMetadata5(output)
       }, contents);
       return response;
     });
-    de_GetFederationTokenCommand = (output, context) => __async(void 0, null, function* () {
+    de_GetFederationTokenCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode >= 300) {
-        return de_CommandError4(output, context);
+        return de_CommandError4(output, context2);
       }
-      const data = yield parseXmlBody(output.body, context);
+      const data = yield parseXmlBody(output.body, context2);
       let contents = {};
-      contents = de_GetFederationTokenResponse(data.GetFederationTokenResult, context);
+      contents = de_GetFederationTokenResponse(data.GetFederationTokenResult, context2);
       const response = __spreadValues({
         $metadata: deserializeMetadata5(output)
       }, contents);
       return response;
     });
-    de_GetSessionTokenCommand = (output, context) => __async(void 0, null, function* () {
+    de_GetSessionTokenCommand = (output, context2) => __async(void 0, null, function* () {
       if (output.statusCode >= 300) {
-        return de_CommandError4(output, context);
+        return de_CommandError4(output, context2);
       }
-      const data = yield parseXmlBody(output.body, context);
+      const data = yield parseXmlBody(output.body, context2);
       let contents = {};
-      contents = de_GetSessionTokenResponse(data.GetSessionTokenResult, context);
+      contents = de_GetSessionTokenResponse(data.GetSessionTokenResult, context2);
       const response = __spreadValues({
         $metadata: deserializeMetadata5(output)
       }, contents);
       return response;
     });
-    de_CommandError4 = (output, context) => __async(void 0, null, function* () {
+    de_CommandError4 = (output, context2) => __async(void 0, null, function* () {
       const parsedOutput = __spreadProps(__spreadValues({}, output), {
-        body: yield parseXmlErrorBody(output.body, context)
+        body: yield parseXmlErrorBody(output.body, context2)
       });
       const errorCode = loadQueryErrorCode(output, parsedOutput.body);
       switch (errorCode) {
         case "ExpiredTokenException":
         case "com.amazonaws.sts#ExpiredTokenException":
-          throw yield de_ExpiredTokenExceptionRes2(parsedOutput, context);
+          throw yield de_ExpiredTokenExceptionRes2(parsedOutput, context2);
         case "MalformedPolicyDocument":
         case "com.amazonaws.sts#MalformedPolicyDocumentException":
-          throw yield de_MalformedPolicyDocumentExceptionRes(parsedOutput, context);
+          throw yield de_MalformedPolicyDocumentExceptionRes(parsedOutput, context2);
         case "PackedPolicyTooLarge":
         case "com.amazonaws.sts#PackedPolicyTooLargeException":
-          throw yield de_PackedPolicyTooLargeExceptionRes(parsedOutput, context);
+          throw yield de_PackedPolicyTooLargeExceptionRes(parsedOutput, context2);
         case "RegionDisabledException":
         case "com.amazonaws.sts#RegionDisabledException":
-          throw yield de_RegionDisabledExceptionRes(parsedOutput, context);
+          throw yield de_RegionDisabledExceptionRes(parsedOutput, context2);
         case "IDPRejectedClaim":
         case "com.amazonaws.sts#IDPRejectedClaimException":
-          throw yield de_IDPRejectedClaimExceptionRes(parsedOutput, context);
+          throw yield de_IDPRejectedClaimExceptionRes(parsedOutput, context2);
         case "InvalidIdentityToken":
         case "com.amazonaws.sts#InvalidIdentityTokenException":
-          throw yield de_InvalidIdentityTokenExceptionRes(parsedOutput, context);
+          throw yield de_InvalidIdentityTokenExceptionRes(parsedOutput, context2);
         case "IDPCommunicationError":
         case "com.amazonaws.sts#IDPCommunicationErrorException":
-          throw yield de_IDPCommunicationErrorExceptionRes(parsedOutput, context);
+          throw yield de_IDPCommunicationErrorExceptionRes(parsedOutput, context2);
         case "InvalidAuthorizationMessageException":
         case "com.amazonaws.sts#InvalidAuthorizationMessageException":
-          throw yield de_InvalidAuthorizationMessageExceptionRes(parsedOutput, context);
+          throw yield de_InvalidAuthorizationMessageExceptionRes(parsedOutput, context2);
         default:
           const parsedBody = parsedOutput.body;
           return throwDefaultError5({
@@ -33761,71 +33761,71 @@ var init_Aws_query = __esm({
           });
       }
     });
-    de_ExpiredTokenExceptionRes2 = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_ExpiredTokenExceptionRes2 = (parsedOutput, context2) => __async(void 0, null, function* () {
       const body = parsedOutput.body;
-      const deserialized = de_ExpiredTokenException(body.Error, context);
+      const deserialized = de_ExpiredTokenException(body.Error, context2);
       const exception = new ExpiredTokenException2(__spreadValues({
         $metadata: deserializeMetadata5(parsedOutput)
       }, deserialized));
       return decorateServiceException(exception, body);
     });
-    de_IDPCommunicationErrorExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_IDPCommunicationErrorExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const body = parsedOutput.body;
-      const deserialized = de_IDPCommunicationErrorException(body.Error, context);
+      const deserialized = de_IDPCommunicationErrorException(body.Error, context2);
       const exception = new IDPCommunicationErrorException(__spreadValues({
         $metadata: deserializeMetadata5(parsedOutput)
       }, deserialized));
       return decorateServiceException(exception, body);
     });
-    de_IDPRejectedClaimExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_IDPRejectedClaimExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const body = parsedOutput.body;
-      const deserialized = de_IDPRejectedClaimException(body.Error, context);
+      const deserialized = de_IDPRejectedClaimException(body.Error, context2);
       const exception = new IDPRejectedClaimException(__spreadValues({
         $metadata: deserializeMetadata5(parsedOutput)
       }, deserialized));
       return decorateServiceException(exception, body);
     });
-    de_InvalidAuthorizationMessageExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_InvalidAuthorizationMessageExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const body = parsedOutput.body;
-      const deserialized = de_InvalidAuthorizationMessageException(body.Error, context);
+      const deserialized = de_InvalidAuthorizationMessageException(body.Error, context2);
       const exception = new InvalidAuthorizationMessageException(__spreadValues({
         $metadata: deserializeMetadata5(parsedOutput)
       }, deserialized));
       return decorateServiceException(exception, body);
     });
-    de_InvalidIdentityTokenExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_InvalidIdentityTokenExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const body = parsedOutput.body;
-      const deserialized = de_InvalidIdentityTokenException(body.Error, context);
+      const deserialized = de_InvalidIdentityTokenException(body.Error, context2);
       const exception = new InvalidIdentityTokenException(__spreadValues({
         $metadata: deserializeMetadata5(parsedOutput)
       }, deserialized));
       return decorateServiceException(exception, body);
     });
-    de_MalformedPolicyDocumentExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_MalformedPolicyDocumentExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const body = parsedOutput.body;
-      const deserialized = de_MalformedPolicyDocumentException(body.Error, context);
+      const deserialized = de_MalformedPolicyDocumentException(body.Error, context2);
       const exception = new MalformedPolicyDocumentException(__spreadValues({
         $metadata: deserializeMetadata5(parsedOutput)
       }, deserialized));
       return decorateServiceException(exception, body);
     });
-    de_PackedPolicyTooLargeExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_PackedPolicyTooLargeExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const body = parsedOutput.body;
-      const deserialized = de_PackedPolicyTooLargeException(body.Error, context);
+      const deserialized = de_PackedPolicyTooLargeException(body.Error, context2);
       const exception = new PackedPolicyTooLargeException(__spreadValues({
         $metadata: deserializeMetadata5(parsedOutput)
       }, deserialized));
       return decorateServiceException(exception, body);
     });
-    de_RegionDisabledExceptionRes = (parsedOutput, context) => __async(void 0, null, function* () {
+    de_RegionDisabledExceptionRes = (parsedOutput, context2) => __async(void 0, null, function* () {
       const body = parsedOutput.body;
-      const deserialized = de_RegionDisabledException(body.Error, context);
+      const deserialized = de_RegionDisabledException(body.Error, context2);
       const exception = new RegionDisabledException(__spreadValues({
         $metadata: deserializeMetadata5(parsedOutput)
       }, deserialized));
       return decorateServiceException(exception, body);
     });
-    se_AssumeRoleRequest = (input, context) => {
+    se_AssumeRoleRequest = (input, context2) => {
       var _a2, _b, _c, _d;
       const entries = {};
       if (input[_RA] != null) {
@@ -33835,7 +33835,7 @@ var init_Aws_query = __esm({
         entries[_RSN] = input[_RSN];
       }
       if (input[_PA] != null) {
-        const memberEntries = se_policyDescriptorListType(input[_PA], context);
+        const memberEntries = se_policyDescriptorListType(input[_PA], context2);
         if (((_a2 = input[_PA]) == null ? void 0 : _a2.length) === 0) {
           entries.PolicyArns = [];
         }
@@ -33851,7 +33851,7 @@ var init_Aws_query = __esm({
         entries[_DS] = input[_DS];
       }
       if (input[_T2] != null) {
-        const memberEntries = se_tagListType(input[_T2], context);
+        const memberEntries = se_tagListType(input[_T2], context2);
         if (((_b = input[_T2]) == null ? void 0 : _b.length) === 0) {
           entries.Tags = [];
         }
@@ -33861,7 +33861,7 @@ var init_Aws_query = __esm({
         });
       }
       if (input[_TTK] != null) {
-        const memberEntries = se_tagKeyListType(input[_TTK], context);
+        const memberEntries = se_tagKeyListType(input[_TTK], context2);
         if (((_c = input[_TTK]) == null ? void 0 : _c.length) === 0) {
           entries.TransitiveTagKeys = [];
         }
@@ -33883,7 +33883,7 @@ var init_Aws_query = __esm({
         entries[_SI] = input[_SI];
       }
       if (input[_PC2] != null) {
-        const memberEntries = se_ProvidedContextsListType(input[_PC2], context);
+        const memberEntries = se_ProvidedContextsListType(input[_PC2], context2);
         if (((_d = input[_PC2]) == null ? void 0 : _d.length) === 0) {
           entries.ProvidedContexts = [];
         }
@@ -33894,7 +33894,7 @@ var init_Aws_query = __esm({
       }
       return entries;
     };
-    se_AssumeRoleWithSAMLRequest = (input, context) => {
+    se_AssumeRoleWithSAMLRequest = (input, context2) => {
       var _a2;
       const entries = {};
       if (input[_RA] != null) {
@@ -33907,7 +33907,7 @@ var init_Aws_query = __esm({
         entries[_SAMLA] = input[_SAMLA];
       }
       if (input[_PA] != null) {
-        const memberEntries = se_policyDescriptorListType(input[_PA], context);
+        const memberEntries = se_policyDescriptorListType(input[_PA], context2);
         if (((_a2 = input[_PA]) == null ? void 0 : _a2.length) === 0) {
           entries.PolicyArns = [];
         }
@@ -33924,7 +33924,7 @@ var init_Aws_query = __esm({
       }
       return entries;
     };
-    se_AssumeRoleWithWebIdentityRequest = (input, context) => {
+    se_AssumeRoleWithWebIdentityRequest = (input, context2) => {
       var _a2;
       const entries = {};
       if (input[_RA] != null) {
@@ -33940,7 +33940,7 @@ var init_Aws_query = __esm({
         entries[_PI] = input[_PI];
       }
       if (input[_PA] != null) {
-        const memberEntries = se_policyDescriptorListType(input[_PA], context);
+        const memberEntries = se_policyDescriptorListType(input[_PA], context2);
         if (((_a2 = input[_PA]) == null ? void 0 : _a2.length) === 0) {
           entries.PolicyArns = [];
         }
@@ -33957,25 +33957,25 @@ var init_Aws_query = __esm({
       }
       return entries;
     };
-    se_DecodeAuthorizationMessageRequest = (input, context) => {
+    se_DecodeAuthorizationMessageRequest = (input, context2) => {
       const entries = {};
       if (input[_EM] != null) {
         entries[_EM] = input[_EM];
       }
       return entries;
     };
-    se_GetAccessKeyInfoRequest = (input, context) => {
+    se_GetAccessKeyInfoRequest = (input, context2) => {
       const entries = {};
       if (input[_AKI2] != null) {
         entries[_AKI2] = input[_AKI2];
       }
       return entries;
     };
-    se_GetCallerIdentityRequest = (input, context) => {
+    se_GetCallerIdentityRequest = (input, context2) => {
       const entries = {};
       return entries;
     };
-    se_GetFederationTokenRequest = (input, context) => {
+    se_GetFederationTokenRequest = (input, context2) => {
       var _a2, _b;
       const entries = {};
       if (input[_N] != null) {
@@ -33985,7 +33985,7 @@ var init_Aws_query = __esm({
         entries[_P] = input[_P];
       }
       if (input[_PA] != null) {
-        const memberEntries = se_policyDescriptorListType(input[_PA], context);
+        const memberEntries = se_policyDescriptorListType(input[_PA], context2);
         if (((_a2 = input[_PA]) == null ? void 0 : _a2.length) === 0) {
           entries.PolicyArns = [];
         }
@@ -33998,7 +33998,7 @@ var init_Aws_query = __esm({
         entries[_DS] = input[_DS];
       }
       if (input[_T2] != null) {
-        const memberEntries = se_tagListType(input[_T2], context);
+        const memberEntries = se_tagListType(input[_T2], context2);
         if (((_b = input[_T2]) == null ? void 0 : _b.length) === 0) {
           entries.Tags = [];
         }
@@ -34009,7 +34009,7 @@ var init_Aws_query = __esm({
       }
       return entries;
     };
-    se_GetSessionTokenRequest = (input, context) => {
+    se_GetSessionTokenRequest = (input, context2) => {
       const entries = {};
       if (input[_DS] != null) {
         entries[_DS] = input[_DS];
@@ -34022,14 +34022,14 @@ var init_Aws_query = __esm({
       }
       return entries;
     };
-    se_policyDescriptorListType = (input, context) => {
+    se_policyDescriptorListType = (input, context2) => {
       const entries = {};
       let counter = 1;
       for (const entry of input) {
         if (entry === null) {
           continue;
         }
-        const memberEntries = se_PolicyDescriptorType(entry, context);
+        const memberEntries = se_PolicyDescriptorType(entry, context2);
         Object.entries(memberEntries).forEach(([key, value]) => {
           entries[`member.${counter}.${key}`] = value;
         });
@@ -34037,14 +34037,14 @@ var init_Aws_query = __esm({
       }
       return entries;
     };
-    se_PolicyDescriptorType = (input, context) => {
+    se_PolicyDescriptorType = (input, context2) => {
       const entries = {};
       if (input[_a] != null) {
         entries[_a] = input[_a];
       }
       return entries;
     };
-    se_ProvidedContext = (input, context) => {
+    se_ProvidedContext = (input, context2) => {
       const entries = {};
       if (input[_PAro] != null) {
         entries[_PAro] = input[_PAro];
@@ -34054,14 +34054,14 @@ var init_Aws_query = __esm({
       }
       return entries;
     };
-    se_ProvidedContextsListType = (input, context) => {
+    se_ProvidedContextsListType = (input, context2) => {
       const entries = {};
       let counter = 1;
       for (const entry of input) {
         if (entry === null) {
           continue;
         }
-        const memberEntries = se_ProvidedContext(entry, context);
+        const memberEntries = se_ProvidedContext(entry, context2);
         Object.entries(memberEntries).forEach(([key, value]) => {
           entries[`member.${counter}.${key}`] = value;
         });
@@ -34069,7 +34069,7 @@ var init_Aws_query = __esm({
       }
       return entries;
     };
-    se_Tag2 = (input, context) => {
+    se_Tag2 = (input, context2) => {
       const entries = {};
       if (input[_K2] != null) {
         entries[_K2] = input[_K2];
@@ -34079,7 +34079,7 @@ var init_Aws_query = __esm({
       }
       return entries;
     };
-    se_tagKeyListType = (input, context) => {
+    se_tagKeyListType = (input, context2) => {
       const entries = {};
       let counter = 1;
       for (const entry of input) {
@@ -34091,14 +34091,14 @@ var init_Aws_query = __esm({
       }
       return entries;
     };
-    se_tagListType = (input, context) => {
+    se_tagListType = (input, context2) => {
       const entries = {};
       let counter = 1;
       for (const entry of input) {
         if (entry === null) {
           continue;
         }
-        const memberEntries = se_Tag2(entry, context);
+        const memberEntries = se_Tag2(entry, context2);
         Object.entries(memberEntries).forEach(([key, value]) => {
           entries[`member.${counter}.${key}`] = value;
         });
@@ -34106,7 +34106,7 @@ var init_Aws_query = __esm({
       }
       return entries;
     };
-    de_AssumedRoleUser = (output, context) => {
+    de_AssumedRoleUser = (output, context2) => {
       const contents = {};
       if (output[_ARI2] != null) {
         contents[_ARI2] = expectString(output[_ARI2]);
@@ -34116,13 +34116,13 @@ var init_Aws_query = __esm({
       }
       return contents;
     };
-    de_AssumeRoleResponse = (output, context) => {
+    de_AssumeRoleResponse = (output, context2) => {
       const contents = {};
       if (output[_C2] != null) {
-        contents[_C2] = de_Credentials(output[_C2], context);
+        contents[_C2] = de_Credentials(output[_C2], context2);
       }
       if (output[_ARU] != null) {
-        contents[_ARU] = de_AssumedRoleUser(output[_ARU], context);
+        contents[_ARU] = de_AssumedRoleUser(output[_ARU], context2);
       }
       if (output[_PPS] != null) {
         contents[_PPS] = strictParseInt32(output[_PPS]);
@@ -34132,13 +34132,13 @@ var init_Aws_query = __esm({
       }
       return contents;
     };
-    de_AssumeRoleWithSAMLResponse = (output, context) => {
+    de_AssumeRoleWithSAMLResponse = (output, context2) => {
       const contents = {};
       if (output[_C2] != null) {
-        contents[_C2] = de_Credentials(output[_C2], context);
+        contents[_C2] = de_Credentials(output[_C2], context2);
       }
       if (output[_ARU] != null) {
-        contents[_ARU] = de_AssumedRoleUser(output[_ARU], context);
+        contents[_ARU] = de_AssumedRoleUser(output[_ARU], context2);
       }
       if (output[_PPS] != null) {
         contents[_PPS] = strictParseInt32(output[_PPS]);
@@ -34163,16 +34163,16 @@ var init_Aws_query = __esm({
       }
       return contents;
     };
-    de_AssumeRoleWithWebIdentityResponse = (output, context) => {
+    de_AssumeRoleWithWebIdentityResponse = (output, context2) => {
       const contents = {};
       if (output[_C2] != null) {
-        contents[_C2] = de_Credentials(output[_C2], context);
+        contents[_C2] = de_Credentials(output[_C2], context2);
       }
       if (output[_SFWIT] != null) {
         contents[_SFWIT] = expectString(output[_SFWIT]);
       }
       if (output[_ARU] != null) {
-        contents[_ARU] = de_AssumedRoleUser(output[_ARU], context);
+        contents[_ARU] = de_AssumedRoleUser(output[_ARU], context2);
       }
       if (output[_PPS] != null) {
         contents[_PPS] = strictParseInt32(output[_PPS]);
@@ -34188,7 +34188,7 @@ var init_Aws_query = __esm({
       }
       return contents;
     };
-    de_Credentials = (output, context) => {
+    de_Credentials = (output, context2) => {
       const contents = {};
       if (output[_AKI2] != null) {
         contents[_AKI2] = expectString(output[_AKI2]);
@@ -34204,21 +34204,21 @@ var init_Aws_query = __esm({
       }
       return contents;
     };
-    de_DecodeAuthorizationMessageResponse = (output, context) => {
+    de_DecodeAuthorizationMessageResponse = (output, context2) => {
       const contents = {};
       if (output[_DM2] != null) {
         contents[_DM2] = expectString(output[_DM2]);
       }
       return contents;
     };
-    de_ExpiredTokenException = (output, context) => {
+    de_ExpiredTokenException = (output, context2) => {
       const contents = {};
       if (output[_m] != null) {
         contents[_m] = expectString(output[_m]);
       }
       return contents;
     };
-    de_FederatedUser = (output, context) => {
+    de_FederatedUser = (output, context2) => {
       const contents = {};
       if (output[_FUI] != null) {
         contents[_FUI] = expectString(output[_FUI]);
@@ -34228,14 +34228,14 @@ var init_Aws_query = __esm({
       }
       return contents;
     };
-    de_GetAccessKeyInfoResponse = (output, context) => {
+    de_GetAccessKeyInfoResponse = (output, context2) => {
       const contents = {};
       if (output[_Ac] != null) {
         contents[_Ac] = expectString(output[_Ac]);
       }
       return contents;
     };
-    de_GetCallerIdentityResponse = (output, context) => {
+    de_GetCallerIdentityResponse = (output, context2) => {
       const contents = {};
       if (output[_UI2] != null) {
         contents[_UI2] = expectString(output[_UI2]);
@@ -34248,69 +34248,69 @@ var init_Aws_query = __esm({
       }
       return contents;
     };
-    de_GetFederationTokenResponse = (output, context) => {
+    de_GetFederationTokenResponse = (output, context2) => {
       const contents = {};
       if (output[_C2] != null) {
-        contents[_C2] = de_Credentials(output[_C2], context);
+        contents[_C2] = de_Credentials(output[_C2], context2);
       }
       if (output[_FU] != null) {
-        contents[_FU] = de_FederatedUser(output[_FU], context);
+        contents[_FU] = de_FederatedUser(output[_FU], context2);
       }
       if (output[_PPS] != null) {
         contents[_PPS] = strictParseInt32(output[_PPS]);
       }
       return contents;
     };
-    de_GetSessionTokenResponse = (output, context) => {
+    de_GetSessionTokenResponse = (output, context2) => {
       const contents = {};
       if (output[_C2] != null) {
-        contents[_C2] = de_Credentials(output[_C2], context);
+        contents[_C2] = de_Credentials(output[_C2], context2);
       }
       return contents;
     };
-    de_IDPCommunicationErrorException = (output, context) => {
+    de_IDPCommunicationErrorException = (output, context2) => {
       const contents = {};
       if (output[_m] != null) {
         contents[_m] = expectString(output[_m]);
       }
       return contents;
     };
-    de_IDPRejectedClaimException = (output, context) => {
+    de_IDPRejectedClaimException = (output, context2) => {
       const contents = {};
       if (output[_m] != null) {
         contents[_m] = expectString(output[_m]);
       }
       return contents;
     };
-    de_InvalidAuthorizationMessageException = (output, context) => {
+    de_InvalidAuthorizationMessageException = (output, context2) => {
       const contents = {};
       if (output[_m] != null) {
         contents[_m] = expectString(output[_m]);
       }
       return contents;
     };
-    de_InvalidIdentityTokenException = (output, context) => {
+    de_InvalidIdentityTokenException = (output, context2) => {
       const contents = {};
       if (output[_m] != null) {
         contents[_m] = expectString(output[_m]);
       }
       return contents;
     };
-    de_MalformedPolicyDocumentException = (output, context) => {
+    de_MalformedPolicyDocumentException = (output, context2) => {
       const contents = {};
       if (output[_m] != null) {
         contents[_m] = expectString(output[_m]);
       }
       return contents;
     };
-    de_PackedPolicyTooLargeException = (output, context) => {
+    de_PackedPolicyTooLargeException = (output, context2) => {
       const contents = {};
       if (output[_m] != null) {
         contents[_m] = expectString(output[_m]);
       }
       return contents;
     };
-    de_RegionDisabledException = (output, context) => {
+    de_RegionDisabledException = (output, context2) => {
       const contents = {};
       if (output[_m] != null) {
         contents[_m] = expectString(output[_m]);
@@ -34327,8 +34327,8 @@ var init_Aws_query = __esm({
       };
     };
     throwDefaultError5 = withBaseException(STSServiceException);
-    buildHttpRpcRequest = (context, headers, path3, resolvedHostname, body) => __async(void 0, null, function* () {
-      const { hostname, protocol = "https", port, path: basePath } = yield context.endpoint();
+    buildHttpRpcRequest = (context2, headers, path3, resolvedHostname, body) => __async(void 0, null, function* () {
+      const { hostname, protocol = "https", port, path: basePath } = yield context2.endpoint();
       const contents = {
         protocol,
         hostname,
@@ -35415,13 +35415,13 @@ var require_depd = __commonJS({
       if (!funcName) {
         funcName = "<anonymous@" + formatLocation(site) + ">";
       }
-      var context = callSite.getThis();
-      var typeName = context && callSite.getTypeName();
+      var context2 = callSite.getThis();
+      var typeName = context2 && callSite.getTypeName();
       if (typeName === "Object") {
         typeName = void 0;
       }
       if (typeName === "Function") {
-        typeName = context.name || typeName;
+        typeName = context2.name || typeName;
       }
       return typeName && callSite.getMethodName() ? typeName + "." + funcName : funcName;
     }
@@ -57487,14 +57487,14 @@ init_dist_es2();
 init_dist_es17();
 var CONTENT_LENGTH_HEADER = "content-length";
 function checkContentLengthHeader() {
-  return (next, context) => (args) => __async(this, null, function* () {
+  return (next, context2) => (args) => __async(this, null, function* () {
     var _a2;
     const { request: request2 } = args;
     if (HttpRequest.isInstance(request2)) {
       if (!(CONTENT_LENGTH_HEADER in request2.headers)) {
         const message = `Are you using a Stream of unknown length as the Body of a PutObject request? Consider using Upload instead from @aws-sdk/lib-storage.`;
-        if (typeof ((_a2 = context == null ? void 0 : context.logger) == null ? void 0 : _a2.warn) === "function" && !(context.logger instanceof NoOpLogger)) {
-          context.logger.warn(message);
+        if (typeof ((_a2 = context2 == null ? void 0 : context2.logger) == null ? void 0 : _a2.warn) === "function" && !(context2.logger instanceof NoOpLogger)) {
+          context2.logger.warn(message);
         } else {
           console.warn(message);
         }
@@ -57517,16 +57517,16 @@ var getCheckContentLengthHeaderPlugin = (unused) => ({
 
 // ../../../node_modules/.pnpm/@aws-sdk+middleware-sdk-s3@3.624.0/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/region-redirect-endpoint-middleware.js
 var regionRedirectEndpointMiddleware = (config) => {
-  return (next, context) => (args) => __async(void 0, null, function* () {
+  return (next, context2) => (args) => __async(void 0, null, function* () {
     const originalRegion = yield config.region();
     const regionProviderRef = config.region;
     let unlock = () => {
     };
-    if (context.__s3RegionRedirect) {
+    if (context2.__s3RegionRedirect) {
       Object.defineProperty(config, "region", {
         writable: false,
         value: () => __async(void 0, null, function* () {
-          return context.__s3RegionRedirect;
+          return context2.__s3RegionRedirect;
         })
       });
       unlock = () => Object.defineProperty(config, "region", {
@@ -57536,7 +57536,7 @@ var regionRedirectEndpointMiddleware = (config) => {
     }
     try {
       const result = yield next(args);
-      if (context.__s3RegionRedirect) {
+      if (context2.__s3RegionRedirect) {
         unlock();
         const region = yield config.region();
         if (originalRegion !== region) {
@@ -57560,7 +57560,7 @@ var regionRedirectEndpointMiddlewareOptions = {
 
 // ../../../node_modules/.pnpm/@aws-sdk+middleware-sdk-s3@3.624.0/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/region-redirect-middleware.js
 function regionRedirectMiddleware(clientConfig) {
-  return (next, context) => (args) => __async(this, null, function* () {
+  return (next, context2) => (args) => __async(this, null, function* () {
     var _a2, _b;
     try {
       return yield next(args);
@@ -57568,8 +57568,8 @@ function regionRedirectMiddleware(clientConfig) {
       if (clientConfig.followRegionRedirects && ((_a2 = err == null ? void 0 : err.$metadata) == null ? void 0 : _a2.httpStatusCode) === 301) {
         try {
           const actualRegion = err.$response.headers["x-amz-bucket-region"];
-          (_b = context.logger) == null ? void 0 : _b.debug(`Redirecting from ${yield clientConfig.region()} to ${actualRegion}`);
-          context.__s3RegionRedirect = actualRegion;
+          (_b = context2.logger) == null ? void 0 : _b.debug(`Redirecting from ${yield clientConfig.region()} to ${actualRegion}`);
+          context2.__s3RegionRedirect = actualRegion;
         } catch (e5) {
           throw new Error("Region redirect failed: " + e5);
         }
@@ -57597,7 +57597,7 @@ var getRegionRedirectMiddlewarePlugin = (clientConfig) => ({
 init_dist_es2();
 init_dist_es17();
 var s3ExpiresMiddleware = (config) => {
-  return (next, context) => (args) => __async(void 0, null, function* () {
+  return (next, context2) => (args) => __async(void 0, null, function* () {
     var _a2;
     const result = yield next(args);
     const { response } = result;
@@ -57607,7 +57607,7 @@ var s3ExpiresMiddleware = (config) => {
         try {
           parseRfc7231DateTime(response.headers.expires);
         } catch (e5) {
-          (_a2 = context.logger) == null ? void 0 : _a2.warn(`AWS SDK Warning for ${context.clientName}::${context.commandName} response parsing (${response.headers.expires}): ${e5}`);
+          (_a2 = context2.logger) == null ? void 0 : _a2.warn(`AWS SDK Warning for ${context2.clientName}::${context2.commandName} response parsing (${response.headers.expires}): ${e5}`);
           delete response.headers.expires;
         }
       }
@@ -57803,14 +57803,14 @@ function setSingleOverride(privateAccess, credentialsWithoutSessionToken) {
 // ../../../node_modules/.pnpm/@aws-sdk+middleware-sdk-s3@3.624.0/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/s3-express/functions/s3ExpressMiddleware.js
 init_dist_es2();
 var s3ExpressMiddleware = (options) => {
-  return (next, context) => (args) => __async(void 0, null, function* () {
+  return (next, context2) => (args) => __async(void 0, null, function* () {
     var _a2, _b, _c, _d, _e2;
-    if (context.endpointV2) {
-      const endpoint = context.endpointV2;
+    if (context2.endpointV2) {
+      const endpoint = context2.endpointV2;
       const isS3ExpressAuth = ((_c = (_b = (_a2 = endpoint.properties) == null ? void 0 : _a2.authSchemes) == null ? void 0 : _b[0]) == null ? void 0 : _c.name) === S3_EXPRESS_AUTH_SCHEME;
       const isS3ExpressBucket = ((_d = endpoint.properties) == null ? void 0 : _d.backend) === S3_EXPRESS_BACKEND || ((_e2 = endpoint.properties) == null ? void 0 : _e2.bucketType) === S3_EXPRESS_BUCKET_TYPE;
       if (isS3ExpressBucket) {
-        context.isS3ExpressBucket = true;
+        context2.isS3ExpressBucket = true;
       }
       if (isS3ExpressAuth) {
         const requestBucket = args.input.Bucket;
@@ -57818,7 +57818,7 @@ var s3ExpressMiddleware = (options) => {
           const s3ExpressIdentity = yield options.s3ExpressIdentityProvider.getS3ExpressIdentity(yield options.credentials(), {
             Bucket: requestBucket
           });
-          context.s3ExpressIdentity = s3ExpressIdentity;
+          context2.s3ExpressIdentity = s3ExpressIdentity;
           if (HttpRequest.isInstance(args.request) && s3ExpressIdentity.sessionToken) {
             args.request.headers[SESSION_TOKEN_HEADER] = s3ExpressIdentity.sessionToken;
           }
@@ -57861,19 +57861,19 @@ var defaultErrorHandler2 = (signingProperties) => (error) => {
 };
 var defaultSuccessHandler2 = (httpResponse, signingProperties) => {
 };
-var s3ExpressHttpSigningMiddleware = (config) => (next, context) => (args) => __async(void 0, null, function* () {
+var s3ExpressHttpSigningMiddleware = (config) => (next, context2) => (args) => __async(void 0, null, function* () {
   if (!HttpRequest.isInstance(args.request)) {
     return next(args);
   }
-  const smithyContext = getSmithyContext(context);
+  const smithyContext = getSmithyContext(context2);
   const scheme = smithyContext.selectedHttpAuthScheme;
   if (!scheme) {
     throw new Error(`No HttpAuthScheme was selected: unable to sign request`);
   }
   const { httpAuthOption: { signingProperties = {} }, identity, signer } = scheme;
   let request2;
-  if (context.s3ExpressIdentity) {
-    request2 = yield signS3Express(context.s3ExpressIdentity, signingProperties, args.request, yield config.signer());
+  if (context2.s3ExpressIdentity) {
+    request2 = yield signS3Express(context2.s3ExpressIdentity, signingProperties, args.request, yield config.signer());
   } else {
     request2 = yield signer.sign(args.request, identity, signingProperties);
   }
@@ -57917,7 +57917,7 @@ var THROW_IF_EMPTY_BODY = {
   CompleteMultipartUploadCommand: true
 };
 var MAX_BYTES_TO_INSPECT = 3e3;
-var throw200ExceptionsMiddleware = (config) => (next, context) => (args) => __async(void 0, null, function* () {
+var throw200ExceptionsMiddleware = (config) => (next, context2) => (args) => __async(void 0, null, function* () {
   const result = yield next(args);
   const { response } = result;
   if (!HttpResponse.isInstance(response)) {
@@ -57942,7 +57942,7 @@ var throw200ExceptionsMiddleware = (config) => (next, context) => (args) => __as
     bodyCopy.destroy();
   }
   const bodyStringTail = config.utf8Encoder(bodyBytes.subarray(bodyBytes.length - 16));
-  if (bodyBytes.length === 0 && THROW_IF_EMPTY_BODY[context.commandName]) {
+  if (bodyBytes.length === 0 && THROW_IF_EMPTY_BODY[context2.commandName]) {
     const err = new Error("S3 aborted request");
     err.name = "InternalError";
     throw err;
@@ -57952,11 +57952,11 @@ var throw200ExceptionsMiddleware = (config) => (next, context) => (args) => __as
   }
   return result;
 });
-var collectBody2 = (streamBody = new Uint8Array(), context) => {
+var collectBody2 = (streamBody = new Uint8Array(), context2) => {
   if (streamBody instanceof Uint8Array) {
     return Promise.resolve(streamBody);
   }
-  return context.streamCollector(streamBody) || Promise.resolve(new Uint8Array());
+  return context2.streamCollector(streamBody) || Promise.resolve(new Uint8Array());
 };
 var throw200ExceptionsMiddlewareOptions = {
   relation: "after",
@@ -57976,10 +57976,10 @@ var validate2 = (str) => typeof str === "string" && str.indexOf("arn:") === 0 &&
 
 // ../../../node_modules/.pnpm/@aws-sdk+middleware-sdk-s3@3.624.0/node_modules/@aws-sdk/middleware-sdk-s3/dist-es/bucket-endpoint-middleware.js
 function bucketEndpointMiddleware(options) {
-  return (next, context) => (args) => __async(this, null, function* () {
+  return (next, context2) => (args) => __async(this, null, function* () {
     var _a2, _b, _c, _d;
     if (options.bucketEndpoint) {
-      const endpoint = context.endpointV2;
+      const endpoint = context2.endpointV2;
       if (endpoint) {
         const bucket = args.input.Bucket;
         if (typeof bucket === "string") {
@@ -57988,10 +57988,10 @@ function bucketEndpointMiddleware(options) {
             endpoint.url = bucketEndpointUrl;
           } catch (e5) {
             const warning = `@aws-sdk/middleware-sdk-s3: bucketEndpoint=true was set but Bucket=${bucket} could not be parsed as URL.`;
-            if (((_b = (_a2 = context.logger) == null ? void 0 : _a2.constructor) == null ? void 0 : _b.name) === "NoOpLogger") {
+            if (((_b = (_a2 = context2.logger) == null ? void 0 : _a2.constructor) == null ? void 0 : _b.name) === "NoOpLogger") {
               console.warn(warning);
             } else {
-              (_d = (_c = context.logger) == null ? void 0 : _c.warn) == null ? void 0 : _d.call(_c, warning);
+              (_d = (_c = context2.logger) == null ? void 0 : _c.warn) == null ? void 0 : _d.call(_c, warning);
             }
             throw e5;
           }
@@ -58312,31 +58312,31 @@ var _data = { version: "1.0", parameters: { Bucket: S, Region: S, UseFIPS: T, Us
 var ruleSet = _data;
 
 // ../../../node_modules/.pnpm/@aws-sdk+client-s3@3.624.0/node_modules/@aws-sdk/client-s3/dist-es/endpoint/endpointResolver.js
-var defaultEndpointResolver = (endpointParams, context = {}) => {
+var defaultEndpointResolver = (endpointParams, context2 = {}) => {
   return resolveEndpoint(ruleSet, {
     endpointParams,
-    logger: context.logger
+    logger: context2.logger
   });
 };
 customEndpointFunctions.aws = awsEndpointFunctions;
 
 // ../../../node_modules/.pnpm/@aws-sdk+client-s3@3.624.0/node_modules/@aws-sdk/client-s3/dist-es/auth/httpAuthSchemeProvider.js
-var createEndpointRuleSetHttpAuthSchemeParametersProvider = (defaultHttpAuthSchemeParametersProvider) => (config, context, input) => __async(void 0, null, function* () {
+var createEndpointRuleSetHttpAuthSchemeParametersProvider = (defaultHttpAuthSchemeParametersProvider) => (config, context2, input) => __async(void 0, null, function* () {
   var _a2, _b, _c;
   if (!input) {
     throw new Error(`Could not find \`input\` for \`defaultEndpointRuleSetHttpAuthSchemeParametersProvider\``);
   }
-  const defaultParameters = yield defaultHttpAuthSchemeParametersProvider(config, context, input);
-  const instructionsFn = (_c = (_b = (_a2 = getSmithyContext(context)) == null ? void 0 : _a2.commandInstance) == null ? void 0 : _b.constructor) == null ? void 0 : _c.getEndpointParameterInstructions;
+  const defaultParameters = yield defaultHttpAuthSchemeParametersProvider(config, context2, input);
+  const instructionsFn = (_c = (_b = (_a2 = getSmithyContext(context2)) == null ? void 0 : _a2.commandInstance) == null ? void 0 : _b.constructor) == null ? void 0 : _c.getEndpointParameterInstructions;
   if (!instructionsFn) {
-    throw new Error(`getEndpointParameterInstructions() is not defined on \`${context.commandName}\``);
+    throw new Error(`getEndpointParameterInstructions() is not defined on \`${context2.commandName}\``);
   }
   const endpointParameters = yield resolveParams(input, { getEndpointParameterInstructions: instructionsFn }, config);
   return Object.assign(defaultParameters, endpointParameters);
 });
-var _defaultS3HttpAuthSchemeParametersProvider = (config, context, input) => __async(void 0, null, function* () {
+var _defaultS3HttpAuthSchemeParametersProvider = (config, context2, input) => __async(void 0, null, function* () {
   return {
-    operation: getSmithyContext(context).operation,
+    operation: getSmithyContext(context2).operation,
     region: (yield normalizeProvider(config.region)()) || (() => {
       throw new Error("expected `region` to be configured for `aws.auth#sigv4`");
     })()
@@ -58350,10 +58350,10 @@ function createAwsAuthSigv4HttpAuthOption(authParameters) {
       name: "s3",
       region: authParameters.region
     },
-    propertiesExtractor: (config, context) => ({
+    propertiesExtractor: (config, context2) => ({
       signingProperties: {
         config,
-        context
+        context: context2
       }
     })
   };
@@ -58365,10 +58365,10 @@ function createAwsAuthSigv4aHttpAuthOption(authParameters) {
       name: "s3",
       region: authParameters.region
     },
-    propertiesExtractor: (config, context) => ({
+    propertiesExtractor: (config, context2) => ({
       signingProperties: {
         config,
-        context
+        context: context2
       }
     })
   };
@@ -58781,8 +58781,8 @@ var UploadPartOutputFilterSensitiveLog = (obj) => __spreadValues(__spreadValues(
 var UploadPartRequestFilterSensitiveLog = (obj) => __spreadValues(__spreadValues({}, obj), obj.SSECustomerKey && { SSECustomerKey: SENSITIVE_STRING });
 
 // ../../../node_modules/.pnpm/@aws-sdk+client-s3@3.624.0/node_modules/@aws-sdk/client-s3/dist-es/protocols/Aws_restXml.js
-var se_AbortMultipartUploadCommand = (input, context) => __async(void 0, null, function* () {
-  const b5 = requestBuilder(input, context);
+var se_AbortMultipartUploadCommand = (input, context2) => __async(void 0, null, function* () {
+  const b5 = requestBuilder(input, context2);
   const headers = map({}, isSerializableHeaderValue, {
     [_xarp]: input[_RP],
     [_xaebo]: input[_EBO]
@@ -58798,8 +58798,8 @@ var se_AbortMultipartUploadCommand = (input, context) => __async(void 0, null, f
   b5.m("DELETE").h(headers).q(query).b(body);
   return b5.build();
 });
-var se_CompleteMultipartUploadCommand = (input, context) => __async(void 0, null, function* () {
-  const b5 = requestBuilder(input, context);
+var se_CompleteMultipartUploadCommand = (input, context2) => __async(void 0, null, function* () {
+  const b5 = requestBuilder(input, context2);
   const headers = map({}, isSerializableHeaderValue, {
     "content-type": "application/xml",
     [_xacc]: input[_CCRC],
@@ -58821,7 +58821,7 @@ var se_CompleteMultipartUploadCommand = (input, context) => __async(void 0, null
   let body;
   let contents;
   if (input.MultipartUpload !== void 0) {
-    contents = se_CompletedMultipartUpload(input.MultipartUpload, context);
+    contents = se_CompletedMultipartUpload(input.MultipartUpload, context2);
     contents = contents.n("CompleteMultipartUpload");
     body = _ve;
     contents.a("xmlns", "http://s3.amazonaws.com/doc/2006-03-01/");
@@ -58830,8 +58830,8 @@ var se_CompleteMultipartUploadCommand = (input, context) => __async(void 0, null
   b5.m("POST").h(headers).q(query).b(body);
   return b5.build();
 });
-var se_CreateMultipartUploadCommand = (input, context) => __async(void 0, null, function* () {
-  const b5 = requestBuilder(input, context);
+var se_CreateMultipartUploadCommand = (input, context2) => __async(void 0, null, function* () {
+  const b5 = requestBuilder(input, context2);
   const headers = map({}, isSerializableHeaderValue, __spreadValues({
     [_xaa]: input[_ACL],
     [_cc]: input[_CC],
@@ -58874,8 +58874,8 @@ var se_CreateMultipartUploadCommand = (input, context) => __async(void 0, null, 
   b5.m("POST").h(headers).q(query).b(body);
   return b5.build();
 });
-var se_CreateSessionCommand = (input, context) => __async(void 0, null, function* () {
-  const b5 = requestBuilder(input, context);
+var se_CreateSessionCommand = (input, context2) => __async(void 0, null, function* () {
+  const b5 = requestBuilder(input, context2);
   const headers = map({}, isSerializableHeaderValue, {
     [_xacsm]: input[_SM]
   });
@@ -58888,8 +58888,8 @@ var se_CreateSessionCommand = (input, context) => __async(void 0, null, function
   b5.m("GET").h(headers).q(query).b(body);
   return b5.build();
 });
-var se_GetObjectCommand = (input, context) => __async(void 0, null, function* () {
-  const b5 = requestBuilder(input, context);
+var se_GetObjectCommand = (input, context2) => __async(void 0, null, function* () {
+  const b5 = requestBuilder(input, context2);
   const headers = map({}, isSerializableHeaderValue, {
     [_im]: input[_IM],
     [_ims]: [() => isSerializableHeaderValue(input[_IMS]), () => dateToUtcString(input[_IMS]).toString()],
@@ -58921,8 +58921,8 @@ var se_GetObjectCommand = (input, context) => __async(void 0, null, function* ()
   b5.m("GET").h(headers).q(query).b(body);
   return b5.build();
 });
-var se_PutObjectCommand = (input, context) => __async(void 0, null, function* () {
-  const b5 = requestBuilder(input, context);
+var se_PutObjectCommand = (input, context2) => __async(void 0, null, function* () {
+  const b5 = requestBuilder(input, context2);
   const headers = map({}, isSerializableHeaderValue, __spreadValues({
     [_ct]: input[_CT] || "application/octet-stream",
     [_xaa]: input[_ACL],
@@ -58976,8 +58976,8 @@ var se_PutObjectCommand = (input, context) => __async(void 0, null, function* ()
   b5.m("PUT").h(headers).q(query).b(body);
   return b5.build();
 });
-var se_PutObjectTaggingCommand = (input, context) => __async(void 0, null, function* () {
-  const b5 = requestBuilder(input, context);
+var se_PutObjectTaggingCommand = (input, context2) => __async(void 0, null, function* () {
+  const b5 = requestBuilder(input, context2);
   const headers = map({}, isSerializableHeaderValue, {
     "content-type": "application/xml",
     [_cm]: input[_CMD],
@@ -58995,7 +58995,7 @@ var se_PutObjectTaggingCommand = (input, context) => __async(void 0, null, funct
   let body;
   let contents;
   if (input.Tagging !== void 0) {
-    contents = se_Tagging(input.Tagging, context);
+    contents = se_Tagging(input.Tagging, context2);
     body = _ve;
     contents.a("xmlns", "http://s3.amazonaws.com/doc/2006-03-01/");
     body += contents.toString();
@@ -59003,8 +59003,8 @@ var se_PutObjectTaggingCommand = (input, context) => __async(void 0, null, funct
   b5.m("PUT").h(headers).q(query).b(body);
   return b5.build();
 });
-var se_UploadPartCommand = (input, context) => __async(void 0, null, function* () {
-  const b5 = requestBuilder(input, context);
+var se_UploadPartCommand = (input, context2) => __async(void 0, null, function* () {
+  const b5 = requestBuilder(input, context2);
   const headers = map({}, isSerializableHeaderValue, {
     "content-type": "application/octet-stream",
     [_cl_]: [() => isSerializableHeaderValue(input[_CLo]), () => input[_CLo].toString()],
@@ -59037,20 +59037,20 @@ var se_UploadPartCommand = (input, context) => __async(void 0, null, function* (
   b5.m("PUT").h(headers).q(query).b(body);
   return b5.build();
 });
-var de_AbortMultipartUploadCommand = (output, context) => __async(void 0, null, function* () {
+var de_AbortMultipartUploadCommand = (output, context2) => __async(void 0, null, function* () {
   if (output.statusCode !== 204 && output.statusCode >= 300) {
-    return de_CommandError(output, context);
+    return de_CommandError(output, context2);
   }
   const contents = map({
     $metadata: deserializeMetadata2(output),
     [_RC]: [, output.headers[_xarc]]
   });
-  yield collectBody(output.body, context);
+  yield collectBody(output.body, context2);
   return contents;
 });
-var de_CompleteMultipartUploadCommand = (output, context) => __async(void 0, null, function* () {
+var de_CompleteMultipartUploadCommand = (output, context2) => __async(void 0, null, function* () {
   if (output.statusCode !== 200 && output.statusCode >= 300) {
-    return de_CommandError(output, context);
+    return de_CommandError(output, context2);
   }
   const contents = map({
     $metadata: deserializeMetadata2(output),
@@ -59061,7 +59061,7 @@ var de_CompleteMultipartUploadCommand = (output, context) => __async(void 0, nul
     [_BKE]: [() => void 0 !== output.headers[_xassebke], () => parseBoolean(output.headers[_xassebke])],
     [_RC]: [, output.headers[_xarc]]
   });
-  const data = expectNonNull(expectObject(yield parseXmlBody(output.body, context)), "body");
+  const data = expectNonNull(expectObject(yield parseXmlBody(output.body, context2)), "body");
   if (data[_B] != null) {
     contents[_B] = expectString(data[_B]);
   }
@@ -59088,9 +59088,9 @@ var de_CompleteMultipartUploadCommand = (output, context) => __async(void 0, nul
   }
   return contents;
 });
-var de_CreateMultipartUploadCommand = (output, context) => __async(void 0, null, function* () {
+var de_CreateMultipartUploadCommand = (output, context2) => __async(void 0, null, function* () {
   if (output.statusCode !== 200 && output.statusCode >= 300) {
-    return de_CommandError(output, context);
+    return de_CommandError(output, context2);
   }
   const contents = map({
     $metadata: deserializeMetadata2(output),
@@ -59108,7 +59108,7 @@ var de_CreateMultipartUploadCommand = (output, context) => __async(void 0, null,
     [_RC]: [, output.headers[_xarc]],
     [_CA]: [, output.headers[_xaca]]
   });
-  const data = expectNonNull(expectObject(yield parseXmlBody(output.body, context)), "body");
+  const data = expectNonNull(expectObject(yield parseXmlBody(output.body, context2)), "body");
   if (data[_B] != null) {
     contents[_B] = expectString(data[_B]);
   }
@@ -59120,22 +59120,22 @@ var de_CreateMultipartUploadCommand = (output, context) => __async(void 0, null,
   }
   return contents;
 });
-var de_CreateSessionCommand = (output, context) => __async(void 0, null, function* () {
+var de_CreateSessionCommand = (output, context2) => __async(void 0, null, function* () {
   if (output.statusCode !== 200 && output.statusCode >= 300) {
-    return de_CommandError(output, context);
+    return de_CommandError(output, context2);
   }
   const contents = map({
     $metadata: deserializeMetadata2(output)
   });
-  const data = expectNonNull(expectObject(yield parseXmlBody(output.body, context)), "body");
+  const data = expectNonNull(expectObject(yield parseXmlBody(output.body, context2)), "body");
   if (data[_C] != null) {
-    contents[_C] = de_SessionCredentials(data[_C], context);
+    contents[_C] = de_SessionCredentials(data[_C], context2);
   }
   return contents;
 });
-var de_GetObjectCommand = (output, context) => __async(void 0, null, function* () {
+var de_GetObjectCommand = (output, context2) => __async(void 0, null, function* () {
   if (output.statusCode !== 200 && output.statusCode >= 300) {
-    return de_CommandError(output, context);
+    return de_CommandError(output, context2);
   }
   const contents = map({
     $metadata: deserializeMetadata2(output),
@@ -59186,13 +59186,13 @@ var de_GetObjectCommand = (output, context) => __async(void 0, null, function* (
     ]
   });
   const data = output.body;
-  context.sdkStreamMixin(data);
+  context2.sdkStreamMixin(data);
   contents.Body = data;
   return contents;
 });
-var de_PutObjectCommand = (output, context) => __async(void 0, null, function* () {
+var de_PutObjectCommand = (output, context2) => __async(void 0, null, function* () {
   if (output.statusCode !== 200 && output.statusCode >= 300) {
-    return de_CommandError(output, context);
+    return de_CommandError(output, context2);
   }
   const contents = map({
     $metadata: deserializeMetadata2(output),
@@ -59211,23 +59211,23 @@ var de_PutObjectCommand = (output, context) => __async(void 0, null, function* (
     [_BKE]: [() => void 0 !== output.headers[_xassebke], () => parseBoolean(output.headers[_xassebke])],
     [_RC]: [, output.headers[_xarc]]
   });
-  yield collectBody(output.body, context);
+  yield collectBody(output.body, context2);
   return contents;
 });
-var de_PutObjectTaggingCommand = (output, context) => __async(void 0, null, function* () {
+var de_PutObjectTaggingCommand = (output, context2) => __async(void 0, null, function* () {
   if (output.statusCode !== 200 && output.statusCode >= 300) {
-    return de_CommandError(output, context);
+    return de_CommandError(output, context2);
   }
   const contents = map({
     $metadata: deserializeMetadata2(output),
     [_VI]: [, output.headers[_xavi]]
   });
-  yield collectBody(output.body, context);
+  yield collectBody(output.body, context2);
   return contents;
 });
-var de_UploadPartCommand = (output, context) => __async(void 0, null, function* () {
+var de_UploadPartCommand = (output, context2) => __async(void 0, null, function* () {
   if (output.statusCode !== 200 && output.statusCode >= 300) {
-    return de_CommandError(output, context);
+    return de_CommandError(output, context2);
   }
   const contents = map({
     $metadata: deserializeMetadata2(output),
@@ -59243,42 +59243,42 @@ var de_UploadPartCommand = (output, context) => __async(void 0, null, function* 
     [_BKE]: [() => void 0 !== output.headers[_xassebke], () => parseBoolean(output.headers[_xassebke])],
     [_RC]: [, output.headers[_xarc]]
   });
-  yield collectBody(output.body, context);
+  yield collectBody(output.body, context2);
   return contents;
 });
-var de_CommandError = (output, context) => __async(void 0, null, function* () {
+var de_CommandError = (output, context2) => __async(void 0, null, function* () {
   const parsedOutput = __spreadProps(__spreadValues({}, output), {
-    body: yield parseXmlErrorBody(output.body, context)
+    body: yield parseXmlErrorBody(output.body, context2)
   });
   const errorCode = loadRestXmlErrorCode(output, parsedOutput.body);
   switch (errorCode) {
     case "NoSuchUpload":
     case "com.amazonaws.s3#NoSuchUpload":
-      throw yield de_NoSuchUploadRes(parsedOutput, context);
+      throw yield de_NoSuchUploadRes(parsedOutput, context2);
     case "ObjectNotInActiveTierError":
     case "com.amazonaws.s3#ObjectNotInActiveTierError":
-      throw yield de_ObjectNotInActiveTierErrorRes(parsedOutput, context);
+      throw yield de_ObjectNotInActiveTierErrorRes(parsedOutput, context2);
     case "BucketAlreadyExists":
     case "com.amazonaws.s3#BucketAlreadyExists":
-      throw yield de_BucketAlreadyExistsRes(parsedOutput, context);
+      throw yield de_BucketAlreadyExistsRes(parsedOutput, context2);
     case "BucketAlreadyOwnedByYou":
     case "com.amazonaws.s3#BucketAlreadyOwnedByYou":
-      throw yield de_BucketAlreadyOwnedByYouRes(parsedOutput, context);
+      throw yield de_BucketAlreadyOwnedByYouRes(parsedOutput, context2);
     case "NoSuchBucket":
     case "com.amazonaws.s3#NoSuchBucket":
-      throw yield de_NoSuchBucketRes(parsedOutput, context);
+      throw yield de_NoSuchBucketRes(parsedOutput, context2);
     case "InvalidObjectState":
     case "com.amazonaws.s3#InvalidObjectState":
-      throw yield de_InvalidObjectStateRes(parsedOutput, context);
+      throw yield de_InvalidObjectStateRes(parsedOutput, context2);
     case "NoSuchKey":
     case "com.amazonaws.s3#NoSuchKey":
-      throw yield de_NoSuchKeyRes(parsedOutput, context);
+      throw yield de_NoSuchKeyRes(parsedOutput, context2);
     case "NotFound":
     case "com.amazonaws.s3#NotFound":
-      throw yield de_NotFoundRes(parsedOutput, context);
+      throw yield de_NotFoundRes(parsedOutput, context2);
     case "ObjectAlreadyInActiveTierError":
     case "com.amazonaws.s3#ObjectAlreadyInActiveTierError":
-      throw yield de_ObjectAlreadyInActiveTierErrorRes(parsedOutput, context);
+      throw yield de_ObjectAlreadyInActiveTierErrorRes(parsedOutput, context2);
     default:
       const parsedBody = parsedOutput.body;
       return throwDefaultError2({
@@ -59289,7 +59289,7 @@ var de_CommandError = (output, context) => __async(void 0, null, function* () {
   }
 });
 var throwDefaultError2 = withBaseException(S3ServiceException);
-var de_BucketAlreadyExistsRes = (parsedOutput, context) => __async(void 0, null, function* () {
+var de_BucketAlreadyExistsRes = (parsedOutput, context2) => __async(void 0, null, function* () {
   const contents = map({});
   const data = parsedOutput.body;
   const exception = new BucketAlreadyExists(__spreadValues({
@@ -59297,7 +59297,7 @@ var de_BucketAlreadyExistsRes = (parsedOutput, context) => __async(void 0, null,
   }, contents));
   return decorateServiceException(exception, parsedOutput.body);
 });
-var de_BucketAlreadyOwnedByYouRes = (parsedOutput, context) => __async(void 0, null, function* () {
+var de_BucketAlreadyOwnedByYouRes = (parsedOutput, context2) => __async(void 0, null, function* () {
   const contents = map({});
   const data = parsedOutput.body;
   const exception = new BucketAlreadyOwnedByYou(__spreadValues({
@@ -59305,7 +59305,7 @@ var de_BucketAlreadyOwnedByYouRes = (parsedOutput, context) => __async(void 0, n
   }, contents));
   return decorateServiceException(exception, parsedOutput.body);
 });
-var de_InvalidObjectStateRes = (parsedOutput, context) => __async(void 0, null, function* () {
+var de_InvalidObjectStateRes = (parsedOutput, context2) => __async(void 0, null, function* () {
   const contents = map({});
   const data = parsedOutput.body;
   if (data[_AT] != null) {
@@ -59319,7 +59319,7 @@ var de_InvalidObjectStateRes = (parsedOutput, context) => __async(void 0, null, 
   }, contents));
   return decorateServiceException(exception, parsedOutput.body);
 });
-var de_NoSuchBucketRes = (parsedOutput, context) => __async(void 0, null, function* () {
+var de_NoSuchBucketRes = (parsedOutput, context2) => __async(void 0, null, function* () {
   const contents = map({});
   const data = parsedOutput.body;
   const exception = new NoSuchBucket(__spreadValues({
@@ -59327,7 +59327,7 @@ var de_NoSuchBucketRes = (parsedOutput, context) => __async(void 0, null, functi
   }, contents));
   return decorateServiceException(exception, parsedOutput.body);
 });
-var de_NoSuchKeyRes = (parsedOutput, context) => __async(void 0, null, function* () {
+var de_NoSuchKeyRes = (parsedOutput, context2) => __async(void 0, null, function* () {
   const contents = map({});
   const data = parsedOutput.body;
   const exception = new NoSuchKey(__spreadValues({
@@ -59335,7 +59335,7 @@ var de_NoSuchKeyRes = (parsedOutput, context) => __async(void 0, null, function*
   }, contents));
   return decorateServiceException(exception, parsedOutput.body);
 });
-var de_NoSuchUploadRes = (parsedOutput, context) => __async(void 0, null, function* () {
+var de_NoSuchUploadRes = (parsedOutput, context2) => __async(void 0, null, function* () {
   const contents = map({});
   const data = parsedOutput.body;
   const exception = new NoSuchUpload(__spreadValues({
@@ -59343,7 +59343,7 @@ var de_NoSuchUploadRes = (parsedOutput, context) => __async(void 0, null, functi
   }, contents));
   return decorateServiceException(exception, parsedOutput.body);
 });
-var de_NotFoundRes = (parsedOutput, context) => __async(void 0, null, function* () {
+var de_NotFoundRes = (parsedOutput, context2) => __async(void 0, null, function* () {
   const contents = map({});
   const data = parsedOutput.body;
   const exception = new NotFound(__spreadValues({
@@ -59351,7 +59351,7 @@ var de_NotFoundRes = (parsedOutput, context) => __async(void 0, null, function* 
   }, contents));
   return decorateServiceException(exception, parsedOutput.body);
 });
-var de_ObjectAlreadyInActiveTierErrorRes = (parsedOutput, context) => __async(void 0, null, function* () {
+var de_ObjectAlreadyInActiveTierErrorRes = (parsedOutput, context2) => __async(void 0, null, function* () {
   const contents = map({});
   const data = parsedOutput.body;
   const exception = new ObjectAlreadyInActiveTierError(__spreadValues({
@@ -59359,7 +59359,7 @@ var de_ObjectAlreadyInActiveTierErrorRes = (parsedOutput, context) => __async(vo
   }, contents));
   return decorateServiceException(exception, parsedOutput.body);
 });
-var de_ObjectNotInActiveTierErrorRes = (parsedOutput, context) => __async(void 0, null, function* () {
+var de_ObjectNotInActiveTierErrorRes = (parsedOutput, context2) => __async(void 0, null, function* () {
   const contents = map({});
   const data = parsedOutput.body;
   const exception = new ObjectNotInActiveTierError(__spreadValues({
@@ -59367,12 +59367,12 @@ var de_ObjectNotInActiveTierErrorRes = (parsedOutput, context) => __async(void 0
   }, contents));
   return decorateServiceException(exception, parsedOutput.body);
 });
-var se_CompletedMultipartUpload = (input, context) => {
+var se_CompletedMultipartUpload = (input, context2) => {
   const bn2 = new XmlNode(_CMU);
-  bn2.l(input, "Parts", "Part", () => se_CompletedPartList(input[_Part], context));
+  bn2.l(input, "Parts", "Part", () => se_CompletedPartList(input[_Part], context2));
   return bn2;
 };
-var se_CompletedPart = (input, context) => {
+var se_CompletedPart = (input, context2) => {
   const bn2 = new XmlNode(_CPo);
   bn2.cc(input, _ETa);
   bn2.cc(input, _CCRC);
@@ -59384,13 +59384,13 @@ var se_CompletedPart = (input, context) => {
   }
   return bn2;
 };
-var se_CompletedPartList = (input, context) => {
+var se_CompletedPartList = (input, context2) => {
   return input.filter((e5) => e5 != null).map((entry) => {
-    const n5 = se_CompletedPart(entry, context);
+    const n5 = se_CompletedPart(entry, context2);
     return n5.n(_me);
   });
 };
-var se_Tag = (input, context) => {
+var se_Tag = (input, context2) => {
   const bn2 = new XmlNode(_Ta);
   if (input[_K] != null) {
     bn2.c(XmlNode.of(_OK, input[_K]).n(_K));
@@ -59398,18 +59398,18 @@ var se_Tag = (input, context) => {
   bn2.cc(input, _Va);
   return bn2;
 };
-var se_Tagging = (input, context) => {
+var se_Tagging = (input, context2) => {
   const bn2 = new XmlNode(_T);
-  bn2.lc(input, "TagSet", "TagSet", () => se_TagSet(input[_TS], context));
+  bn2.lc(input, "TagSet", "TagSet", () => se_TagSet(input[_TS], context2));
   return bn2;
 };
-var se_TagSet = (input, context) => {
+var se_TagSet = (input, context2) => {
   return input.filter((e5) => e5 != null).map((entry) => {
-    const n5 = se_Tag(entry, context);
+    const n5 = se_Tag(entry, context2);
     return n5.n(_Ta);
   });
 };
-var de_SessionCredentials = (output, context) => {
+var de_SessionCredentials = (output, context2) => {
   const contents = {};
   if (output[_AKI] != null) {
     contents[_AKI] = expectString(output[_AKI]);
@@ -61620,7 +61620,7 @@ var flexibleChecksumsMiddlewareOptions = {
   tags: ["BODY_CHECKSUM"],
   override: true
 };
-var flexibleChecksumsMiddleware = (config, middlewareConfig) => (next, context) => (args) => __async(void 0, null, function* () {
+var flexibleChecksumsMiddleware = (config, middlewareConfig) => (next, context2) => (args) => __async(void 0, null, function* () {
   if (!HttpRequest.isInstance(args.request)) {
     return next(args);
   }
@@ -61631,7 +61631,7 @@ var flexibleChecksumsMiddleware = (config, middlewareConfig) => (next, context) 
   const checksumAlgorithm = getChecksumAlgorithmForRequest(input, {
     requestChecksumRequired,
     requestAlgorithmMember
-  }, !!context.isS3ExpressBucket);
+  }, !!context2.isS3ExpressBucket);
   let updatedBody = requestBody;
   let updatedHeaders = headers;
   if (checksumAlgorithm) {
@@ -61742,7 +61742,7 @@ var flexibleChecksumsResponseMiddlewareOptions = {
   tags: ["BODY_CHECKSUM"],
   override: true
 };
-var flexibleChecksumsResponseMiddleware = (config, middlewareConfig) => (next, context) => (args) => __async(void 0, null, function* () {
+var flexibleChecksumsResponseMiddleware = (config, middlewareConfig) => (next, context2) => (args) => __async(void 0, null, function* () {
   if (!HttpRequest.isInstance(args.request)) {
     return next(args);
   }
@@ -61752,7 +61752,7 @@ var flexibleChecksumsResponseMiddleware = (config, middlewareConfig) => (next, c
   let collectedStream = void 0;
   const { requestValidationModeMember, responseAlgorithms } = middlewareConfig;
   if (requestValidationModeMember && input[requestValidationModeMember] === "ENABLED") {
-    const { clientName, commandName } = context;
+    const { clientName, commandName } = context2;
     const isS3WholeObjectMultipartGetResponseChecksum = clientName === "S3Client" && commandName === "GetObjectCommand" && getChecksumAlgorithmListForResponse(responseAlgorithms).every((algorithm) => {
       const responseHeader = getChecksumLocationName(algorithm);
       const checksumFromResponse = response.headers[responseHeader];
@@ -62448,7 +62448,7 @@ function startServer() {
     );
     app.put(
       "/v8/artifacts/:artifactId",
-      asyncHandler_default((req, res, context) => __async(this, null, function* () {
+      asyncHandler_default((req, res) => __async(this, null, function* () {
         const artifactId = req.params.artifactId;
         const filename = `${artifactId}.gz`;
         console.log(req.headers);
@@ -62459,9 +62459,13 @@ function startServer() {
             params: {
               Bucket: bucket,
               Key: filename,
-              Body: req
+              Body: req,
               // req is a readable stream
+              ContentType: req.headers["content-type"]
             }
+          });
+          upload.on("httpUploadProgress", (progress) => {
+            console.log(progress);
           });
           yield upload.done();
           return res.end();

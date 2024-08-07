@@ -59,7 +59,7 @@ async function startServer() {
 
   app.put(
     "/v8/artifacts/:artifactId",
-    asyncHandler(async (req, res, context) => {
+    asyncHandler(async (req, res) => {
       const artifactId = req.params.artifactId;
       const filename = `${artifactId}.gz`;
 
@@ -72,7 +72,11 @@ async function startServer() {
             Bucket: bucket,
             Key: filename,
             Body: req, // req is a readable stream
+            ContentType: req.headers["content-type"],
           },
+        });
+        upload.on("httpUploadProgress", progress => {
+          console.log(progress);
         });
         await upload.done();
         return res.end();
