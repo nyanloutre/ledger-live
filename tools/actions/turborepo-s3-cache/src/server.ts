@@ -1,6 +1,6 @@
 import { getInput } from "@actions/core";
-import stream from "stream";
 import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
 import { Readable } from "stream";
 import express from "express";
 import * as path from "path";
@@ -62,46 +62,21 @@ async function startServer() {
     asyncHandler(async (req, res) => {
       const artifactId = req.params.artifactId;
       const filename = `${artifactId}.gz`;
-      console.log("REQUEST");
-      console.log(req);
-      console.log("headers", req.headers);
 
-      let contentLength = 0;
-
-      // Create a PassThrough stream to calculate the content length
-      const passThrough = new stream.PassThrough();
-      req.pipe(passThrough);
-
-      passThrough.on("data", (chunk: any) => {
-        contentLength += chunk.length;
-      });
-
-      // Wait for the stream to end to ensure content length is calculated
-      await new Promise((resolve, reject) => {
-        passThrough.on("end", resolve);
-        passThrough.on("error", reject);
-      });
-
-      try {
-        const command = new PutObjectCommand({
+      const upload = new Upload({
+        client,
+        params: {
           Bucket: bucket,
           Key: filename,
-          Body: req,
-          ContentLength: contentLength,
-        });
-        await client.send(command);
+          Body: req, // req is a readable stream
+        },
+      });
+      try {
+        await upload.done();
         return res.end();
-      } catch (error: any) {
+      } catch (error) {
         console.log(error);
-        const errorDetails = {
-          message: error.message,
-          stack: error.stack,
-          name: error.name,
-          code: error.code,
-        };
-        console.log(errorDetails);
-        console.error("Error uploading artifact:", errorDetails);
-        return res.status(500).json(errorDetails);
+        return res.status(500).end();
       }
     }),
   );
