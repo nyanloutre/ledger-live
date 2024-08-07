@@ -61399,9 +61399,6 @@ function startServer() {
         const filename = `${artifactId}.gz`;
         console.log("REQUEST");
         console.log(req);
-        const bodyBuffer = Buffer.from(req);
-        const contentLength = bodyBuffer.length;
-        console.log("ContentLength", contentLength);
         console.log("headers", req.headers);
         try {
           const command = new PutObjectCommand({
