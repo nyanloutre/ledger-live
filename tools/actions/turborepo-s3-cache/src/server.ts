@@ -63,13 +63,15 @@ async function startServer() {
       const artifactId = req.params.artifactId;
       const filename = `${artifactId}.gz`;
 
+      console.log(req.body);
+      console.log("Request", req);
       try {
         const upload = new Upload({
           client,
           params: {
             Bucket: bucket,
             Key: filename,
-            Body: req, // req is a readable stream
+            Body: req.body, // req is a readable stream
           },
         });
         await upload.done();
