@@ -1296,7 +1296,7 @@ var require_util = __commonJS({
     var assert = require("assert");
     var { kDestroyed, kBodyUsed } = require_symbols();
     var { IncomingMessage } = require("http");
-    var stream = require("stream");
+    var stream2 = require("stream");
     var net = require("net");
     var { InvalidArgumentError } = require_errors();
     var { Blob: Blob2 } = require("buffer");
@@ -1415,29 +1415,29 @@ var require_util = __commonJS({
       }
       return null;
     }
-    function isDestroyed(stream2) {
-      return !stream2 || !!(stream2.destroyed || stream2[kDestroyed]);
+    function isDestroyed(stream3) {
+      return !stream3 || !!(stream3.destroyed || stream3[kDestroyed]);
     }
-    function isReadableAborted(stream2) {
-      const state = stream2 && stream2._readableState;
-      return isDestroyed(stream2) && state && !state.endEmitted;
+    function isReadableAborted(stream3) {
+      const state = stream3 && stream3._readableState;
+      return isDestroyed(stream3) && state && !state.endEmitted;
     }
-    function destroy(stream2, err) {
-      if (stream2 == null || !isStream(stream2) || isDestroyed(stream2)) {
+    function destroy(stream3, err) {
+      if (stream3 == null || !isStream(stream3) || isDestroyed(stream3)) {
         return;
       }
-      if (typeof stream2.destroy === "function") {
-        if (Object.getPrototypeOf(stream2).constructor === IncomingMessage) {
-          stream2.socket = null;
+      if (typeof stream3.destroy === "function") {
+        if (Object.getPrototypeOf(stream3).constructor === IncomingMessage) {
+          stream3.socket = null;
         }
-        stream2.destroy(err);
+        stream3.destroy(err);
       } else if (err) {
-        process.nextTick((stream3, err2) => {
-          stream3.emit("error", err2);
-        }, stream2, err);
+        process.nextTick((stream4, err2) => {
+          stream4.emit("error", err2);
+        }, stream3, err);
       }
-      if (stream2.destroyed !== true) {
-        stream2[kDestroyed] = true;
+      if (stream3.destroyed !== true) {
+        stream3[kDestroyed] = true;
       }
     }
     var KEEPALIVE_TIMEOUT_EXPR = /timeout=(\d+)/;
@@ -1524,15 +1524,15 @@ var require_util = __commonJS({
       }
     }
     function isDisturbed(body) {
-      return !!(body && (stream.isDisturbed ? stream.isDisturbed(body) || body[kBodyUsed] : body[kBodyUsed] || body.readableDidRead || body._readableState && body._readableState.dataEmitted || isReadableAborted(body)));
+      return !!(body && (stream2.isDisturbed ? stream2.isDisturbed(body) || body[kBodyUsed] : body[kBodyUsed] || body.readableDidRead || body._readableState && body._readableState.dataEmitted || isReadableAborted(body)));
     }
     function isErrored(body) {
-      return !!(body && (stream.isErrored ? stream.isErrored(body) : /state: 'errored'/.test(
+      return !!(body && (stream2.isErrored ? stream2.isErrored(body) : /state: 'errored'/.test(
         nodeUtil.inspect(body)
       )));
     }
     function isReadable(body) {
-      return !!(body && (stream.isReadable ? stream.isReadable(body) : /state: 'readable'/.test(
+      return !!(body && (stream2.isReadable ? stream2.isReadable(body) : /state: 'readable'/.test(
         nodeUtil.inspect(body)
       )));
     }
@@ -4462,11 +4462,11 @@ var require_util2 = __commonJS({
       });
     }
     var ReadableStream2 = globalThis.ReadableStream;
-    function isReadableStreamLike(stream) {
+    function isReadableStreamLike(stream2) {
       if (!ReadableStream2) {
         ReadableStream2 = require("stream/web").ReadableStream;
       }
-      return stream instanceof ReadableStream2 || stream[Symbol.toStringTag] === "ReadableStream" && typeof stream.tee === "function";
+      return stream2 instanceof ReadableStream2 || stream2[Symbol.toStringTag] === "ReadableStream" && typeof stream2.tee === "function";
     }
     var MAXIMUM_ARGUMENT_LENGTH = 65535;
     function isomorphicDecode(input) {
@@ -5623,14 +5623,14 @@ var require_body = __commonJS({
       if (!ReadableStream2) {
         ReadableStream2 = require("stream/web").ReadableStream;
       }
-      let stream = null;
+      let stream2 = null;
       if (object instanceof ReadableStream2) {
-        stream = object;
+        stream2 = object;
       } else if (isBlobLike(object)) {
-        stream = object.stream();
+        stream2 = object.stream();
       } else {
         let _a2;
-        stream = new ReadableStream2({
+        stream2 = new ReadableStream2({
           pull(controller) {
             return __async(this, null, function* () {
               controller.enqueue(
@@ -5644,7 +5644,7 @@ var require_body = __commonJS({
           type: void 0
         });
       }
-      assert(isReadableStreamLike(stream));
+      assert(isReadableStreamLike(stream2));
       let action = null;
       let source = null;
       let length = null;
@@ -5724,7 +5724,7 @@ Content-Type: ${value.type || "application/octet-stream"}\r
             "Response body object should not be disturbed or locked"
           );
         }
-        stream = object instanceof ReadableStream2 ? object : ReadableStreamFrom(object);
+        stream2 = object instanceof ReadableStream2 ? object : ReadableStreamFrom(object);
       }
       if (typeof source === "string" || util.isBuffer(source)) {
         length = Buffer.byteLength(source);
@@ -5732,7 +5732,7 @@ Content-Type: ${value.type || "application/octet-stream"}\r
       if (action != null) {
         let _b;
         let iterator;
-        stream = new ReadableStream2({
+        stream2 = new ReadableStream2({
           start() {
             return __async(this, null, function* () {
               iterator = action(object)[Symbol.asyncIterator]();
@@ -5746,7 +5746,7 @@ Content-Type: ${value.type || "application/octet-stream"}\r
                   controller.close();
                 });
               } else {
-                if (!isErrored(stream)) {
+                if (!isErrored(stream2)) {
                   controller.enqueue(new Uint8Array(value));
                 }
               }
@@ -5761,7 +5761,7 @@ Content-Type: ${value.type || "application/octet-stream"}\r
           type: void 0
         });
       }
-      const body = { stream, source, length };
+      const body = { stream: stream2, source, length };
       return [body, type];
     }
     function safelyExtractBody(object, keepalive = false) {
@@ -5791,15 +5791,15 @@ Content-Type: ${value.type || "application/octet-stream"}\r
           if (isUint8Array(body)) {
             yield body;
           } else {
-            const stream = body.stream;
-            if (util.isDisturbed(stream)) {
+            const stream2 = body.stream;
+            if (util.isDisturbed(stream2)) {
               throw new TypeError("The body has already been consumed.");
             }
-            if (stream.locked) {
+            if (stream2.locked) {
               throw new TypeError("The stream is locked.");
             }
-            stream[kBodyUsed] = true;
-            yield* __yieldStar(stream);
+            stream2[kBodyUsed] = true;
+            yield* __yieldStar(stream2);
           }
         }
       });
@@ -8514,23 +8514,23 @@ upgrade: ${upgrade}\r
       if (request2.aborted) {
         return false;
       }
-      let stream;
+      let stream2;
       const h2State = client[kHTTP2SessionState];
       headers[HTTP2_HEADER_AUTHORITY] = host || client[kHost];
       headers[HTTP2_HEADER_METHOD] = method;
       if (method === "CONNECT") {
         session.ref();
-        stream = session.request(headers, { endStream: false, signal });
-        if (stream.id && !stream.pending) {
-          request2.onUpgrade(null, null, stream);
+        stream2 = session.request(headers, { endStream: false, signal });
+        if (stream2.id && !stream2.pending) {
+          request2.onUpgrade(null, null, stream2);
           ++h2State.openStreams;
         } else {
-          stream.once("ready", () => {
-            request2.onUpgrade(null, null, stream);
+          stream2.once("ready", () => {
+            request2.onUpgrade(null, null, stream2);
             ++h2State.openStreams;
           });
         }
-        stream.once("close", () => {
+        stream2.once("close", () => {
           h2State.openStreams -= 1;
           if (h2State.openStreams === 0)
             session.unref();
@@ -8565,48 +8565,48 @@ upgrade: ${upgrade}\r
       const shouldEndStream = method === "GET" || method === "HEAD";
       if (expectContinue) {
         headers[HTTP2_HEADER_EXPECT] = "100-continue";
-        stream = session.request(headers, { endStream: shouldEndStream, signal });
-        stream.once("continue", writeBodyH2);
+        stream2 = session.request(headers, { endStream: shouldEndStream, signal });
+        stream2.once("continue", writeBodyH2);
       } else {
-        stream = session.request(headers, {
+        stream2 = session.request(headers, {
           endStream: shouldEndStream,
           signal
         });
         writeBodyH2();
       }
       ++h2State.openStreams;
-      stream.once("response", (headers2) => {
+      stream2.once("response", (headers2) => {
         const _a2 = headers2, { [HTTP2_HEADER_STATUS]: statusCode } = _a2, realHeaders = __objRest(_a2, [__restKey(HTTP2_HEADER_STATUS)]);
-        if (request2.onHeaders(Number(statusCode), realHeaders, stream.resume.bind(stream), "") === false) {
-          stream.pause();
+        if (request2.onHeaders(Number(statusCode), realHeaders, stream2.resume.bind(stream2), "") === false) {
+          stream2.pause();
         }
       });
-      stream.once("end", () => {
+      stream2.once("end", () => {
         request2.onComplete([]);
       });
-      stream.on("data", (chunk) => {
+      stream2.on("data", (chunk) => {
         if (request2.onData(chunk) === false) {
-          stream.pause();
+          stream2.pause();
         }
       });
-      stream.once("close", () => {
+      stream2.once("close", () => {
         h2State.openStreams -= 1;
         if (h2State.openStreams === 0) {
           session.unref();
         }
       });
-      stream.once("error", function(err) {
+      stream2.once("error", function(err) {
         if (client[kHTTP2Session] && !client[kHTTP2Session].destroyed && !this.closed && !this.destroyed) {
           h2State.streams -= 1;
-          util.destroy(stream, err);
+          util.destroy(stream2, err);
         }
       });
-      stream.once("frameError", (type, code) => {
+      stream2.once("frameError", (type, code) => {
         const err = new InformationalError(`HTTP/2: "frameError" received - type ${type}, code ${code}`);
         errorRequest(client, request2, err);
         if (client[kHTTP2Session] && !client[kHTTP2Session].destroyed && !this.closed && !this.destroyed) {
           h2State.streams -= 1;
-          util.destroy(stream, err);
+          util.destroy(stream2, err);
         }
       });
       return true;
@@ -8615,10 +8615,10 @@ upgrade: ${upgrade}\r
           request2.onRequestSent();
         } else if (util.isBuffer(body)) {
           assert(contentLength === body.byteLength, "buffer body must have content length");
-          stream.cork();
-          stream.write(body);
-          stream.uncork();
-          stream.end();
+          stream2.cork();
+          stream2.write(body);
+          stream2.uncork();
+          stream2.end();
           request2.onBodySent(body);
           request2.onRequestSent();
         } else if (util.isBlobLike(body)) {
@@ -8627,7 +8627,7 @@ upgrade: ${upgrade}\r
               client,
               request: request2,
               contentLength,
-              h2stream: stream,
+              h2stream: stream2,
               expectsPayload,
               body: body.stream(),
               socket: client[kSocket],
@@ -8640,7 +8640,7 @@ upgrade: ${upgrade}\r
               request: request2,
               contentLength,
               expectsPayload,
-              h2stream: stream,
+              h2stream: stream2,
               header: "",
               socket: client[kSocket]
             });
@@ -8653,7 +8653,7 @@ upgrade: ${upgrade}\r
             contentLength,
             expectsPayload,
             socket: client[kSocket],
-            h2stream: stream,
+            h2stream: stream2,
             header: ""
           });
         } else if (util.isIterable(body)) {
@@ -8664,7 +8664,7 @@ upgrade: ${upgrade}\r
             contentLength,
             expectsPayload,
             header: "",
-            h2stream: stream,
+            h2stream: stream2,
             socket: client[kSocket]
           });
         } else {
@@ -9799,29 +9799,29 @@ var require_readable = __commonJS({
     function isUnusable(self) {
       return util.isDisturbed(self) || isLocked(self);
     }
-    function consume(stream, type) {
+    function consume(stream2, type) {
       return __async(this, null, function* () {
-        if (isUnusable(stream)) {
+        if (isUnusable(stream2)) {
           throw new TypeError("unusable");
         }
-        assert(!stream[kConsume]);
+        assert(!stream2[kConsume]);
         return new Promise((resolve3, reject) => {
-          stream[kConsume] = {
+          stream2[kConsume] = {
             type,
-            stream,
+            stream: stream2,
             resolve: resolve3,
             reject,
             length: 0,
             body: []
           };
-          stream.on("error", function(err) {
+          stream2.on("error", function(err) {
             consumeFinish(this[kConsume], err);
           }).on("close", function() {
             if (this[kConsume].body !== null) {
               consumeFinish(this[kConsume], new RequestAbortedError());
             }
           });
-          process.nextTick(consumeStart, stream[kConsume]);
+          process.nextTick(consumeStart, stream2[kConsume]);
         });
       });
     }
@@ -9845,7 +9845,7 @@ var require_readable = __commonJS({
       }
     }
     function consumeEnd(consume2) {
-      const { type, body, resolve: resolve3, stream, length } = consume2;
+      const { type, body, resolve: resolve3, stream: stream2, length } = consume2;
       try {
         if (type === "text") {
           resolve3(toUSVString(Buffer.concat(body)));
@@ -9863,11 +9863,11 @@ var require_readable = __commonJS({
           if (!Blob2) {
             Blob2 = require("buffer").Blob;
           }
-          resolve3(new Blob2(body, { type: stream[kContentType] }));
+          resolve3(new Blob2(body, { type: stream2[kContentType] }));
         }
         consumeFinish(consume2);
       } catch (err) {
-        stream.destroy(err);
+        stream2.destroy(err);
       }
     }
     function consumePush(consume2, chunk) {
@@ -10307,10 +10307,10 @@ var require_api_stream = __commonJS({
         }
       }
     };
-    function stream(opts, factory, callback) {
+    function stream2(opts, factory, callback) {
       if (callback === void 0) {
         return new Promise((resolve3, reject) => {
-          stream.call(this, opts, factory, (err, data) => {
+          stream2.call(this, opts, factory, (err, data) => {
             return err ? reject(err) : resolve3(data);
           });
         });
@@ -10325,7 +10325,7 @@ var require_api_stream = __commonJS({
         queueMicrotask(() => callback(err, { opaque }));
       }
     }
-    module2.exports = stream;
+    module2.exports = stream2;
   }
 });
 
@@ -14279,7 +14279,7 @@ var require_fetch = __commonJS({
         if (!ReadableStream2) {
           ReadableStream2 = require("stream/web").ReadableStream;
         }
-        const stream = new ReadableStream2(
+        const stream2 = new ReadableStream2(
           {
             start(controller) {
               return __async(this, null, function* () {
@@ -14304,7 +14304,7 @@ var require_fetch = __commonJS({
             }
           }
         );
-        response.body = { stream };
+        response.body = { stream: stream2 };
         fetchParams.controller.on("terminated", onAborted);
         fetchParams.controller.resume = () => __async(this, null, function* () {
           var _a3;
@@ -14336,7 +14336,7 @@ var require_fetch = __commonJS({
               return;
             }
             fetchParams.controller.controller.enqueue(new Uint8Array(bytes));
-            if (isErrored(stream)) {
+            if (isErrored(stream2)) {
               fetchParams.controller.terminate();
               return;
             }
@@ -14348,13 +14348,13 @@ var require_fetch = __commonJS({
         function onAborted(reason) {
           if (isAborted(fetchParams)) {
             response.aborted = true;
-            if (isReadable(stream)) {
+            if (isReadable(stream2)) {
               fetchParams.controller.controller.error(
                 fetchParams.controller.serializedAbortReason
               );
             }
           } else {
-            if (isReadable(stream)) {
+            if (isReadable(stream2)) {
               fetchParams.controller.controller.error(new TypeError("terminated", {
                 cause: isErrorLike(reason) ? reason : void 0
               }));
@@ -14909,8 +14909,8 @@ var require_util4 = __commonJS({
       fr[kState] = "loading";
       fr[kResult] = null;
       fr[kError] = null;
-      const stream = blob.stream();
-      const reader = stream.getReader();
+      const stream2 = blob.stream();
+      const reader = stream2.getReader();
       const bytes = [];
       let chunkPromise = reader.read();
       let isFirstChunk = true;
@@ -15629,8 +15629,8 @@ var require_cache = __commonJS({
           const clonedResponse = cloneResponse(innerResponse);
           const bodyReadPromise = createDeferredPromise();
           if (innerResponse.body != null) {
-            const stream = innerResponse.body.stream;
-            const reader = stream.getReader();
+            const stream2 = innerResponse.body.stream;
+            const reader = stream2.getReader();
             readAllBytes(reader).then(bodyReadPromise.resolve, bodyReadPromise.reject);
           } else {
             bodyReadPromise.resolve(void 0);
@@ -18139,9 +18139,9 @@ var require_lib = __commonJS({
           return this.request("HEAD", requestUrl, null, additionalHeaders || {});
         });
       }
-      sendStream(verb, requestUrl, stream, additionalHeaders) {
+      sendStream(verb, requestUrl, stream2, additionalHeaders) {
         return __awaiter2(this, void 0, void 0, function* () {
-          return this.request(verb, requestUrl, stream, additionalHeaders);
+          return this.request(verb, requestUrl, stream2, additionalHeaders);
         });
       }
       /**
@@ -21103,10 +21103,10 @@ var init_collector = __esm({
 });
 
 // ../../../node_modules/.pnpm/@smithy+node-http-handler@3.1.4/node_modules/@smithy/node-http-handler/dist-es/stream-collector/index.js
-function collectReadableStream(stream) {
+function collectReadableStream(stream2) {
   return __async(this, null, function* () {
     const chunks = [];
-    const reader = stream.getReader();
+    const reader = stream2.getReader();
     let isDone = false;
     let length = 0;
     while (!isDone) {
@@ -21131,14 +21131,14 @@ var init_stream_collector = __esm({
   "../../../node_modules/.pnpm/@smithy+node-http-handler@3.1.4/node_modules/@smithy/node-http-handler/dist-es/stream-collector/index.js"() {
     "use strict";
     init_collector();
-    streamCollector = (stream) => {
-      if (isReadableStreamInstance(stream)) {
-        return collectReadableStream(stream);
+    streamCollector = (stream2) => {
+      if (isReadableStreamInstance(stream2)) {
+        return collectReadableStream(stream2);
       }
       return new Promise((resolve3, reject) => {
         const collector = new Collector();
-        stream.pipe(collector);
-        stream.on("error", (err) => {
+        stream2.pipe(collector);
+        stream2.on("error", (err) => {
           collector.end();
           reject(err);
         });
@@ -21149,7 +21149,7 @@ var init_stream_collector = __esm({
         });
       });
     };
-    isReadableStreamInstance = (stream) => typeof ReadableStream === "function" && stream instanceof ReadableStream;
+    isReadableStreamInstance = (stream2) => typeof ReadableStream === "function" && stream2 instanceof ReadableStream;
   }
 });
 
@@ -21188,10 +21188,10 @@ function collectBlob(blob) {
     return new Uint8Array(arrayBuffer);
   });
 }
-function collectStream(stream) {
+function collectStream(stream2) {
   return __async(this, null, function* () {
     const chunks = [];
-    const reader = stream.getReader();
+    const reader = stream2.getReader();
     let isDone = false;
     let length = 0;
     while (!isDone) {
@@ -21234,11 +21234,11 @@ var init_stream_collector2 = __esm({
   "../../../node_modules/.pnpm/@smithy+fetch-http-handler@3.2.4/node_modules/@smithy/fetch-http-handler/dist-es/stream-collector.js"() {
     "use strict";
     init_dist_es10();
-    streamCollector2 = (stream) => {
-      if (typeof Blob === "function" && stream instanceof Blob) {
-        return collectBlob(stream);
+    streamCollector2 = (stream2) => {
+      if (typeof Blob === "function" && stream2 instanceof Blob) {
+        return collectBlob(stream2);
       }
-      return collectStream(stream);
+      return collectStream(stream2);
     };
   }
 });
@@ -21297,9 +21297,9 @@ var isReadableStream;
 var init_stream_type_check = __esm({
   "../../../node_modules/.pnpm/@smithy+util-stream@3.1.3/node_modules/@smithy/util-stream/dist-es/stream-type-check.js"() {
     "use strict";
-    isReadableStream = (stream) => {
+    isReadableStream = (stream2) => {
       var _a2;
-      return typeof ReadableStream === "function" && (((_a2 = stream == null ? void 0 : stream.constructor) == null ? void 0 : _a2.name) === ReadableStream.name || stream instanceof ReadableStream);
+      return typeof ReadableStream === "function" && (((_a2 = stream2 == null ? void 0 : stream2.constructor) == null ? void 0 : _a2.name) === ReadableStream.name || stream2 instanceof ReadableStream);
     };
   }
 });
@@ -21315,10 +21315,10 @@ var init_sdk_stream_mixin_browser = __esm({
     init_dist_es9();
     init_stream_type_check();
     ERR_MSG_STREAM_HAS_BEEN_TRANSFORMED = "The stream has already been transformed.";
-    sdkStreamMixin = (stream) => {
+    sdkStreamMixin = (stream2) => {
       var _a2, _b;
-      if (!isBlobInstance(stream) && !isReadableStream(stream)) {
-        const name = ((_b = (_a2 = stream == null ? void 0 : stream.__proto__) == null ? void 0 : _a2.constructor) == null ? void 0 : _b.name) || stream;
+      if (!isBlobInstance(stream2) && !isReadableStream(stream2)) {
+        const name = ((_b = (_a2 = stream2 == null ? void 0 : stream2.__proto__) == null ? void 0 : _a2.constructor) == null ? void 0 : _b.name) || stream2;
         throw new Error(`Unexpected stream implementation, expect Blob or ReadableStream, got ${name}`);
       }
       let transformed = false;
@@ -21327,7 +21327,7 @@ var init_sdk_stream_mixin_browser = __esm({
           throw new Error(ERR_MSG_STREAM_HAS_BEEN_TRANSFORMED);
         }
         transformed = true;
-        return yield streamCollector2(stream);
+        return yield streamCollector2(stream2);
       });
       const blobToWebStream = (blob) => {
         if (typeof blob.stream !== "function") {
@@ -21335,7 +21335,7 @@ var init_sdk_stream_mixin_browser = __esm({
         }
         return blob.stream();
       };
-      return Object.assign(stream, {
+      return Object.assign(stream2, {
         transformToByteArray,
         transformToString: (encoding) => __async(void 0, null, function* () {
           const buf = yield transformToByteArray();
@@ -21356,17 +21356,17 @@ var init_sdk_stream_mixin_browser = __esm({
             throw new Error(ERR_MSG_STREAM_HAS_BEEN_TRANSFORMED);
           }
           transformed = true;
-          if (isBlobInstance(stream)) {
-            return blobToWebStream(stream);
-          } else if (isReadableStream(stream)) {
-            return stream;
+          if (isBlobInstance(stream2)) {
+            return blobToWebStream(stream2);
+          } else if (isReadableStream(stream2)) {
+            return stream2;
           } else {
-            throw new Error(`Cannot transform payload to web stream, got ${stream}`);
+            throw new Error(`Cannot transform payload to web stream, got ${stream2}`);
           }
         }
       });
     };
-    isBlobInstance = (stream) => typeof Blob === "function" && stream instanceof Blob;
+    isBlobInstance = (stream2) => typeof Blob === "function" && stream2 instanceof Blob;
   }
 });
 
@@ -21381,13 +21381,13 @@ var init_sdk_stream_mixin = __esm({
     import_util = require("util");
     init_sdk_stream_mixin_browser();
     ERR_MSG_STREAM_HAS_BEEN_TRANSFORMED2 = "The stream has already been transformed.";
-    sdkStreamMixin2 = (stream) => {
+    sdkStreamMixin2 = (stream2) => {
       var _a2, _b;
-      if (!(stream instanceof import_stream4.Readable)) {
+      if (!(stream2 instanceof import_stream4.Readable)) {
         try {
-          return sdkStreamMixin(stream);
+          return sdkStreamMixin(stream2);
         } catch (e5) {
-          const name = ((_b = (_a2 = stream == null ? void 0 : stream.__proto__) == null ? void 0 : _a2.constructor) == null ? void 0 : _b.name) || stream;
+          const name = ((_b = (_a2 = stream2 == null ? void 0 : stream2.__proto__) == null ? void 0 : _a2.constructor) == null ? void 0 : _b.name) || stream2;
           throw new Error(`Unexpected stream implementation, expect Stream.Readable instance, got ${name}`);
         }
       }
@@ -21397,9 +21397,9 @@ var init_sdk_stream_mixin = __esm({
           throw new Error(ERR_MSG_STREAM_HAS_BEEN_TRANSFORMED2);
         }
         transformed = true;
-        return yield streamCollector(stream);
+        return yield streamCollector(stream2);
       });
-      return Object.assign(stream, {
+      return Object.assign(stream2, {
         transformToByteArray,
         transformToString: (encoding) => __async(void 0, null, function* () {
           const buf = yield transformToByteArray();
@@ -21414,14 +21414,14 @@ var init_sdk_stream_mixin = __esm({
           if (transformed) {
             throw new Error(ERR_MSG_STREAM_HAS_BEEN_TRANSFORMED2);
           }
-          if (stream.readableFlowing !== null) {
+          if (stream2.readableFlowing !== null) {
             throw new Error("The stream has been consumed by other callbacks.");
           }
           if (typeof import_stream4.Readable.toWeb !== "function") {
             throw new Error("Readable.toWeb() is not supported. Please make sure you are using Node.js >= 17.0.0, or polyfill is available.");
           }
           transformed = true;
-          return import_stream4.Readable.toWeb(stream);
+          return import_stream4.Readable.toWeb(stream2);
         }
       });
     };
@@ -21429,12 +21429,12 @@ var init_sdk_stream_mixin = __esm({
 });
 
 // ../../../node_modules/.pnpm/@smithy+util-stream@3.1.3/node_modules/@smithy/util-stream/dist-es/splitStream.browser.js
-function splitStream(stream) {
+function splitStream(stream2) {
   return __async(this, null, function* () {
-    if (typeof stream.stream === "function") {
-      stream = stream.stream();
+    if (typeof stream2.stream === "function") {
+      stream2 = stream2.stream();
     }
-    const readableStream = stream;
+    const readableStream = stream2;
     return readableStream.tee();
   });
 }
@@ -21445,16 +21445,16 @@ var init_splitStream_browser = __esm({
 });
 
 // ../../../node_modules/.pnpm/@smithy+util-stream@3.1.3/node_modules/@smithy/util-stream/dist-es/splitStream.js
-function splitStream2(stream) {
+function splitStream2(stream2) {
   return __async(this, null, function* () {
-    if (isReadableStream(stream)) {
-      return splitStream(stream);
+    if (isReadableStream(stream2)) {
+      return splitStream(stream2);
     }
     const stream1 = new import_stream5.PassThrough();
-    const stream2 = new import_stream5.PassThrough();
-    stream.pipe(stream1);
-    stream.pipe(stream2);
-    return [stream1, stream2];
+    const stream22 = new import_stream5.PassThrough();
+    stream2.pipe(stream1);
+    stream2.pipe(stream22);
+    return [stream1, stream22];
   });
 }
 var import_stream5;
@@ -21468,12 +21468,12 @@ var init_splitStream = __esm({
 });
 
 // ../../../node_modules/.pnpm/@smithy+util-stream@3.1.3/node_modules/@smithy/util-stream/dist-es/headStream.browser.js
-function headStream(stream, bytes) {
+function headStream(stream2, bytes) {
   return __async(this, null, function* () {
     var _a2;
     let byteLengthCounter = 0;
     const chunks = [];
-    const reader = stream.getReader();
+    const reader = stream2.getReader();
     let isDone = false;
     while (!isDone) {
       const { done, value } = yield reader.read();
@@ -21515,15 +21515,15 @@ var init_headStream = __esm({
     import_stream6 = require("stream");
     init_headStream_browser();
     init_stream_type_check();
-    headStream2 = (stream, bytes) => {
-      if (isReadableStream(stream)) {
-        return headStream(stream, bytes);
+    headStream2 = (stream2, bytes) => {
+      if (isReadableStream(stream2)) {
+        return headStream(stream2, bytes);
       }
       return new Promise((resolve3, reject) => {
         const collector = new Collector2();
         collector.limit = bytes;
-        stream.pipe(collector);
-        stream.on("error", (err) => {
+        stream2.pipe(collector);
+        stream2.on("error", (err) => {
           collector.end();
           reject(err);
         });
@@ -29790,8 +29790,8 @@ function createGetRequest(url) {
 }
 function getCredentials(response, logger2) {
   return __async(this, null, function* () {
-    const stream = sdkStreamMixin2(response.body);
-    const str = yield stream.transformToString();
+    const stream2 = sdkStreamMixin2(response.body);
+    const str = yield stream2.transformToString();
     if (response.statusCode === 200) {
       const parsed = JSON.parse(str);
       if (typeof parsed.AccessKeyId !== "string" || typeof parsed.SecretAccessKey !== "string" || typeof parsed.Token !== "string" || typeof parsed.Expiration !== "string") {
@@ -36484,7 +36484,7 @@ var require_node = __commonJS({
       util.deprecate(function() {
       }, "except for stderr(2) and stdout(1), any other usage of DEBUG_FD is deprecated. Override debug.log if you want to use a different log function (https://git.io/debug_fd)")();
     }
-    var stream = 1 === fd ? process.stdout : 2 === fd ? process.stderr : createWritableStdioStream(fd);
+    var stream2 = 1 === fd ? process.stdout : 2 === fd ? process.stderr : createWritableStdioStream(fd);
     function useColors() {
       return "colors" in exports2.inspectOpts ? Boolean(exports2.inspectOpts.colors) : tty.isatty(fd);
     }
@@ -36511,7 +36511,7 @@ var require_node = __commonJS({
       }
     }
     function log() {
-      return stream.write(util.format.apply(util, arguments) + "\n");
+      return stream2.write(util.format.apply(util, arguments) + "\n");
     }
     function save(namespaces) {
       if (null == namespaces) {
@@ -36524,42 +36524,42 @@ var require_node = __commonJS({
       return process.env.DEBUG;
     }
     function createWritableStdioStream(fd2) {
-      var stream2;
+      var stream3;
       var tty_wrap = process.binding("tty_wrap");
       switch (tty_wrap.guessHandleType(fd2)) {
         case "TTY":
-          stream2 = new tty.WriteStream(fd2);
-          stream2._type = "tty";
-          if (stream2._handle && stream2._handle.unref) {
-            stream2._handle.unref();
+          stream3 = new tty.WriteStream(fd2);
+          stream3._type = "tty";
+          if (stream3._handle && stream3._handle.unref) {
+            stream3._handle.unref();
           }
           break;
         case "FILE":
           var fs3 = require("fs");
-          stream2 = new fs3.SyncWriteStream(fd2, { autoClose: false });
-          stream2._type = "fs";
+          stream3 = new fs3.SyncWriteStream(fd2, { autoClose: false });
+          stream3._type = "fs";
           break;
         case "PIPE":
         case "TCP":
           var net = require("net");
-          stream2 = new net.Socket({
+          stream3 = new net.Socket({
             fd: fd2,
             readable: false,
             writable: true
           });
-          stream2.readable = false;
-          stream2.read = null;
-          stream2._type = "pipe";
-          if (stream2._handle && stream2._handle.unref) {
-            stream2._handle.unref();
+          stream3.readable = false;
+          stream3.read = null;
+          stream3._type = "pipe";
+          if (stream3._handle && stream3._handle.unref) {
+            stream3._handle.unref();
           }
           break;
         default:
           throw new Error("Implement me. Unknown stream file type!");
       }
-      stream2.fd = fd2;
-      stream2._isStdio = true;
-      return stream2;
+      stream3.fd = fd2;
+      stream3._isStdio = true;
+      return stream3;
     }
     function init(debug) {
       debug.inspectOpts = {};
@@ -36593,70 +36593,70 @@ var require_destroy = __commonJS({
     var Stream = require("stream");
     var Zlib = require("zlib");
     module2.exports = destroy;
-    function destroy(stream, suppress) {
-      if (isFsReadStream(stream)) {
-        destroyReadStream(stream);
-      } else if (isZlibStream(stream)) {
-        destroyZlibStream(stream);
-      } else if (hasDestroy(stream)) {
-        stream.destroy();
+    function destroy(stream2, suppress) {
+      if (isFsReadStream(stream2)) {
+        destroyReadStream(stream2);
+      } else if (isZlibStream(stream2)) {
+        destroyZlibStream(stream2);
+      } else if (hasDestroy(stream2)) {
+        stream2.destroy();
       }
-      if (isEventEmitter(stream) && suppress) {
-        stream.removeAllListeners("error");
-        stream.addListener("error", noop);
+      if (isEventEmitter(stream2) && suppress) {
+        stream2.removeAllListeners("error");
+        stream2.addListener("error", noop);
       }
-      return stream;
+      return stream2;
     }
-    function destroyReadStream(stream) {
-      stream.destroy();
-      if (typeof stream.close === "function") {
-        stream.on("open", onOpenClose);
+    function destroyReadStream(stream2) {
+      stream2.destroy();
+      if (typeof stream2.close === "function") {
+        stream2.on("open", onOpenClose);
       }
     }
-    function closeZlibStream(stream) {
-      if (stream._hadError === true) {
-        var prop = stream._binding === null ? "_binding" : "_handle";
-        stream[prop] = {
+    function closeZlibStream(stream2) {
+      if (stream2._hadError === true) {
+        var prop = stream2._binding === null ? "_binding" : "_handle";
+        stream2[prop] = {
           close: function() {
             this[prop] = null;
           }
         };
       }
-      stream.close();
+      stream2.close();
     }
-    function destroyZlibStream(stream) {
-      if (typeof stream.destroy === "function") {
-        if (stream._binding) {
-          stream.destroy();
-          if (stream._processing) {
-            stream._needDrain = true;
-            stream.once("drain", onDrainClearBinding);
+    function destroyZlibStream(stream2) {
+      if (typeof stream2.destroy === "function") {
+        if (stream2._binding) {
+          stream2.destroy();
+          if (stream2._processing) {
+            stream2._needDrain = true;
+            stream2.once("drain", onDrainClearBinding);
           } else {
-            stream._binding.clear();
+            stream2._binding.clear();
           }
-        } else if (stream._destroy && stream._destroy !== Stream.Transform.prototype._destroy) {
-          stream.destroy();
-        } else if (stream._destroy && typeof stream.close === "function") {
-          stream.destroyed = true;
-          stream.close();
+        } else if (stream2._destroy && stream2._destroy !== Stream.Transform.prototype._destroy) {
+          stream2.destroy();
+        } else if (stream2._destroy && typeof stream2.close === "function") {
+          stream2.destroyed = true;
+          stream2.close();
         } else {
-          stream.destroy();
+          stream2.destroy();
         }
-      } else if (typeof stream.close === "function") {
-        closeZlibStream(stream);
+      } else if (typeof stream2.close === "function") {
+        closeZlibStream(stream2);
       }
     }
-    function hasDestroy(stream) {
-      return stream instanceof Stream && typeof stream.destroy === "function";
+    function hasDestroy(stream2) {
+      return stream2 instanceof Stream && typeof stream2.destroy === "function";
     }
     function isEventEmitter(val2) {
       return val2 instanceof EventEmitter;
     }
-    function isFsReadStream(stream) {
-      return stream instanceof ReadStream;
+    function isFsReadStream(stream2) {
+      return stream2 instanceof ReadStream;
     }
-    function isZlibStream(stream) {
-      return stream instanceof Zlib.Gzip || stream instanceof Zlib.Gunzip || stream instanceof Zlib.Deflate || stream instanceof Zlib.DeflateRaw || stream instanceof Zlib.Inflate || stream instanceof Zlib.InflateRaw || stream instanceof Zlib.Unzip;
+    function isZlibStream(stream2) {
+      return stream2 instanceof Zlib.Gzip || stream2 instanceof Zlib.Gunzip || stream2 instanceof Zlib.Deflate || stream2 instanceof Zlib.DeflateRaw || stream2 instanceof Zlib.Inflate || stream2 instanceof Zlib.InflateRaw || stream2 instanceof Zlib.Unzip;
     }
     function noop() {
     }
@@ -40125,8 +40125,8 @@ var require_unpipe = __commonJS({
   "../../../node_modules/.pnpm/unpipe@1.0.0/node_modules/unpipe/index.js"(exports2, module2) {
     "use strict";
     module2.exports = unpipe;
-    function hasPipeDataListeners(stream) {
-      var listeners = stream.listeners("data");
+    function hasPipeDataListeners(stream2) {
+      var listeners = stream2.listeners("data");
       for (var i5 = 0; i5 < listeners.length; i5++) {
         if (listeners[i5].name === "ondata") {
           return true;
@@ -40134,25 +40134,25 @@ var require_unpipe = __commonJS({
       }
       return false;
     }
-    function unpipe(stream) {
-      if (!stream) {
+    function unpipe(stream2) {
+      if (!stream2) {
         throw new TypeError("argument stream is required");
       }
-      if (typeof stream.unpipe === "function") {
-        stream.unpipe();
+      if (typeof stream2.unpipe === "function") {
+        stream2.unpipe();
         return;
       }
-      if (!hasPipeDataListeners(stream)) {
+      if (!hasPipeDataListeners(stream2)) {
         return;
       }
       var listener;
-      var listeners = stream.listeners("close");
+      var listeners = stream2.listeners("close");
       for (var i5 = 0; i5 < listeners.length; i5++) {
         listener = listeners[i5];
         if (listener.name !== "cleanup" && listener.name !== "onclose") {
           continue;
         }
-        listener.call(stream);
+        listener.call(stream2);
       }
     }
   }
@@ -40183,12 +40183,12 @@ var require_raw_body = __commonJS({
         });
       }
     }
-    function getRawBody(stream, options, callback) {
+    function getRawBody(stream2, options, callback) {
       var done = callback;
       var opts = options || {};
-      if (stream === void 0) {
+      if (stream2 === void 0) {
         throw new TypeError("argument stream is required");
-      } else if (typeof stream !== "object" || stream === null || typeof stream.on !== "function") {
+      } else if (typeof stream2 !== "object" || stream2 === null || typeof stream2.on !== "function") {
         throw new TypeError("argument stream must be a stream");
       }
       if (options === true || typeof options === "string") {
@@ -40210,23 +40210,23 @@ var require_raw_body = __commonJS({
       var limit = bytes.parse(opts.limit);
       var length = opts.length != null && !isNaN(opts.length) ? parseInt(opts.length, 10) : null;
       if (done) {
-        return readStream(stream, encoding, length, limit, wrap(done));
+        return readStream(stream2, encoding, length, limit, wrap(done));
       }
       return new Promise(function executor(resolve3, reject) {
-        readStream(stream, encoding, length, limit, function onRead(err, buf) {
+        readStream(stream2, encoding, length, limit, function onRead(err, buf) {
           if (err)
             return reject(err);
           resolve3(buf);
         });
       });
     }
-    function halt(stream) {
-      unpipe(stream);
-      if (typeof stream.pause === "function") {
-        stream.pause();
+    function halt(stream2) {
+      unpipe(stream2);
+      if (typeof stream2.pause === "function") {
+        stream2.pause();
       }
     }
-    function readStream(stream, encoding, length, limit, callback) {
+    function readStream(stream2, encoding, length, limit, callback) {
       var complete = false;
       var sync = true;
       if (limit !== null && length !== null && length > limit) {
@@ -40237,13 +40237,13 @@ var require_raw_body = __commonJS({
           type: "entity.too.large"
         }));
       }
-      var state = stream._readableState;
-      if (stream._decoder || state && (state.encoding || state.decoder)) {
+      var state = stream2._readableState;
+      if (stream2._decoder || state && (state.encoding || state.decoder)) {
         return done(createError(500, "stream encoding should not be set", {
           type: "stream.encoding.set"
         }));
       }
-      if (typeof stream.readable !== "undefined" && !stream.readable) {
+      if (typeof stream2.readable !== "undefined" && !stream2.readable) {
         return done(createError(500, "stream is not readable", {
           type: "stream.not.readable"
         }));
@@ -40256,11 +40256,11 @@ var require_raw_body = __commonJS({
         return done(err);
       }
       var buffer = decoder ? "" : [];
-      stream.on("aborted", onAborted);
-      stream.on("close", cleanup);
-      stream.on("data", onData);
-      stream.on("end", onEnd);
-      stream.on("error", onEnd);
+      stream2.on("aborted", onAborted);
+      stream2.on("close", cleanup);
+      stream2.on("data", onData);
+      stream2.on("end", onEnd);
+      stream2.on("error", onEnd);
       sync = false;
       function done() {
         var args = new Array(arguments.length);
@@ -40276,7 +40276,7 @@ var require_raw_body = __commonJS({
         function invokeCallback() {
           cleanup();
           if (args[0]) {
-            halt(stream);
+            halt(stream2);
           }
           callback.apply(null, args);
         }
@@ -40327,11 +40327,11 @@ var require_raw_body = __commonJS({
       }
       function cleanup() {
         buffer = null;
-        stream.removeListener("aborted", onAborted);
-        stream.removeListener("data", onData);
-        stream.removeListener("end", onEnd);
-        stream.removeListener("error", onEnd);
-        stream.removeListener("close", cleanup);
+        stream2.removeListener("aborted", onAborted);
+        stream2.removeListener("data", onData);
+        stream2.removeListener("end", onEnd);
+        stream2.removeListener("error", onEnd);
+        stream2.removeListener("close", cleanup);
       }
     }
     function tryRequireAsyncHooks() {
@@ -40534,14 +40534,14 @@ var require_read = __commonJS({
     function read(req, res, next, parse4, debug, options) {
       var length;
       var opts = options;
-      var stream;
+      var stream2;
       req._body = true;
       var encoding = opts.encoding !== null ? opts.encoding : null;
       var verify = opts.verify;
       try {
-        stream = contentstream(req, debug, opts.inflate);
-        length = stream.length;
-        stream.length = void 0;
+        stream2 = contentstream(req, debug, opts.inflate);
+        length = stream2.length;
+        stream2.length = void 0;
       } catch (err) {
         return next(err);
       }
@@ -40554,7 +40554,7 @@ var require_read = __commonJS({
         }));
       }
       debug("read body");
-      getBody(stream, opts, function(error, body) {
+      getBody(stream2, opts, function(error, body) {
         if (error) {
           var _error;
           if (error.type === "encoding.unsupported") {
@@ -40565,9 +40565,9 @@ var require_read = __commonJS({
           } else {
             _error = createError(400, error);
           }
-          if (stream !== req) {
+          if (stream2 !== req) {
             unpipe(req);
-            destroy(stream, true);
+            destroy(stream2, true);
           }
           dump(req, function onfinished() {
             next(createError(400, _error));
@@ -40604,7 +40604,7 @@ var require_read = __commonJS({
     function contentstream(req, debug, inflate) {
       var encoding = (req.headers["content-encoding"] || "identity").toLowerCase();
       var length = req.headers["content-length"];
-      var stream;
+      var stream2;
       debug('content-encoding "%s"', encoding);
       if (inflate === false && encoding !== "identity") {
         throw createError(415, "content encoding unsupported", {
@@ -40614,18 +40614,18 @@ var require_read = __commonJS({
       }
       switch (encoding) {
         case "deflate":
-          stream = zlib.createInflate();
+          stream2 = zlib.createInflate();
           debug("inflate body");
-          req.pipe(stream);
+          req.pipe(stream2);
           break;
         case "gzip":
-          stream = zlib.createGunzip();
+          stream2 = zlib.createGunzip();
           debug("gunzip body");
-          req.pipe(stream);
+          req.pipe(stream2);
           break;
         case "identity":
-          stream = req;
-          stream.length = length;
+          stream2 = req;
+          stream2.length = length;
           break;
         default:
           throw createError(415, 'unsupported content encoding "' + encoding + '"', {
@@ -40633,7 +40633,7 @@ var require_read = __commonJS({
             type: "encoding.unsupported"
           });
       }
-      return stream;
+      return stream2;
     }
     function dump(req, callback) {
       if (onFinished.isFinished(req)) {
@@ -54302,21 +54302,21 @@ var require_send = __commonJS({
       }
       next();
     };
-    SendStream.prototype.stream = function stream(path4, options) {
+    SendStream.prototype.stream = function stream2(path4, options) {
       var self = this;
       var res = this.res;
-      var stream2 = fs3.createReadStream(path4, options);
-      this.emit("stream", stream2);
-      stream2.pipe(res);
+      var stream3 = fs3.createReadStream(path4, options);
+      this.emit("stream", stream3);
+      stream3.pipe(res);
       function cleanup() {
-        destroy(stream2, true);
+        destroy(stream3, true);
       }
       onFinished(res, cleanup);
-      stream2.on("error", function onerror(err) {
+      stream3.on("error", function onerror(err) {
         cleanup();
         self.onStatError(err);
       });
-      stream2.on("end", function onend() {
+      stream3.on("end", function onend() {
         self.emit("end");
       });
     };
@@ -57308,24 +57308,24 @@ var require_serve_static = __commonJS({
         if (path3 === "/" && originalUrl.pathname.substr(-1) !== "/") {
           path3 = "";
         }
-        var stream = send(req, path3, opts);
-        stream.on("directory", onDirectory);
+        var stream2 = send(req, path3, opts);
+        stream2.on("directory", onDirectory);
         if (setHeaders) {
-          stream.on("headers", setHeaders);
+          stream2.on("headers", setHeaders);
         }
         if (fallthrough) {
-          stream.on("file", function onFile() {
+          stream2.on("file", function onFile() {
             forwardError = true;
           });
         }
-        stream.on("error", function error(err) {
+        stream2.on("error", function error(err) {
           if (forwardError || !(err.statusCode < 500)) {
             next(err);
             return;
           }
           next();
         });
-        stream.pipe(res);
+        stream2.pipe(res);
       };
     }
     function collapseLeadingSlashes(str) {
@@ -57446,6 +57446,7 @@ var require_express2 = __commonJS({
 
 // src/server.ts
 var import_core32 = __toESM(require_core());
+var import_stream11 = __toESM(require("stream"));
 
 // ../../../node_modules/.pnpm/@aws-sdk+middleware-expect-continue@3.620.0/node_modules/@aws-sdk/middleware-expect-continue/dist-es/index.js
 init_dist_es2();
@@ -57934,8 +57935,8 @@ var throw200ExceptionsMiddleware = (config) => (next, context) => (args) => __as
   }
   response.body = body;
   const bodyBytes = yield collectBody2(bodyCopy, {
-    streamCollector: (stream) => __async(void 0, null, function* () {
-      return headStream2(stream, MAX_BYTES_TO_INSPECT);
+    streamCollector: (stream2) => __async(void 0, null, function* () {
+      return headStream2(stream2, MAX_BYTES_TO_INSPECT);
     })
   });
   if (typeof (bodyCopy == null ? void 0 : bodyCopy.destroy) === "function") {
@@ -61207,10 +61208,10 @@ var isChecksumWithPartNumber = (checksum) => {
 // ../../../node_modules/.pnpm/@aws-sdk+middleware-flexible-checksums@3.620.0/node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/streams/create-read-stream-on-buffer.js
 var import_stream10 = require("stream");
 function createReadStreamOnBuffer(buffer) {
-  const stream = new import_stream10.Transform();
-  stream.push(buffer);
-  stream.push(null);
-  return stream;
+  const stream2 = new import_stream10.Transform();
+  stream2.push(buffer);
+  stream2.push(null);
+  return stream2;
 }
 
 // ../../../node_modules/.pnpm/@aws-sdk+middleware-flexible-checksums@3.620.0/node_modules/@aws-sdk/middleware-flexible-checksums/dist-es/getChecksum.js
@@ -61400,11 +61401,22 @@ function startServer() {
         console.log("REQUEST");
         console.log(req);
         console.log("headers", req.headers);
+        let contentLength = 0;
+        const passThrough = new import_stream11.default.PassThrough();
+        req.pipe(passThrough);
+        passThrough.on("data", (chunk) => {
+          contentLength += chunk.length;
+        });
+        yield new Promise((resolve3, reject) => {
+          passThrough.on("end", resolve3);
+          passThrough.on("error", reject);
+        });
         try {
           const command = new PutObjectCommand({
             Bucket: bucket,
             Key: filename,
-            Body: req
+            Body: req,
+            ContentLength: contentLength
           });
           yield client.send(command);
           return res.end();

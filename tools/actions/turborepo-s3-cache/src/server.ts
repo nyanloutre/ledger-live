@@ -1,4 +1,5 @@
 import { getInput } from "@actions/core";
+import stream from "stream";
 import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { Readable } from "stream";
 import express from "express";
@@ -64,11 +65,29 @@ async function startServer() {
       console.log("REQUEST");
       console.log(req);
       console.log("headers", req.headers);
+
+      let contentLength = 0;
+
+      // Create a PassThrough stream to calculate the content length
+      const passThrough = new stream.PassThrough();
+      req.pipe(passThrough);
+
+      passThrough.on("data", (chunk: any) => {
+        contentLength += chunk.length;
+      });
+
+      // Wait for the stream to end to ensure content length is calculated
+      await new Promise((resolve, reject) => {
+        passThrough.on("end", resolve);
+        passThrough.on("error", reject);
+      });
+
       try {
         const command = new PutObjectCommand({
           Bucket: bucket,
           Key: filename,
           Body: req,
+          ContentLength: contentLength,
         });
         await client.send(command);
         return res.end();
