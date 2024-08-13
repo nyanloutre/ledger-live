@@ -1,9 +1,9 @@
 import axios, {
-  AxiosPromise,
-  AxiosResponse,
+  type AxiosPromise,
+  type AxiosResponse,
+  type InternalAxiosRequestConfig,
   type AxiosError,
   type AxiosRequestConfig,
-  type Method,
 } from "axios";
 import { LedgerAPI4xx, LedgerAPI5xx, NetworkDown } from "@ledgerhq/errors";
 import { changes, getEnv } from "@ledgerhq/live-env";
@@ -11,9 +11,9 @@ import { retry } from "@ledgerhq/live-promise";
 import { log } from "@ledgerhq/logs";
 
 type Metadata = { startTime: number };
-type ExtendedXHRConfig = AxiosRequestConfig & { metadata?: Metadata };
+type ExtendedXHRConfig = InternalAxiosRequestConfig & { metadata?: Metadata };
 
-export const requestInterceptor = (request: AxiosRequestConfig): ExtendedXHRConfig => {
+export const requestInterceptor = (request: ExtendedXHRConfig): ExtendedXHRConfig => {
   if (!getEnv("ENABLE_NETWORK_LOGS")) {
     return request;
   }
@@ -21,25 +21,23 @@ export const requestInterceptor = (request: AxiosRequestConfig): ExtendedXHRConf
   const { baseURL, url, method = "", data } = request;
   log("network", `${method} ${baseURL || ""}${url}`, { data });
 
-  const req: ExtendedXHRConfig = request;
-
-  req.metadata = {
+  request.metadata = {
     startTime: Date.now(),
   };
 
-  return req;
+  return request;
 };
 
 type InterceptedResponse = {
   config: ExtendedXHRConfig;
-} & AxiosResponse<any>;
+} & AxiosResponse;
 
-export const responseInterceptor = (response: InterceptedResponse): InterceptedResponse => {
+export const responseInterceptor = (response: AxiosResponse): AxiosResponse => {
   if (!getEnv("ENABLE_NETWORK_LOGS")) {
     return response;
   }
 
-  const { baseURL, url, method = "", metadata } = response.config;
+  const { baseURL, url, method, metadata } = response.config as ExtendedXHRConfig;
   const { startTime = 0 } = metadata || {};
 
   log(
@@ -55,12 +53,12 @@ export const responseInterceptor = (response: InterceptedResponse): InterceptedR
 
 type InterceptedError = {
   response?: InterceptedResponse;
-} & AxiosError<any>;
+} & AxiosError;
 
 export const errorInterceptor = (error: InterceptedError): InterceptedError => {
   const config = error?.response?.config;
   if (!config) throw error;
-  const { baseURL, url, method = "", metadata } = config;
+  const { baseURL, url, method = "", metadata } = config as ExtendedXHRConfig;
   const { startTime = 0 } = metadata || {};
 
   const duration = `${(Date.now() - startTime).toFixed(0)}ms`;
@@ -117,7 +115,7 @@ if (NETWORK_USE_HTTPS_KEEP_ALIVE) {
   axios.defaults.httpsAgent = new https.Agent({ keepAlive: true });
 }
 
-const makeError = (msg: string, status: number, url: string | undefined, method: Method | "") => {
+const makeError = (msg: string, status: number, url: string | undefined, method: string) => {
   const obj = {
     status,
     url,
