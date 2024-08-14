@@ -15,7 +15,8 @@ import type {
 import { mapDelegations, searchFilter as defaultSearchFilter } from "./logic";
 import { getAccountCurrency } from "../../account";
 import useMemoOnce from "../../hooks/useMemoOnce";
-import cryptoFactory from "./chain/chain";
+import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
+// import cryptoFactory from "./chain/chain";
 
 export function useCosmosFamilyPreloadData(currencyId?: string): CosmosPreloadData {
   const getCurrent = getCurrentCosmosPreloadData;

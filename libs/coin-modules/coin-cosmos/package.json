@@ -56,6 +56,7 @@
     "@ledgerhq/logs": "workspace:^",
     "@ledgerhq/types-cryptoassets": "workspace:^",
     "@ledgerhq/types-live": "workspace:^",
+    "@zondax/ledger-cosmos-js": "3.0.3",
     "axios": "0.26.1",
     "bignumber.js": "^9.1.2",
     "cosmjs-types": "0.2.1",

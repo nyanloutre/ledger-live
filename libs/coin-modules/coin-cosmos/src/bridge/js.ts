@@ -16,7 +16,7 @@ import getTransactionStatus from "../getTransactionStatus";
 import { prepareTransaction } from "../prepareTransaction";
 import { updateTransaction } from "../updateTransaction";
 import { createTransaction } from "../createTransaction";
-import { sync, getAccountShape } from "../synchronisation";
+import { getAccountShape } from "../synchronisation";
 import { buildSignOperation } from "../signOperation";
 import cryptoFactory from "../chain/chain";
 import { CosmosAPI } from "../api/Cosmos";
