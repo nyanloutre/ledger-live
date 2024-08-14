@@ -12,7 +12,6 @@ import { makeBridgeCacheSystem } from "../../bridge/cache";
 import { genAccount, genAddingOperationsInAccount } from "../../mock/account";
 import { LiveConfig } from "@ledgerhq/live-config/LiveConfig";
 import { liveConfig } from "../../config/sharedConfig";
-import cryptoFactory from "./chain/chain";
 import type {
   CosmosAccount,
   CosmosDelegation,
@@ -25,6 +24,7 @@ import { getCurrentCosmosPreloadData } from "./preloadedData";
 import preloadedMockData from "./preloadedData.mock";
 import * as hooks from "./react";
 import { CurrencyBridge } from "@ledgerhq/types-live";
+import cryptoFactory from "@ledgerhq/coin-cosmos/lib/chain/chain";
 
 const localCache = {};
 const cache = makeBridgeCacheSystem({

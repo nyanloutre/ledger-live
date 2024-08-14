@@ -3,10 +3,10 @@ import * as preloadedData from "./preloadedData";
 import * as logic from "./logic";
 import type { CosmosAccount, CosmosValidatorItem } from "./types";
 import data from "./preloadedData.mock";
-import cryptoFactory from "./chain/chain";
 import { BigNumber } from "bignumber.js";
 import { LiveConfig } from "@ledgerhq/live-config/LiveConfig";
 import { liveConfig } from "../../config/sharedConfig";
+import cryptoFactory from "@ledgerhq/coin-cosmos/lib/chain/chain";
 
 jest.mock("./prepareTransaction", () => ({
   calculateFees: jest.fn(() => Promise.resolve({})),

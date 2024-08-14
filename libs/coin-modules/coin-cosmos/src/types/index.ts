@@ -291,6 +291,7 @@ export const RETURN_CODES = {
   REFUSED_OPERATION: 27014,
 };
 
+// TODO: redundant ?
 export interface CosmosSigner {
   getAddress(
     path: string,

@@ -54,28 +54,46 @@ export const buildSignOperation =
           sequence.toString(),
         );
         const tx = Buffer.from(serializeSignDoc(signDoc));
-        const app = new CosmosApp(transport);
+        // const app = new CosmosApp(transport);
         const path = account.freshAddressPath.split("/").map(p => parseInt(p.replace("'", "")));
 
-        const { compressed_pk } = await app.getAddressAndPubKey(path, chainInstance.prefix);
+        // const { compressed_pk } = await app.getAddressAndPubKey(path, chainInstance.prefix);
+
+        const { address, publicKey } = await signerContext(deviceId, signer =>
+          signer.getAddress(
+            account.freshAddressPath,
+            parseInt(chainInstance.prefix),
+            false, // TODO: check if defaulting to false is good
+          ),
+        );
+        // TODO: is publicKey always compressed?
+        const compressed_pk = publicKey;
         const pubKey = Buffer.from(compressed_pk).toString("base64");
 
         // HRP is only needed when signing for ethermint chains
+        /*
         const signResponseApp =
           path[1] === 60
             ? await app.sign(path, tx, parseInt(chainInstance.prefix))
             : await app.sign(path, tx);
+        */
+        // const signResponseApp = await signerContext.
+        const { signature, return_code } = await signerContext(deviceId, signer =>
+          path[1] === 60
+            ? signer.sign(account.freshAddressPath, tx, chainInstance.prefix)
+            : signer.sign(account.freshAddressPath, tx),
+        );
 
-        switch (signResponseApp.return_code) {
+        switch (return_code) {
           case RETURN_CODES.EXPERT_MODE_REQUIRED:
             throw new ExpertModeRequired();
           case RETURN_CODES.REFUSED_OPERATION:
             throw new UserRefusedOnDevice();
         }
 
-        const signature = Buffer.from(
-          Secp256k1Signature.fromDer(signResponseApp.signature).toFixedLength(),
-        );
+        // const signature = Buffer.from(
+        //   Secp256k1Signature.fromDer(signResponseApp.signature).toFixedLength(),
+        // );
 
         const txBytes = buildTransaction({
           protoMsgs,
