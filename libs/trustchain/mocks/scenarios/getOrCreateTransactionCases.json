@@ -24,7 +24,8 @@
           "headers": {
             "accept": "application/json, text/plain, */*",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           }
         },
         "response": {
@@ -51,7 +52,8 @@
             "content-length": "1068",
             "content-type": "application/json",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           },
           "body": "{\"challenge\":{\"version\":0,\"challenge\":{\"data\":\"ac61f6ee9cd6df2f50923697641c31cd\",\"expiry\":\"2024-07-30T15:06:02Z\"},\"host\":\"trustchain-backend.api.aws.stg.ldg-tech.com\",\"rp\":[{\"credential\":{\"version\":0,\"curveId\":33,\"signAlgorithm\":1,\"publicKey\":\"03cb7628e7248ddf9c07da54b979f16bf081fb3d173aac0992ad2a44ef6a388ae2\"},\"signature\":\"3045022000aab553bb7a95ede3080415cd9959443124aa1d4192c21f96c9da9876bec358022100ff2c75349313457970112fc211bbcd53907470187811d40d023c95337e5ac8fc\"}],\"protocolVersion\":{\"major\":1,\"minor\":0,\"patch\":0}},\"signature\":{\"credential\":{\"version\":0,\"curveId\":33,\"signAlgorithm\":1,\"publicKey\":\"030c6fefa47ad27aa8820fc95596245e70e437c44a60bf0cd55e2d2c608a30f921\"},\"signature\":\"304402205ed416b748880d9d6283d767151b2ccbf76739ed8650858f04fe3588c58b60da022038e58a260d8ea97b035acc83b51501e19fc5ed5393023f9cfa27e72bc40c211d\",\"attestation\":\"0000210121029a8bef4947807f60aa2130f194f83b45e3989746a40d7b5a027ba13a38c2115f473045022100fa51a673c81b95c0d44863dbd207d7ce46e9913b8f4f60ba4bd65ee0097a01a2022058fc7639f0045b2965cf8dfa16eb06202bcd2562524a10e83e3fd4bccc827197\"}}"
         },
@@ -78,7 +80,8 @@
             "accept": "application/json, text/plain, */*",
             "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJ0cnVzdGNoYWluLWJhY2tlbmQuYXBpLmF3cy5zdGcubGRnLXRlY2guY29tIiwic3ViIjoiMDMwYzZmZWZhNDdhZDI3YWE4ODIwZmM5NTU5NjI0NWU3MGU0MzdjNDRhNjBiZjBjZDU1ZTJkMmM2MDhhMzBmOTIxIiwiYXVkIjpbIkNsb3VkU3luYyIsInRydXN0Y2hhaW4iXSwiZXhwIjoxNzIyMzUwNDY1LCJpYXQiOjE3MjIzNTAxNjQsImp0aSI6IjIxZTVhZTFjLWVlOTAtNDEzMy1iMTcxLWY1ZWZmNzU2OGE4ZSIsInBlcm1pc3Npb25zIjp7fSwiZGV2aWNlIjp0cnVlLCJyZWZyZXNoRXhwaXJhdGlvbiI6IjIwMjQtMDctMzBUMTU6MzY6MDVaIn0.AI4rQjezLbUDMMc5kjK9H6eRPO4SmbnYzWaq8kUkRrTFlqh_UymhmdHwcVDfgGpfbf2RHW3K2X7s0PdJllNB7w",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           }
         },
         "response": {
@@ -106,7 +109,8 @@
             "content-length": "654",
             "content-type": "application/json",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           },
           "body": "\"01010102203ae03ea857b7bbe5d1384668fa4c6cdc40f26e0722c502b65fd8bd1f055422af0621030c6fefa47ad27aa8820fc95596245e70e437c44a60bf0cd55e2d2c608a30f92101010110b0050001020000062102cfc8e253d7440855d9c9fe5cb7501d3ab2165290b6643890df1bc18acb8c8c27051096ef0cbf926a3d12edc090b1d3fa253f0550fe0813f10f4eba3fd95bb1a191223a7aac452da27f16a8ba37c7e8b51eb4fe1b42c99606c631c9bbe03382fb1599686af00a3521ff033d0aded4fb0f61d22656c5b955c1882314973a62b28b294d0543062102690876cca18a8a958e336e87a5c7096224fd308eef511364a4126334125d290603473045022100b68f05c83e4159ba53a8f2f5cb0a3973a9abecd2cbf37d379a9910187764704e022057c917578ffbe6edfe66f31a1cc2f91ebaf9be81e687affa285d9f63270f8588\""
         },
@@ -130,7 +134,8 @@
             "accept": "application/json, text/plain, */*",
             "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJ0cnVzdGNoYWluLWJhY2tlbmQuYXBpLmF3cy5zdGcubGRnLXRlY2guY29tIiwic3ViIjoiMDMwYzZmZWZhNDdhZDI3YWE4ODIwZmM5NTU5NjI0NWU3MGU0MzdjNDRhNjBiZjBjZDU1ZTJkMmM2MDhhMzBmOTIxIiwiYXVkIjpbIkNsb3VkU3luYyIsInRydXN0Y2hhaW4iXSwiZXhwIjoxNzIyMzUwNDY1LCJpYXQiOjE3MjIzNTAxNjQsImp0aSI6IjIxZTVhZTFjLWVlOTAtNDEzMy1iMTcxLWY1ZWZmNzU2OGE4ZSIsInBlcm1pc3Npb25zIjp7fSwiZGV2aWNlIjp0cnVlLCJyZWZyZXNoRXhwaXJhdGlvbiI6IjIwMjQtMDctMzBUMTU6MzY6MDVaIn0.AI4rQjezLbUDMMc5kjK9H6eRPO4SmbnYzWaq8kUkRrTFlqh_UymhmdHwcVDfgGpfbf2RHW3K2X7s0PdJllNB7w",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           }
         },
         "response": {
@@ -156,7 +161,8 @@
             "accept": "application/json, text/plain, */*",
             "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJ0cnVzdGNoYWluLWJhY2tlbmQuYXBpLmF3cy5zdGcubGRnLXRlY2guY29tIiwic3ViIjoiMDMwYzZmZWZhNDdhZDI3YWE4ODIwZmM5NTU5NjI0NWU3MGU0MzdjNDRhNjBiZjBjZDU1ZTJkMmM2MDhhMzBmOTIxIiwiYXVkIjpbIkNsb3VkU3luYyIsInRydXN0Y2hhaW4iXSwiZXhwIjoxNzIyMzUwNDY3LCJpYXQiOjE3MjIzNTAxNjYsImp0aSI6IjAzZjAzNTQyLTdjMzMtNDQ1Yi1iNjBkLTQ0ODBiM2EyODMxZCIsInBlcm1pc3Npb25zIjp7IjAwNTJlYmYxMGY4MDkyOWEyMDUyMWQzMmUzZTliZTEwOTkwZWRjOWY2ZTMyOTU3MWExZGQxN2M0YTUwZGFhNzc4NCI6eyJtLyI6WyJvd25lciJdfX0sImRldmljZSI6dHJ1ZSwicmVmcmVzaEV4cGlyYXRpb24iOiIyMDI0LTA3LTMwVDE1OjM2OjA1WiJ9.UPyhxeDoTmWiP4_su4712AZydDJjvIpH3G2buZE31h9xC7GL-iu_g0cOW0j6eAInfvtl5J4gy1T6neDlWU_bsA",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           }
         },
         "response": {
@@ -182,7 +188,8 @@
             "accept": "application/json, text/plain, */*",
             "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJ0cnVzdGNoYWluLWJhY2tlbmQuYXBpLmF3cy5zdGcubGRnLXRlY2guY29tIiwic3ViIjoiMDMwYzZmZWZhNDdhZDI3YWE4ODIwZmM5NTU5NjI0NWU3MGU0MzdjNDRhNjBiZjBjZDU1ZTJkMmM2MDhhMzBmOTIxIiwiYXVkIjpbIkNsb3VkU3luYyIsInRydXN0Y2hhaW4iXSwiZXhwIjoxNzIyMzUwNDY3LCJpYXQiOjE3MjIzNTAxNjYsImp0aSI6IjAzZjAzNTQyLTdjMzMtNDQ1Yi1iNjBkLTQ0ODBiM2EyODMxZCIsInBlcm1pc3Npb25zIjp7IjAwNTJlYmYxMGY4MDkyOWEyMDUyMWQzMmUzZTliZTEwOTkwZWRjOWY2ZTMyOTU3MWExZGQxN2M0YTUwZGFhNzc4NCI6eyJtLyI6WyJvd25lciJdfX0sImRldmljZSI6dHJ1ZSwicmVmcmVzaEV4cGlyYXRpb24iOiIyMDI0LTA3LTMwVDE1OjM2OjA1WiJ9.UPyhxeDoTmWiP4_su4712AZydDJjvIpH3G2buZE31h9xC7GL-iu_g0cOW0j6eAInfvtl5J4gy1T6neDlWU_bsA",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           }
         },
         "response": {
@@ -210,7 +217,8 @@
             "content-length": "1120",
             "content-type": "application/json",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           },
           "body": "\"010101022052ebf10f80929a20521d32e3e9be10990edc9f6e329571a1dd17c4a50daa77840621030c6fefa47ad27aa8820fc95596245e70e437c44a60bf0cd55e2d2c608a30f92101010315b8050c800000008000001080000000062103a96a4dd64d5eb6e6f53a7776e10254605fe9c7aad8cb70919dac8757594771e4051050ec562fb7748d944c94f077666df06705503bd07750869eb6b38858859b89a880046b7bc124361e1d500306590c6f1b7bc2eccf3da4d5a5d9b92ebdece5cd68449a3bdb809bdf48bacd0d131cb958092641538b7ab0b1b376f08e5c2041eecc879c062103100c1b26a20bf9a4900f4b1bcf065bf1319326a1dc660bcf84a1cd8afa31d2bc113304084d656d62657220310621030cb5888c967e6217516ba070078a58b96c5bb8a951a9fe3e3c318a8a876655250104ffffffff12aa051052ca9e2871c6a9dc57dbdd7a80a5ac7f0550e373c03fb53e960bd2a1bdf256ca86471cecd378631ee0c08febed859d97bd09a107cbac581145d22c10cb244ede6cecfb02eb503c51eca615a33c15ec53238093b1279b094663c49d1238f3a227a5e60621030cb5888c967e6217516ba070078a58b96c5bb8a951a9fe3e3c318a8a876655250621022e58f91d89730595fedb1493cc38a196278a5d8657a3f895a2e81e79ee59ff6a03473045022100bdcafe0ba2c1dc5c5f75e754d899a0482ad01b77007c467388671da7c00ecdba02205c5eca24e8b0d9e9a8b77468660d66516ebe0342bafddcef3022856aa7cb378a\""
         },
@@ -234,7 +242,8 @@
             "accept": "application/json, text/plain, */*",
             "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJ0cnVzdGNoYWluLWJhY2tlbmQuYXBpLmF3cy5zdGcubGRnLXRlY2guY29tIiwic3ViIjoiMDMwYzZmZWZhNDdhZDI3YWE4ODIwZmM5NTU5NjI0NWU3MGU0MzdjNDRhNjBiZjBjZDU1ZTJkMmM2MDhhMzBmOTIxIiwiYXVkIjpbIkNsb3VkU3luYyIsInRydXN0Y2hhaW4iXSwiZXhwIjoxNzIyMzUwNDY3LCJpYXQiOjE3MjIzNTAxNjYsImp0aSI6IjAzZjAzNTQyLTdjMzMtNDQ1Yi1iNjBkLTQ0ODBiM2EyODMxZCIsInBlcm1pc3Npb25zIjp7IjAwNTJlYmYxMGY4MDkyOWEyMDUyMWQzMmUzZTliZTEwOTkwZWRjOWY2ZTMyOTU3MWExZGQxN2M0YTUwZGFhNzc4NCI6eyJtLyI6WyJvd25lciJdfX0sImRldmljZSI6dHJ1ZSwicmVmcmVzaEV4cGlyYXRpb24iOiIyMDI0LTA3LTMwVDE1OjM2OjA1WiJ9.UPyhxeDoTmWiP4_su4712AZydDJjvIpH3G2buZE31h9xC7GL-iu_g0cOW0j6eAInfvtl5J4gy1T6neDlWU_bsA",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           }
         },
         "response": {
@@ -260,7 +269,8 @@
             "accept": "application/json, text/plain, */*",
             "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJ0cnVzdGNoYWluLWJhY2tlbmQuYXBpLmF3cy5zdGcubGRnLXRlY2guY29tIiwic3ViIjoiMDMwYzZmZWZhNDdhZDI3YWE4ODIwZmM5NTU5NjI0NWU3MGU0MzdjNDRhNjBiZjBjZDU1ZTJkMmM2MDhhMzBmOTIxIiwiYXVkIjpbIkNsb3VkU3luYyIsInRydXN0Y2hhaW4iXSwiZXhwIjoxNzIyMzUwNDY3LCJpYXQiOjE3MjIzNTAxNjYsImp0aSI6IjAzZjAzNTQyLTdjMzMtNDQ1Yi1iNjBkLTQ0ODBiM2EyODMxZCIsInBlcm1pc3Npb25zIjp7IjAwNTJlYmYxMGY4MDkyOWEyMDUyMWQzMmUzZTliZTEwOTkwZWRjOWY2ZTMyOTU3MWExZGQxN2M0YTUwZGFhNzc4NCI6eyJtLyI6WyJvd25lciJdfX0sImRldmljZSI6dHJ1ZSwicmVmcmVzaEV4cGlyYXRpb24iOiIyMDI0LTA3LTMwVDE1OjM2OjA1WiJ9.UPyhxeDoTmWiP4_su4712AZydDJjvIpH3G2buZE31h9xC7GL-iu_g0cOW0j6eAInfvtl5J4gy1T6neDlWU_bsA",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           }
         },
         "response": {
@@ -285,7 +295,8 @@
           "headers": {
             "accept": "application/json, text/plain, */*",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           }
         },
         "response": {
@@ -312,7 +323,8 @@
             "content-length": "1066",
             "content-type": "application/json",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           },
           "body": "{\"challenge\":{\"version\":0,\"challenge\":{\"data\":\"0e86497ed64499266f39e01f85b842aa\",\"expiry\":\"2024-07-30T15:06:11Z\"},\"host\":\"trustchain-backend.api.aws.stg.ldg-tech.com\",\"rp\":[{\"credential\":{\"version\":0,\"curveId\":33,\"signAlgorithm\":1,\"publicKey\":\"03cb7628e7248ddf9c07da54b979f16bf081fb3d173aac0992ad2a44ef6a388ae2\"},\"signature\":\"30450221009218f37d4d7613db0ae9c87e95dc10d983e49c8dfe35e48885d5ebffe34879da0220297993b80f61ff025d8b20b918e7323fbe038c1cba56fdca83281cdbd88fb29d\"}],\"protocolVersion\":{\"major\":1,\"minor\":0,\"patch\":0}},\"signature\":{\"credential\":{\"version\":0,\"curveId\":33,\"signAlgorithm\":1,\"publicKey\":\"030c6fefa47ad27aa8820fc95596245e70e437c44a60bf0cd55e2d2c608a30f921\"},\"signature\":\"3044022074c90a4ef75f2425855b656be9af596f51b2c928e333511434852c5ea07a83070220327c308dcfea8cd758e27919afaba54c7af4056951feb344ce7246197cb85426\",\"attestation\":\"0000210121029a8bef4947807f60aa2130f194f83b45e3989746a40d7b5a027ba13a38c2115f463044022049625f5b7b55f066fdfac67fe2cfe46206bdd380a8d4e8e12c04c7f26b2e487e02203908740d0dae931e188dea2a0e59d4dbb352c9dcb6073cd6ab27cfdd061e663e\"}}"
         },
@@ -339,7 +351,8 @@
             "accept": "application/json, text/plain, */*",
             "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJ0cnVzdGNoYWluLWJhY2tlbmQuYXBpLmF3cy5zdGcubGRnLXRlY2guY29tIiwic3ViIjoiMDMwYzZmZWZhNDdhZDI3YWE4ODIwZmM5NTU5NjI0NWU3MGU0MzdjNDRhNjBiZjBjZDU1ZTJkMmM2MDhhMzBmOTIxIiwiYXVkIjpbIkNsb3VkU3luYyIsInRydXN0Y2hhaW4iXSwiZXhwIjoxNzIyMzUwNDc0LCJpYXQiOjE3MjIzNTAxNzMsImp0aSI6IjU2ODY4NDk2LWJlYmMtNGQ1Mi04OWNlLTFkMTZhY2YxYjY2ZiIsInBlcm1pc3Npb25zIjp7IjAwNTJlYmYxMGY4MDkyOWEyMDUyMWQzMmUzZTliZTEwOTkwZWRjOWY2ZTMyOTU3MWExZGQxN2M0YTUwZGFhNzc4NCI6eyJtLyI6WyJvd25lciJdfX0sImRldmljZSI6dHJ1ZSwicmVmcmVzaEV4cGlyYXRpb24iOiIyMDI0LTA3LTMwVDE1OjM2OjE0WiJ9.5mNUKygL048Jlo5J6u8qUdB9XHR2XWtQHPvFiH54yyOdrK-ThfqbqjiH53mImFl7YZ7_VfV4VmFXkMSxIzXvfg",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           }
         },
         "response": {
@@ -365,7 +378,8 @@
             "accept": "application/json, text/plain, */*",
             "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJ0cnVzdGNoYWluLWJhY2tlbmQuYXBpLmF3cy5zdGcubGRnLXRlY2guY29tIiwic3ViIjoiMDMwYzZmZWZhNDdhZDI3YWE4ODIwZmM5NTU5NjI0NWU3MGU0MzdjNDRhNjBiZjBjZDU1ZTJkMmM2MDhhMzBmOTIxIiwiYXVkIjpbIkNsb3VkU3luYyIsInRydXN0Y2hhaW4iXSwiZXhwIjoxNzIyMzUwNDc0LCJpYXQiOjE3MjIzNTAxNzMsImp0aSI6IjU2ODY4NDk2LWJlYmMtNGQ1Mi04OWNlLTFkMTZhY2YxYjY2ZiIsInBlcm1pc3Npb25zIjp7IjAwNTJlYmYxMGY4MDkyOWEyMDUyMWQzMmUzZTliZTEwOTkwZWRjOWY2ZTMyOTU3MWExZGQxN2M0YTUwZGFhNzc4NCI6eyJtLyI6WyJvd25lciJdfX0sImRldmljZSI6dHJ1ZSwicmVmcmVzaEV4cGlyYXRpb24iOiIyMDI0LTA3LTMwVDE1OjM2OjE0WiJ9.5mNUKygL048Jlo5J6u8qUdB9XHR2XWtQHPvFiH54yyOdrK-ThfqbqjiH53mImFl7YZ7_VfV4VmFXkMSxIzXvfg",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           }
         },
         "response": {
@@ -393,7 +407,8 @@
             "content-length": "782",
             "content-type": "application/json",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           },
           "body": "{\"path\":\"m/0'/16'/0'\",\"blocks\":[\"0101010220063db86e21d0c0f5684d5a55e573765bd2e1d93d507d64b772b367e5ecdcd2b90621030c6fefa47ad27aa8820fc95596245e70e437c44a60bf0cd55e2d2c608a30f921010102113304084d656d6265722032062102c9b693a992fea5441e1e11c808b743c75d0239dd320164e2a3119e05c5a247c80104ffffffff12aa05109aafe05234401fd2da61c4ee2217626d0550db668b9ea048bede9a9f05478fe1e74d70b767f13fa8cd3ed784a831138ee95ee573d033bb4930364ef478c9ce3ee9b9713dd4d34a3b57b0b8f5784a1d4e8eb58402bc9fd85f59b8eb44639aad1a1182062102c9b693a992fea5441e1e11c808b743c75d0239dd320164e2a3119e05c5a247c8062102675dbee99981bf1264e10a2ac9707a71edbce19a61cc6092a4a2ce4d2b4a31c903473045022100dbb31b3cd4f1b2088adfc46b2760900748b12ce758e763347e8756fccaad729702206fb87d2f847e9e5ff86054ff3f5ded13bf174fb4dbd6cc907680d1ca9cde2576\"]}"
         },
@@ -416,7 +431,8 @@
           "headers": {
             "accept": "application/json, text/plain, */*",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           }
         },
         "response": {
@@ -443,7 +459,8 @@
             "content-length": "986",
             "content-type": "application/json",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           },
           "body": "{\"challenge\":{\"version\":0,\"challenge\":{\"data\":\"ebd04517806219a60a5a4758bef979d7\",\"expiry\":\"2024-07-30T15:06:18Z\"},\"host\":\"trustchain-backend.api.aws.stg.ldg-tech.com\",\"rp\":[{\"credential\":{\"version\":0,\"curveId\":33,\"signAlgorithm\":1,\"publicKey\":\"03cb7628e7248ddf9c07da54b979f16bf081fb3d173aac0992ad2a44ef6a388ae2\"},\"signature\":\"3045022100e0c73883783bd6b4607b7c1a2743daa7cad9e5f6964f2dd99a2771bd01584eff0220782514723ec0f7c702a69f2aa3b3daf0730c7ad8e27d971583e7fcf511093cb7\"}],\"protocolVersion\":{\"major\":1,\"minor\":0,\"patch\":0}},\"signature\":{\"credential\":{\"version\":0,\"curveId\":33,\"signAlgorithm\":1,\"publicKey\":\"030cb5888c967e6217516ba070078a58b96c5bb8a951a9fe3e3c318a8a87665525\"},\"signature\":\"3045022100db9a1c4964104007308db5cfd43fd85cc49dbd22f8aca0bed0f34c7c2b5e8b150220250958b43e10450212ed111e1e08d45a61f701e6372836f6221a424deec34ce4\",\"attestation\":\"0242303035326562663130663830393239613230353231643332653365396265313039393065646339663665333239353731613164643137633461353064616137373834\"}}"
         },
@@ -470,7 +487,8 @@
             "accept": "application/json, text/plain, */*",
             "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJ0cnVzdGNoYWluLWJhY2tlbmQuYXBpLmF3cy5zdGcubGRnLXRlY2guY29tIiwic3ViIjoiMDMwY2I1ODg4Yzk2N2U2MjE3NTE2YmEwNzAwNzhhNThiOTZjNWJiOGE5NTFhOWZlM2UzYzMxOGE4YTg3NjY1NTI1IiwiYXVkIjpbIkNsb3VkU3luYyIsInRydXN0Y2hhaW4iXSwiZXhwIjoxNzIyMzUwNDc4LCJpYXQiOjE3MjIzNTAxNzcsImp0aSI6IjE2NzVhN2UzLWEzNTUtNDAzNi05NDBlLWFjNTM5YTNlYTY3ZiIsInBlcm1pc3Npb25zIjp7IjAwNTJlYmYxMGY4MDkyOWEyMDUyMWQzMmUzZTliZTEwOTkwZWRjOWY2ZTMyOTU3MWExZGQxN2M0YTUwZGFhNzc4NCI6eyJtLzAnLzE2Jy8wJyI6WyJvd25lciJdfX0sImRldmljZSI6ZmFsc2UsInJlZnJlc2hFeHBpcmF0aW9uIjoiMjAyNC0wNy0zMFQxNTozNjoxOFoifQ.o6ireo5HvljXITZE4sZKca6Jt3TNuOEBwGxwMFdH4nbOQ8NNB-HWsQdIEfGYHyR_BzRhC6jSofcSQLkzoeKyZA",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           }
         },
         "response": {
@@ -496,7 +514,8 @@
             "accept": "application/json, text/plain, */*",
             "authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJ0cnVzdGNoYWluLWJhY2tlbmQuYXBpLmF3cy5zdGcubGRnLXRlY2guY29tIiwic3ViIjoiMDMwY2I1ODg4Yzk2N2U2MjE3NTE2YmEwNzAwNzhhNThiOTZjNWJiOGE5NTFhOWZlM2UzYzMxOGE4YTg3NjY1NTI1IiwiYXVkIjpbIkNsb3VkU3luYyIsInRydXN0Y2hhaW4iXSwiZXhwIjoxNzIyMzUwNDc4LCJpYXQiOjE3MjIzNTAxNzcsImp0aSI6IjE2NzVhN2UzLWEzNTUtNDAzNi05NDBlLWFjNTM5YTNlYTY3ZiIsInBlcm1pc3Npb25zIjp7IjAwNTJlYmYxMGY4MDkyOWEyMDUyMWQzMmUzZTliZTEwOTkwZWRjOWY2ZTMyOTU3MWExZGQxN2M0YTUwZGFhNzc4NCI6eyJtLzAnLzE2Jy8wJyI6WyJvd25lciJdfX0sImRldmljZSI6ZmFsc2UsInJlZnJlc2hFeHBpcmF0aW9uIjoiMjAyNC0wNy0zMFQxNTozNjoxOFoifQ.o6ireo5HvljXITZE4sZKca6Jt3TNuOEBwGxwMFdH4nbOQ8NNB-HWsQdIEfGYHyR_BzRhC6jSofcSQLkzoeKyZA",
             "host": "trustchain-backend.api.aws.stg.ldg-tech.com",
-            "user-agent": "axios/0.26.1"
+            "accept-encoding": "gzip, compress, deflate, br",
+            "user-agent": "axios/1.7.3"
           }
         },
         "response": {
