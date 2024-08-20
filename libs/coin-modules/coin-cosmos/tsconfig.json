@@ -9,6 +9,5 @@
     "outDir": "lib",
     "exactOptionalPropertyTypes": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["src/api/subscan.ts", "src/api/websocket.ts"]
+  "include": ["src/**/*"]
 }
