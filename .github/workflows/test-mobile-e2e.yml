@@ -95,6 +95,8 @@ jobs:
         run: |
           pnpm build:dummy-apps
           rm ~/Library/Detox/device.registry.json
+          rm -rf ~/.cocoapods/
+          cd apps/ledger-live-mobile/ && bundle install
         shell: bash
       - name: Create iOS simulator
         id: simulator
