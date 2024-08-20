@@ -94,6 +94,7 @@ jobs:
       - name: Build Dummy Live SDK and Dummy Wallet API apps for testing
         run: |
           pnpm build:dummy-apps
+          rm ~/Library/Detox/device.registry.json
         shell: bash
       - name: Create iOS simulator
         id: simulator
