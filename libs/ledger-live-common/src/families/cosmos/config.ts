@@ -180,5 +180,3 @@ export const getCoinConfig = (): CosmosCoinConfig => {
 };
 
 export { cosmosConfig };
-
-// TODO: unused, might remove?, only the one in LLC is used

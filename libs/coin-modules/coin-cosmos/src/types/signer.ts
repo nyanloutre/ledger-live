@@ -18,7 +18,7 @@ export type CosmosSignatureSdk = {
 export interface CosmosSigner {
   getAddress(path: string, hrp: string, boolDisplay?: boolean): Promise<CosmosAddress>;
   // sign(path: string, message: string): Promise<CosmosSignature>;
-  sign(path: number[], buffer: Buffer, transactionType?:  string): Promise<CosmosSignatureSdk>;
+  sign(path: number[], buffer: Buffer, transactionType?:  number): Promise<CosmosSignatureSdk>;
   // NOTE: missing error_message from CosmosSignature https://github.com/Zondax/ledger-cosmos-js/blob/master/src/cosmosApp.ts
 }
 
