@@ -85,6 +85,11 @@ jobs:
           bucket: ll-gha-s3-cache
           region: ${{ secrets.AWS_CACHE_REGION }}
           use-fallback: false
+      - name: Build
+        run: |
+          rm -rf ~/.cocoapods/
+          cd apps/ledger-live-mobile/ && bundle install && cd ../..
+          pnpm clean && pnpm store prune
       - name: install dependencies
         run: |
           pnpm i --filter="live-mobile..." --filter="ledger-live" --filter="@ledgerhq/dummy-*-app..." --no-frozen-lockfile --unsafe-perm
@@ -94,9 +99,6 @@ jobs:
       - name: Build Dummy Live SDK and Dummy Wallet API apps for testing
         run: |
           pnpm build:dummy-apps
-          rm ~/Library/Detox/device.registry.json
-          rm -rf ~/.cocoapods/
-          cd apps/ledger-live-mobile/ && bundle install
         shell: bash
       - name: Create iOS simulator
         id: simulator
