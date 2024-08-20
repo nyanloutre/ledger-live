@@ -87,7 +87,6 @@ jobs:
           use-fallback: false
       - name: Build
         run: |
-          rm -rf ~/.cocoapods/
           cd apps/ledger-live-mobile/ && bundle install && cd ../..
           pnpm clean && pnpm store prune
       - name: install dependencies
