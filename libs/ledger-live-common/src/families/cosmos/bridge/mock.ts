@@ -12,7 +12,7 @@ import type {
   StatusErrorMap,
   Transaction,
   CosmosCurrencyConfig,
-} from "../types";
+} from "@ledgerhq/coin-cosmos/types/index";
 import {
   scanAccounts,
   signOperation,
@@ -23,7 +23,7 @@ import {
 } from "../../../bridge/mockHelpers";
 import { defaultUpdateTransaction } from "@ledgerhq/coin-framework/bridge/jsHelpers";
 import { setCosmosPreloadData, asSafeCosmosPreloadData } from "../preloadedData";
-import { getMainAccount } from "../../../account";
+import { getMainAccount } from "@ledgerhq/coin-framework/account/index";
 import mockPreloadedData from "../preloadedData.mock";
 import type { Account, AccountBridge, CurrencyBridge } from "@ledgerhq/types-live";
 // import { assignFromAccountRaw, assignToAccountRaw } from "../serialization";
