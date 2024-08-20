@@ -1,6 +1,5 @@
 import casper from "../families/casper/hw-getAddress";
 import celo from "../families/celo/hw-getAddress";
-import cosmos from "../families/cosmos/hw-getAddress";
 import crypto_org from "../families/crypto_org/hw-getAddress";
 import elrond from "../families/elrond/hw-getAddress";
 import filecoin from "../families/filecoin/hw-getAddress";
@@ -25,7 +24,6 @@ import { resolver as ton } from "../families/ton/setup";
 export default {
   casper,
   celo,
-  cosmos,
   crypto_org,
   elrond,
   filecoin,

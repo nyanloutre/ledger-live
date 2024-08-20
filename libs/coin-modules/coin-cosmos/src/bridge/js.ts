@@ -35,11 +35,14 @@ import { CosmosCoinConfig, getCoinConfig, setCoinConfig } from "../config";
 import getAddressWrapper from "@ledgerhq/coin-framework/bridge/getAddressWrapper";
 import { CoinConfig } from "@ledgerhq/coin-framework/config";
 import { SignerContext } from "@ledgerhq/coin-framework/signer";
+import resolver from "../signer/hw-getAddress";
 
 const sync = makeSync({ getAccountShape });
 
 function buildCurrencyBridge(signerContext: SignerContext<CosmosSigner>): CurrencyBridge {
-  const getAddress = signerGetAddress(signerContext);
+
+  const getAddress = resolver(signerContext);
+  // const getAddress = signerGetAddress(signerContext);
   const receive = makeAccountBridgeReceive(getAddressWrapper(getAddress));
 
   const scanAccounts = makeScanAccounts({
@@ -93,7 +96,9 @@ function buildCurrencyBridge(signerContext: SignerContext<CosmosSigner>): Curren
 function buildAccountBridge(
   signerContext: SignerContext<CosmosSigner>,
 ): AccountBridge<Transaction, CosmosAccount, TransactionStatus> {
-  const getAddress = signerGetAddress(signerContext);
+  const getAddress = resolver(signerContext);
+
+  // const getAddress = signerGetAddress(signerContext);
 
   const receive = makeAccountBridgeReceive(getAddressWrapper(getAddress));
   const signOperation = buildSignOperation(signerContext);

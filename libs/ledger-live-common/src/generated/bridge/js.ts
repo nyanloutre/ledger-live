@@ -1,6 +1,5 @@
 import casper from "../../families/casper/bridge/js";
 import celo from "../../families/celo/bridge/js";
-import cosmos from "../../families/cosmos/bridge/js";
 import crypto_org from "../../families/crypto_org/bridge/js";
 import elrond from "../../families/elrond/bridge/js";
 import filecoin from "../../families/filecoin/bridge/js";
@@ -25,7 +24,6 @@ import { bridge as ton } from "../../families/ton/setup";
 export default {
   casper,
   celo,
-  cosmos,
   crypto_org,
   elrond,
   filecoin,
