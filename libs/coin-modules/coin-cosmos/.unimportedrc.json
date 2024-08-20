@@ -4,6 +4,7 @@
     "src/bridge/js.ts",
     "src/cli.ts",
     "src/deviceTransactionConfig.ts",
+    "src/CosmosValidatorsManager.ts",
     "src/errors.ts",
     "src/formatters.ts",
     "src/hw-getAddress.ts",

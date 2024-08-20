@@ -2,11 +2,17 @@ import { TFunction } from "i18next";
 import { Device } from "@ledgerhq/live-common/hw/actions/types";
 import { Step } from "~/renderer/components/Stepper";
 import { Operation } from "@ledgerhq/types-live";
-import {
+// import {
+//   CosmosAccount,
+//   Transaction,
+//   TransactionStatus,
+// } from "@ledgerhq/live-common/families/cosmos/types";
+import type {
   CosmosAccount,
   Transaction,
   TransactionStatus,
-} from "@ledgerhq/live-common/families/cosmos/types";
+} from "@ledgerhq/coin-cosmos/lib/types/index";
+
 import { OpenModal } from "~/renderer/actions/modals";
 export type StepId = "claimRewards" | "connectDevice" | "confirmation";
 export type StepProps = {

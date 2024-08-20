@@ -5,6 +5,7 @@ import BigNumber from "bignumber.js";
 import { getCryptoCurrencyIcon } from "@ledgerhq/live-common/reactNative";
 import { CosmosAccount } from "@ledgerhq/live-common/families/cosmos/types";
 import { CosmosAPI } from "@ledgerhq/live-common/families/cosmos/api/Cosmos";
+// import { CosmosAPI } from "@ledgerhq/coin-cosmos/lib/api/Cosmos";
 import { Account } from "@ledgerhq/types-live";
 import cryptoFactory from "@ledgerhq/live-common/families/cosmos/chain/chain";
 import { Unit } from "@ledgerhq/types-cryptoassets";

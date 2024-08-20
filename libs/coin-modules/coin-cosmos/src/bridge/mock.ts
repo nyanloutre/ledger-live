@@ -20,11 +20,11 @@ import {
   sync,
   isInvalidRecipient,
   makeAccountBridgeReceive,
-} from "../../../bridge/mockHelpers";
+} from "../../../../ledger-live-common/src/bridge/mockHelpers";
 import { defaultUpdateTransaction } from "@ledgerhq/coin-framework/bridge/jsHelpers";
-import { setCosmosPreloadData, asSafeCosmosPreloadData } from "../preloadedData";
+import { setCosmosPreloadData, asSafeCosmosPreloadData } from "../../../../ledger-live-common/src/families/cosmos/preloadedData";
 import { getMainAccount } from "@ledgerhq/coin-framework/account/index";
-import mockPreloadedData from "../preloadedData.mock";
+import mockPreloadedData from "../../../../ledger-live-common/src/families/cosmos/preloadedData.mock";
 import type { Account, AccountBridge, CurrencyBridge } from "@ledgerhq/types-live";
 // import { assignFromAccountRaw, assignToAccountRaw } from "../serialization";
 // import {
@@ -34,9 +34,9 @@ import type { Account, AccountBridge, CurrencyBridge } from "@ledgerhq/types-liv
 //   // type Transaction,
 // } from "@ledgerhq/coin-cosmos";
 // import { CosmosValidatorsManager } from "../CosmosValidatorsManager";
-import { getCryptoCurrencyById } from "../../../currencies";
+import { getCryptoCurrencyById } from "../../../../ledger-live-common/src/currencies";
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
-import { getCurrencyConfiguration } from "../../../config";
+import { getCurrencyConfiguration } from "../../../../ledger-live-common/src/config";
 import cryptoFactory from "@ledgerhq/coin-cosmos/lib/chain/chain";
 import {assignFromAccountRaw, assignToAccountRaw} from "@ledgerhq/coin-cosmos/lib/serialization";
 import { CosmosValidatorsManager } from "@ledgerhq/coin-cosmos/lib/CosmosValidatorsManager";

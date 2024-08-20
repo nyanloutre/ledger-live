@@ -23,7 +23,8 @@ import StepClaimRewards, { StepClaimRewardsFooter } from "./steps/StepClaimRewar
 import GenericStepConnectDevice from "~/renderer/modals/Send/steps/GenericStepConnectDevice";
 import StepConfirmation, { StepConfirmationFooter } from "./steps/StepConfirmation";
 import logger from "~/renderer/logger";
-import { CosmosAccount } from "@ledgerhq/live-common/families/cosmos/types";
+// import { CosmosAccount } from "@ledgerhq/live-common/families/cosmos/types";
+import type { CosmosAccount } from "@ledgerhq/coin-cosmos/lib/types/index";
 
 export type Data = {
   account: CosmosAccount;
