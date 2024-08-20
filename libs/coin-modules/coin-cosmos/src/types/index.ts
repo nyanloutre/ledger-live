@@ -292,7 +292,8 @@ export const RETURN_CODES = {
 };
 
 // TODO: redundant ?
-export interface CosmosSigner {
+// NOTE: didn't follow what was in libs/ledgerjs/packages/hw-app-cosmos/src/Cosmos.ts
+export interface CosmosSignerOld {
   getAddress(
     path: string,
     chainPrefix: number,

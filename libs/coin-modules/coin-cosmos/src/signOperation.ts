@@ -1,4 +1,4 @@
-import { CosmosAccount, CosmosSigner, RETURN_CODES, Transaction } from "./types";
+import { CosmosAccount, RETURN_CODES, Transaction } from "./types";
 import { Observable } from "rxjs";
 import BigNumber from "bignumber.js";
 import { Secp256k1Signature } from "@cosmjs/crypto";
@@ -12,6 +12,7 @@ import { SignerContext } from "@ledgerhq/coin-framework/signer";
 import { txToMessages, buildTransaction } from "./buildTransaction";
 import { CosmosAPI } from "./api/Cosmos";
 import cryptoFactory from "./chain/chain";
+import { CosmosSignature, CosmosSignatureSdk, CosmosSigner } from "./types/signer";
 
 export const buildSignOperation =
   (
@@ -62,7 +63,7 @@ export const buildSignOperation =
         const { address, publicKey } = await signerContext(deviceId, signer =>
           signer.getAddress(
             account.freshAddressPath,
-            parseInt(chainInstance.prefix),
+            chainInstance.prefix,
             false, // TODO: check if defaulting to false is good
           ),
         );
@@ -78,11 +79,16 @@ export const buildSignOperation =
             : await app.sign(path, tx);
         */
         // const signResponseApp = await signerContext.
-        const { signature, return_code } = await signerContext(deviceId, signer =>
-          path[1] === 60
-            ? signer.sign(account.freshAddressPath, tx, chainInstance.prefix)
-            : signer.sign(account.freshAddressPath, tx),
-        );
+        const { signature: resSignature, return_code } = (await signerContext(deviceId, async (signer) => {
+          let res;
+          if (path[1] === 60) {
+              res = await signer.signSdk(path, tx, parseInt(chainInstance.prefix))
+          } else {
+            res = await signer.signSdk(path, tx);
+          }
+          return res;
+        }
+        )) as CosmosSignatureSdk;
 
         switch (return_code) {
           case RETURN_CODES.EXPERT_MODE_REQUIRED:
@@ -91,9 +97,9 @@ export const buildSignOperation =
             throw new UserRefusedOnDevice();
         }
 
-        // const signature = Buffer.from(
-        //   Secp256k1Signature.fromDer(signResponseApp.signature).toFixedLength(),
-        // );
+        const signature = Buffer.from(
+          Secp256k1Signature.fromDer(resSignature).toFixedLength(),
+        );
 
         const txBytes = buildTransaction({
           protoMsgs,

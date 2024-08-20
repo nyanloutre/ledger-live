@@ -4,7 +4,7 @@ import type { AccountBridge, CurrencyBridge } from "@ledgerhq/types-live";
 import type {
   CosmosAccount,
   CosmosCurrencyConfig,
-  CosmosSigner,
+  // CosmosSigner,
   CosmosValidatorItem,
   Transaction,
   TransactionStatus,
@@ -36,6 +36,7 @@ import getAddressWrapper from "@ledgerhq/coin-framework/bridge/getAddressWrapper
 import { CoinConfig } from "@ledgerhq/coin-framework/config";
 import { SignerContext } from "@ledgerhq/coin-framework/signer";
 import resolver from "../hw-getAddress";
+import { CosmosSigner } from "../types/signer";
 
 const sync = makeSync({ getAccountShape });
 
