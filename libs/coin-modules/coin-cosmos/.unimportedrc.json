@@ -2,7 +2,7 @@
   "entry": [
     "src/account.ts",
     "src/bridge/js.ts",
-    "src/cli-transaction.ts",
+    "src/cli.ts",
     "src/deviceTransactionConfig.ts",
     "src/errors.ts",
     "src/formatters.ts",
@@ -11,8 +11,28 @@
     "src/mock.ts",
     "src/serialization.ts",
     "src/specs.ts",
-    "src/transaction.ts",
-    "src/tokens.ts"
+    "src/transaction.ts"
   ],
-  "ignoreUnimported": []
+  "ignorePatterns": [
+    "**/node_modules/**",
+    "**/*.fixture.ts",
+    "**/*.mock.ts",
+    "**/*.test.{js,jsx,ts,tsx}"
+  ],
+  "ignoreUnresolved": [],
+  "ignoreUnimported": [
+    "src/bridge/index.ts",
+    "src/broadcast.ts",
+    "src/buildOptimisticOperation.ts",
+    "src/buildTransaction.ts",
+    "src/cli.ts",
+    "src/config.ts",
+    "src/createTransaction.ts",
+    "src/estimateMaxSpendable.ts",
+    "src/getTransactionStatus.ts",
+    "src/prepareTransaction.ts",
+    "src/signOperation.ts",
+    "src/synchronization.ts"
+  ],
+  "ignoreUnused": ["rxjs"]
 }

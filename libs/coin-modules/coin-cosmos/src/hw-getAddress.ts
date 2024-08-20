@@ -20,8 +20,8 @@ import { SignerContext } from "@ledgerhq/coin-framework/signer";
 import { GetAddressOptions } from "@ledgerhq/coin-framework/derivation";
 // import { StrKey } from "@stellar/stellar-sdk";
 // import { StellarSigner } from "./types/signer";
-import { CosmosSigner } from "../types";
-import cryptoFactory from "../chain/chain";
+import { CosmosSigner } from "./types";
+import cryptoFactory from "./chain/chain";
 
 function resolver(signerContext: SignerContext<CosmosSigner>): GetAddressFn {
   return async (deviceId: string, { path, verify, currency }: GetAddressOptions) => {

@@ -35,7 +35,7 @@ import { CosmosCoinConfig, getCoinConfig, setCoinConfig } from "../config";
 import getAddressWrapper from "@ledgerhq/coin-framework/bridge/getAddressWrapper";
 import { CoinConfig } from "@ledgerhq/coin-framework/config";
 import { SignerContext } from "@ledgerhq/coin-framework/signer";
-import resolver from "../signer/hw-getAddress";
+import resolver from "../hw-getAddress";
 
 const sync = makeSync({ getAccountShape });
 

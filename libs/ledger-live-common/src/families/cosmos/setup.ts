@@ -20,7 +20,7 @@ import { CosmosApp } from "@zondax/ledger-cosmos-js";
 import { Transaction, CosmosAccount, TransactionStatus, CosmosSigner } from "@ledgerhq/coin-cosmos/types/index";
 import makeCliTools from "@ledgerhq/coin-cosmos/cli";
 import { createBridges } from "@ledgerhq/coin-cosmos/bridge/js";
-import cosmosResolver from "@ledgerhq/coin-cosmos/signer/hw-getAddress"
+import cosmosResolver from "@ledgerhq/coin-cosmos/lib/hw-getAddress"
 
 /*
 const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
