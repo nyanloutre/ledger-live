@@ -3388,6 +3388,9 @@ importers:
       '@ledgerhq/hw-app-btc':
         specifier: workspace:^
         version: link:../ledgerjs/packages/hw-app-btc
+      '@ledgerhq/hw-app-cosmos':
+        specifier: workspace:^
+        version: link:../ledgerjs/packages/hw-app-cosmos
       '@ledgerhq/hw-app-eth':
         specifier: workspace:^
         version: link:../ledgerjs/packages/hw-app-eth

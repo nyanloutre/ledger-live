@@ -291,7 +291,6 @@ export const RETURN_CODES = {
   REFUSED_OPERATION: 27014,
 };
 
-// TODO: redundant ?
 // NOTE: didn't follow what was in libs/ledgerjs/packages/hw-app-cosmos/src/Cosmos.ts
 export interface CosmosSignerOld {
   getAddress(

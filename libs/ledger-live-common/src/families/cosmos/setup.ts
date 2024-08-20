@@ -17,11 +17,12 @@ import { Resolver } from "../../hw/getAddress/types";
 import { getCurrencyConfiguration } from "../../config";
 import { CosmosApp } from "@zondax/ledger-cosmos-js";
 // import { Transaction } from "./types";
-import { Transaction, CosmosAccount, TransactionStatus, CosmosSigner } from "@ledgerhq/coin-cosmos/types/index";
+import { Transaction, CosmosAccount, TransactionStatus } from "@ledgerhq/coin-cosmos/types/index";
+import { CosmosSigner } from "@ledgerhq/coin-cosmos/types/signer";
 import makeCliTools from "@ledgerhq/coin-cosmos/cli";
 import { createBridges } from "@ledgerhq/coin-cosmos/bridge/js";
 import cosmosResolver from "@ledgerhq/coin-cosmos/lib/hw-getAddress"
-
+// import Cosmos from "@ledgerhq/hw-app-cosmos";
 /*
 const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
     const trx = new Trx(transport);
@@ -44,16 +45,26 @@ const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
 */
 
 const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
+  // return new Cosmos(transport)
   // return new CosmosApp(transport);
-
-  // TODO: this one
+  const cosmos = new CosmosApp(transport);
+  // return new CosmosApp(transport)
   return {
-    getAddress: (path: number[], boolDisplay?: boolean) => {
-      return cosmos.getAddressAndPubKey(path, chainPrefix)
+    getAddress: (path: string, hrp: string, boolDisplay?: boolean) => {
+      const pathSplit = path.split("/").map(p => parseInt(p.replace("'", "")));
+      return cosmos.getAddressAndPubKey(pathSplit, hrp, boolDisplay)
     },
-    sign: (path: string, rawTxHex: string, tokenSignatures: string[]) =>
-      cosmos.sign(path, rawTxHex, tokenSignatures),
+    // sign: (path: string, rawTxHex: string, tokenSignatures: string[]) =>
+    sign: (path: number[], buffer: Buffer, transactionType?: number) => {
+      let transactionTypeStr = transactionType !== undefined ? transactionType.toString() : undefined;
+      return cosmos.sign(path, buffer, transactionTypeStr)
+    }
   }
+  // const cosmos = new Cosmos(transport);
+  // return {
+  //   getAddress: 
+    
+  // }
 };
 
 const cosmos = getCryptoCurrencyById("cosmos");

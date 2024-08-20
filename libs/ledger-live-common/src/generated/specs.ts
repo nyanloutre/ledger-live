@@ -1,6 +1,5 @@
 import casper from "../families/casper/specs";
 import celo from "../families/celo/specs";
-import cosmos from "../families/cosmos/specs";
 import crypto_org from "../families/crypto_org/specs";
 import elrond from "../families/elrond/specs";
 import filecoin from "../families/filecoin/specs";
@@ -25,7 +24,6 @@ import ton from "@ledgerhq/coin-ton/specs";
 export default {
   casper,
   celo,
-  cosmos,
   crypto_org,
   elrond,
   filecoin,
