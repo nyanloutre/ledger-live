@@ -36,6 +36,7 @@ const bundle_ios_with_cache = async () => {
 const test_ios = async () => {
   await $`pnpm mobile e2e:test \
     -c ios.sim.release \
+    dex \
     --loglevel error \
     --record-logs all \
     --take-screenshots all \
