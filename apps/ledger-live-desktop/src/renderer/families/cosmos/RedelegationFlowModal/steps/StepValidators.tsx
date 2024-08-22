@@ -20,7 +20,7 @@ import CosmosFamilyLedgerValidatorIcon from "~/renderer/families/cosmos/shared/c
 import Text from "~/renderer/components/Text";
 import AccountFooter from "~/renderer/modals/Send/AccountFooter";
 // import cryptoFactory from "@ledgerhq/live-common/families/cosmos/chain/chain";
-import cryptoFactory from "@ledgerhq/coin-cosmos/lib/chain/chain";
+import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
 import { CosmosMappedDelegation } from "@ledgerhq/live-common/families/cosmos/types";
 
 const SelectButton = styled(Base)`

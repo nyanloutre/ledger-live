@@ -20,7 +20,7 @@ import { OpenModal, openModal } from "~/renderer/actions/modals";
 
 import StepAmount, { StepAmountFooter } from "./steps/StepAmount";
 // import cryptoFactory from "@ledgerhq/live-common/families/cosmos/chain/chain";
-import cryptoFactory from "@ledgerhq/coin-cosmos/lib/chain/chain";
+import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
 import { BigNumber } from "bignumber.js";
 import Stepper from "~/renderer/components/Stepper";
 import StepDelegation, { StepDelegationFooter } from "./steps/StepDelegation";

@@ -12,7 +12,7 @@ import type {
 } from "@ledgerhq/coin-cosmos/types/index";
 import { AccountRaw, CurrenciesData } from "@ledgerhq/types-live";
 // import { fromTransactionRaw } from "../transaction";
-import { fromTransactionRaw } from "@ledgerhq/coin-cosmos/lib/transaction";
+import { fromTransactionRaw } from "@ledgerhq/coin-cosmos/transaction";
 
 const dataset: CurrenciesData<Transaction> = {
   FIXME_ignoreAccountFields: ["cosmosResources", "operationsCount", "operations"],

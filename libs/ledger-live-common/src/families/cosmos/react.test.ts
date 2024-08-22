@@ -24,7 +24,7 @@ import { getCurrentCosmosPreloadData } from "./preloadedData";
 import preloadedMockData from "./preloadedData.mock";
 import * as hooks from "./react";
 import { CurrencyBridge } from "@ledgerhq/types-live";
-import cryptoFactory from "@ledgerhq/coin-cosmos/lib/chain/chain";
+import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
 
 const localCache = {};
 const cache = makeBridgeCacheSystem({

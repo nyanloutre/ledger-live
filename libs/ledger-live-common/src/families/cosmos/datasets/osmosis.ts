@@ -7,7 +7,7 @@ import {
 } from "@ledgerhq/errors";
 import invariant from "invariant";
 import type { CosmosAccount, Transaction } from "../types";
-import { fromTransactionRaw } from "@ledgerhq/coin-cosmos/lib/transaction";
+import { fromTransactionRaw } from "@ledgerhq/coin-cosmos/transaction";
 import { AccountRaw, CurrenciesData } from "@ledgerhq/types-live";
 
 const dataset: CurrenciesData<Transaction> = {

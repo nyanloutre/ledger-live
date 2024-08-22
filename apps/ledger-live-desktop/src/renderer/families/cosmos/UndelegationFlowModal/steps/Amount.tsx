@@ -17,7 +17,7 @@ import Alert from "~/renderer/components/Alert";
 import ErrorBanner from "~/renderer/components/ErrorBanner";
 import AccountFooter from "~/renderer/modals/Send/AccountFooter";
 // import cryptoFactory from "@ledgerhq/live-common/families/cosmos/chain/chain";
-import cryptoFactory from "@ledgerhq/coin-cosmos/lib/chain/chain";
+import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
 
 export default function StepAmount({
   account,

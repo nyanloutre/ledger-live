@@ -11,7 +11,7 @@ import type {
   CosmosAccount,
   Transaction,
   TransactionStatus,
-} from "@ledgerhq/coin-cosmos/lib/types/index";
+} from "@ledgerhq/coin-cosmos/types/index";
 
 import { OpenModal } from "~/renderer/actions/modals";
 export type StepId = "claimRewards" | "connectDevice" | "confirmation";

@@ -2,7 +2,7 @@ import { getCurrentCosmosPreloadData } from "./preloadedData";
 import { canDelegate, canRedelegate } from "./logic";
 // import cryptoFactory from "./chain/chain";
 import type { CosmosAccount, CosmosValidatorItem } from "./types";
-import cryptoFactory from "@ledgerhq/coin-cosmos/lib/chain/chain";
+import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
 
 export interface AccountBannerState {
   display: boolean;

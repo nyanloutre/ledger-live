@@ -6,7 +6,7 @@ import data from "./preloadedData.mock";
 import { BigNumber } from "bignumber.js";
 import { LiveConfig } from "@ledgerhq/live-config/LiveConfig";
 import { liveConfig } from "../../config/sharedConfig";
-import cryptoFactory from "@ledgerhq/coin-cosmos/lib/chain/chain";
+import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
 
 jest.mock("./prepareTransaction", () => ({
   calculateFees: jest.fn(() => Promise.resolve({})),

@@ -1,7 +1,7 @@
 import { formatCurrencyUnit } from "@ledgerhq/live-common/currencies/index";
 import { getDefaultExplorerView, getAddressExplorer } from "@ledgerhq/live-common/explorers";
 // import cryptoFactory from "@ledgerhq/live-common/families/cosmos/chain/chain";
-import cryptoFactory from "@ledgerhq/coin-cosmos/lib/chain/chain";
+import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
 import { CosmosValidatorItem } from "@ledgerhq/live-common/families/cosmos/types";
 import { CryptoCurrency, Unit } from "@ledgerhq/types-cryptoassets";
 import { BigNumber } from "bignumber.js";

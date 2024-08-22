@@ -5,7 +5,7 @@ import { IconContainer } from "~/renderer/components/Delegation/ValidatorRow";
 import LedgerLiveLogo from "~/renderer/components/LedgerLiveLogo";
 import Logo from "~/renderer/icons/Logo";
 import FirstLetterIcon from "~/renderer/components/FirstLetterIcon";
-import cosmosBase from "@ledgerhq/coin-cosmos/lib/chain/cosmosBase";
+import cosmosBase from "@ledgerhq/coin-cosmos/chain/cosmosBase";
 const CosmosFamilyLedgerValidatorIcon = ({
   validator,
 }: {

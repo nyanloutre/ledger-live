@@ -21,7 +21,7 @@ import AccountFooter from "~/renderer/modals/Send/AccountFooter";
 import type {
   CosmosLikeTransaction,
   CosmosMappedDelegation,
-} from "@ledgerhq/coin-cosmos/lib/types/index";
+} from "@ledgerhq/coin-cosmos/types/index";
 
 import { useAccountUnit } from "~/renderer/hooks/useAccountUnit";
 

@@ -802,6 +802,9 @@ importers:
       '@formatjs/intl-relativetimeformat':
         specifier: ^11.1.8
         version: 11.2.12
+      '@ledgerhq/coin-cosmos':
+        specifier: workspace:^
+        version: link:../../libs/coin-modules/coin-cosmos
       '@ledgerhq/coin-evm':
         specifier: workspace:^
         version: link:../../libs/coin-modules/coin-evm

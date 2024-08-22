@@ -37,9 +37,9 @@ import type { Account, AccountBridge, CurrencyBridge } from "@ledgerhq/types-liv
 import { getCryptoCurrencyById } from "../../../currencies";
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 import { getCurrencyConfiguration } from "../../../config";
-import cryptoFactory from "@ledgerhq/coin-cosmos/lib/chain/chain";
-import {assignFromAccountRaw, assignToAccountRaw} from "@ledgerhq/coin-cosmos/lib/serialization";
-// import { CosmosValidatorsManager } from "@ledgerhq/coin-cosmos/lib/CosmosValidatorsManager";
+import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
+import {assignFromAccountRaw, assignToAccountRaw} from "@ledgerhq/coin-cosmos/serialization";
+// import { CosmosValidatorsManager } from "@ledgerhq/coin-cosmos/CosmosValidatorsManager";
 // import cryptoFactory from "../chain/chain";
 
 const receive = makeAccountBridgeReceive();

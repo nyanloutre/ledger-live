@@ -13,7 +13,7 @@ import InfoCircle from "~/renderer/icons/InfoCircle";
 import ToolTip from "~/renderer/components/Tooltip";
 import { CosmosAccount } from "@ledgerhq/live-common/families/cosmos/types";
 // import { CosmosAPI } from "@ledgerhq/";
-import { CosmosAPI } from "@ledgerhq/coin-cosmos/lib/api/Cosmos";
+import { CosmosAPI } from "@ledgerhq/coin-cosmos/api/Cosmos";
 import { SubAccount } from "@ledgerhq/types-live";
 import { useAccountUnit } from "~/renderer/hooks/useAccountUnit";
 
