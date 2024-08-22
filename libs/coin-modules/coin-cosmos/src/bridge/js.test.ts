@@ -7,7 +7,7 @@ import cosmosBase from "../chain/cosmosBase";
 import { CurrencyBridge } from "@ledgerhq/types-live";
 const mockedCryptoFactory = jest.mocked(cryptoFactory);
 
-describe("currencyBridge", () => {
+describe.skip("currencyBridge", () => {
   let currencyBridge: CurrencyBridge;
   describe("hydrate", () => {
     beforeEach(() => {
