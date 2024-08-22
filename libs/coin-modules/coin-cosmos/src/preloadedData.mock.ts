@@ -1,9 +1,10 @@
 import type { CosmosPreloadData } from "./types";
-import { CosmosCoinConfig, getCoinConfig } from "./config";
+import { CosmosCoinConfig, getCoinConfig, cosmosConfig } from "./config";
 
 // @ts-ignore
-const LEDGER_VALIDATOR_ADDRESS = (getCoinConfig() as CosmosCoinConfig).config_currency_cosmos
-  .default["ledgerValidator"];
+// const LEDGER_VALIDATOR_ADDRESS = (getCoinConfig() as CosmosCoinConfig).config_currency_cosmos
+//   .default["ledgerValidator"];
+const LEDGER_VALIDATOR_ADDRESS = cosmosConfig.config_currency_cosmos.default["ledgerValidator"];
 // Data manually fetched from the network between heights
 // 1685677 and 1685679
 const data: CosmosPreloadData = {
