@@ -1,4 +1,4 @@
-import cosmos from "../families/cosmos/mock";
+import cosmos from "@ledgerhq/coin-cosmos/mock";
 import vechain from "../families/vechain/mock";
 import algorand from "@ledgerhq/coin-algorand/mock";
 
