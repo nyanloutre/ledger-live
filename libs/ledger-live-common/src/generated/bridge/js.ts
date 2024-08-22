@@ -25,7 +25,6 @@ import { bridge as ton } from "../../families/ton/setup";
 export default {
   casper,
   celo,
-  cosmos,
   crypto_org,
   elrond,
   filecoin,
@@ -36,6 +35,7 @@ export default {
   algorand,
   bitcoin,
   cardano,
+  cosmos,
   evm,
   near,
   polkadot,
