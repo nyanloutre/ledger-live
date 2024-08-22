@@ -2,7 +2,7 @@ import algorand from "../../families/algorand/bridge/mock";
 import bitcoin from "../../families/bitcoin/bridge/mock";
 import cardano from "../../families/cardano/bridge/mock";
 import casper from "../../families/casper/bridge/mock";
-import cosmos from "@ledgerhq/coin-cosmos/src/bridge/mock";
+import cosmos from "../../families/cosmos/bridge/mock";
 import evm from "../../families/evm/bridge/mock";
 import icon from "../../families/icon/bridge/mock";
 import polkadot from "../../families/polkadot/bridge/mock";
