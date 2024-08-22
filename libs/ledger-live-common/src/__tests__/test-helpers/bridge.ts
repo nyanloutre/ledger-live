@@ -78,6 +78,7 @@ export function testBridge<T extends TransactionCommon>(data: DatasetTest<T>): v
     currency: CryptoCurrency;
   }> = [];
   const { implementations, currencies } = data;
+  console.log({currencies})
   Object.keys(currencies).forEach(currencyId => {
     const currencyData = currencies[currencyId];
     const currency = getCryptoCurrencyById(currencyId);
@@ -87,6 +88,7 @@ export function testBridge<T extends TransactionCommon>(data: DatasetTest<T>): v
     });
 
     const accounts = currencyData.accounts || [];
+    console.log({accounts})
     accounts.forEach(accountData =>
       implementations.forEach(impl => {
         console.log({accountDataImp: accountData.implementations})
