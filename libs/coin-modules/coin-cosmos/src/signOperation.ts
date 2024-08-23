@@ -61,7 +61,7 @@ export const buildSignOperation =
         // const { compressed_pk } = await app.getAddressAndPubKey(path, chainInstance.prefix);
 
         const { address, publicKey } = await signerContext(deviceId, signer =>
-          signer.getAddress(
+          signer.getAddressAndPubKey(
             account.freshAddressPath,
             chainInstance.prefix,
             false, // TODO: check if defaulting to false is good
@@ -83,7 +83,8 @@ export const buildSignOperation =
         const { signature: resSignature, return_code } = (await signerContext(deviceId, async (signer) => {
           let res;
           if (path[1] === 60) {
-              res = await signer.sign(path, tx, parseInt(chainInstance.prefix))
+              // res = await signer.sign(path, tx, parseInt(chainInstance.prefix))
+              res = await signer.sign(path, tx, chainInstance.prefix)
           } else {
             res = await signer.sign(path, tx);
           }

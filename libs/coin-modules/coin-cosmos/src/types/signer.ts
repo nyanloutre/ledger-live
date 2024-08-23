@@ -28,5 +28,5 @@ export interface CosmosSigner {
 // https://github.com/Zondax/ledger-cosmos-js/blob/master/src/cosmosApp.ts
 export interface CosmosSigner {
   getAddressAndPubKey(path: string, hrp: string, boolDisplay?: boolean): Promise<CosmosAddress>;
-  sign(path: number[], buffer: Buffer, transactionType: string): Promise<CosmosSignature>;
+  sign(path: number[], buffer: Buffer, transactionType?: string): Promise<CosmosSignature>;
 }

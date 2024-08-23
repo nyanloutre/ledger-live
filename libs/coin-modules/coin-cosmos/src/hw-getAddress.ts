@@ -9,7 +9,7 @@ function resolver(signerContext: SignerContext<CosmosSigner>): GetAddressFn {
       const cosmosApiImpl = cryptoFactory(currency.id);
 
     const {address, publicKey} = (await signerContext(deviceId, async signer => {
-      const { address, publicKey } = await signer.getAddress(path, cosmosApiImpl.prefix, verify || false);
+      const { address, publicKey } = await signer.getAddressAndPubKey(path, cosmosApiImpl.prefix, verify || false);
       console.log({RESOLVERADDRESS: address, publicKey})
       return { address, publicKey};
     })) as CosmosAddress;
