@@ -1,6 +1,6 @@
 import { getAccountBannerState } from "./banner";
 import * as preloadedData from "./preloadedData";
-import * as logic from "./logic";
+import * as logic from "@ledgerhq/coin-cosmos/logic";
 import type { CosmosAccount, CosmosValidatorItem } from "./types";
 import data from "./preloadedData.mock";
 import { BigNumber } from "bignumber.js";
