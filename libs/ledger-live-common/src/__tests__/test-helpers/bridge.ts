@@ -119,6 +119,7 @@ export function testBridge<T extends TransactionCommon>(data: DatasetTest<T>): v
 
   currenciesRelated.map(({ currencyData, currency }) => {
     const bridge = getCurrencyBridge(currency);
+    console.log({currency, bridge})
 
     const scanAccounts = async apdus => {
       const deviceId = await mockDeviceWithAPDUs(apdus, currencyData.mockDeviceOptions);
@@ -138,6 +139,8 @@ export function testBridge<T extends TransactionCommon>(data: DatasetTest<T>): v
         );
         return accounts;
       } catch (e: any) {
+        console.log({e})
+        console.trace(e.message)
         console.error(e.message);
         throw e;
       } finally {

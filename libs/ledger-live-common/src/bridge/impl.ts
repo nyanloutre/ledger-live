@@ -58,7 +58,7 @@ export function getAccountBridgeByFamily(family: string, accountId?: string): Ac
     }
   }
 
-  console.log({jsBridges, family})
+  // console.log({jsBridges, family})
   const jsBridge = jsBridges[family];
   if (!jsBridge) {
     throw new CurrencyNotSupported("currency bridge not found " + family);
