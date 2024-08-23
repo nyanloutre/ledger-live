@@ -422,6 +422,7 @@ export class CosmosAPI {
     if (semver.gte(cosmosSDKVersion, "0.50.0")) {
       queryparam = "query";
     }
+    console.log("COSMOS", { cosmosSDKVersion, queryparam });
     let serializedOptions = "";
     for (const key of Object.keys(options)) {
       serializedOptions += options[key] != null ? `&${key}=${options[key]}` : "";

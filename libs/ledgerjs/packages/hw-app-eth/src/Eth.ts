@@ -194,15 +194,6 @@ export default class Eth {
     r: string;
   }> {
     if (resolution === undefined) {
-      console.warn(
-        "hw-app-eth: signTransaction(path, rawTxHex, resolution): " +
-          "please provide the 'resolution' parameter. " +
-          "See https://github.com/LedgerHQ/ledgerjs/blob/master/packages/hw-app-eth/README.md " +
-          "– the previous signature is deprecated and providing the 3rd 'resolution' parameter explicitly will become mandatory so you have the control on the resolution and the fallback mecanism (e.g. fallback to blind signing or not)." +
-          "// Possible solution:\n" +
-          " + import { ledgerService } from '@ledgerhq/hw-app-eth';\n" +
-          " + const resolution = await ledgerService.resolveTransaction(rawTxHex);",
-      );
       resolution = await ledgerService
         .resolveTransaction(rawTxHex, this.loadConfig, {
           externalPlugins: true,

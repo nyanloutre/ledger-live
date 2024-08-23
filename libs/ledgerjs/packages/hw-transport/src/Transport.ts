@@ -267,6 +267,12 @@ export default class Transport {
     }
 
     tracer.trace("Starting an exchange", { abortTimeoutMs });
+    // console.log(
+    //   "=>",
+    //   Buffer.concat([Buffer.from([cla, ins, p1, p2]), Buffer.from([data.length]), data]).toString(
+    //     "hex",
+    //   ),
+    // );
     const response = await this.exchange(
       // The size of the data is added in 1 byte just before `data`
       Buffer.concat([Buffer.from([cla, ins, p1, p2]), Buffer.from([data.length]), data]),
@@ -275,6 +281,7 @@ export default class Transport {
     tracer.trace("Received response from exchange");
     const sw = response.readUInt16BE(response.length - 2);
 
+    // console.log("=>", response.toString("hex"));
     if (!statusList.some(s => s === sw)) {
       throw new TransportStatusError(sw);
     }
