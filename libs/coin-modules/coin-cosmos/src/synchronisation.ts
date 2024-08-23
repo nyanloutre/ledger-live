@@ -1,7 +1,7 @@
 import { BigNumber } from "bignumber.js";
 import {
-  makeSync,
-  makeScanAccounts,
+  // makeSync,
+  // makeScanAccounts,
   GetAccountShape,
   mergeOps,
   AccountShapeInfo,
@@ -13,11 +13,11 @@ import { CosmosAccount, CosmosOperation, CosmosTx } from "./types";
 import type { OperationType } from "@ledgerhq/types-live";
 import { getMainMessage } from "./helpers";
 import { parseAmountStringToNumber } from "./logic";
-import getAddressWrapper from "@ledgerhq/coin-framework/bridge/getAddressWrapper";
+// import getAddressWrapper from "@ledgerhq/coin-framework/bridge/getAddressWrapper";
 
 export const getAccountShape: GetAccountShape<CosmosAccount> = async (info: any) => {
   const { address, currency, derivationMode, initialAccount } = info;
-  console.log({getaccountshapeinfo: info})
+  console.log({ getaccountshapeinfo: info });
   const accountId = encodeAccountId({
     type: "js",
     version: "2",

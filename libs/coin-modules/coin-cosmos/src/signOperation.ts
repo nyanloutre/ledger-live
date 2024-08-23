@@ -2,7 +2,7 @@ import { CosmosAccount, RETURN_CODES, Transaction } from "./types";
 import { Observable } from "rxjs";
 import BigNumber from "bignumber.js";
 import { Secp256k1Signature } from "@cosmjs/crypto";
-import { CosmosApp } from "@zondax/ledger-cosmos-js";
+// import { CosmosApp } from "@zondax/ledger-cosmos-js";
 import { serializeSignDoc, makeSignDoc } from "@cosmjs/amino";
 import { UserRefusedOnDevice, ExpertModeRequired } from "@ledgerhq/errors";
 import { Coin } from "@keplr-wallet/proto-types/cosmos/base/v1beta1/coin";
@@ -12,7 +12,11 @@ import { SignerContext } from "@ledgerhq/coin-framework/signer";
 import { txToMessages, buildTransaction } from "./buildTransaction";
 import { CosmosAPI } from "./api/Cosmos";
 import cryptoFactory from "./chain/chain";
-import { CosmosSignature, CosmosSignatureSdk, CosmosSigner } from "./types/signer";
+import {
+  // CosmosSignature,
+  CosmosSignatureSdk,
+  CosmosSigner,
+} from "./types/signer";
 
 export const buildSignOperation =
   (
@@ -67,7 +71,7 @@ export const buildSignOperation =
             false, // TODO: check if defaulting to false is good
           ),
         );
-        console.log({BUILDSIGNOPERATIONADDRESS: address, publicKey})
+        console.log({ BUILDSIGNOPERATIONADDRESS: address, publicKey });
         // TODO: is publicKey always compressed?
         const compressed_pk = publicKey;
         const pubKey = Buffer.from(compressed_pk).toString("base64");
@@ -80,16 +84,18 @@ export const buildSignOperation =
             : await app.sign(path, tx);
         */
         // const signResponseApp = await signerContext.
-        const { signature: resSignature, return_code } = (await signerContext(deviceId, async (signer) => {
-          let res;
-          if (path[1] === 60) {
+        const { signature: resSignature, return_code } = (await signerContext(
+          deviceId,
+          async signer => {
+            let res;
+            if (path[1] === 60) {
               // res = await signer.sign(path, tx, parseInt(chainInstance.prefix))
-              res = await signer.sign(path, tx, chainInstance.prefix)
-          } else {
-            res = await signer.sign(path, tx);
-          }
-          return res;
-        }
+              res = await signer.sign(path, tx, chainInstance.prefix);
+            } else {
+              res = await signer.sign(path, tx);
+            }
+            return res;
+          },
         )) as CosmosSignatureSdk;
 
         switch (return_code) {
@@ -99,9 +105,7 @@ export const buildSignOperation =
             throw new UserRefusedOnDevice();
         }
 
-        const signature = Buffer.from(
-          Secp256k1Signature.fromDer(resSignature).toFixedLength(),
-        );
+        const signature = Buffer.from(Secp256k1Signature.fromDer(resSignature).toFixedLength());
 
         const txBytes = buildTransaction({
           protoMsgs,

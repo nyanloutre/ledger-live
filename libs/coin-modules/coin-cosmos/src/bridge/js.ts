@@ -41,7 +41,7 @@ import { CosmosSigner } from "../types/signer";
 const sync = makeSync({ getAccountShape });
 
 function buildCurrencyBridge(signerContext: SignerContext<CosmosSigner>): CurrencyBridge {
-  console.log({signerContextFromBuildCurrencyBridge: signerContext})
+  console.log({ signerContextFromBuildCurrencyBridge: signerContext });
 
   const getAddress = resolver(signerContext);
   // const getAddress = signerGetAddress(signerContext);
@@ -105,7 +105,7 @@ function buildAccountBridge(
 
   const receive = makeAccountBridgeReceive(getAddressWrapper(getAddress));
   const signOperation = buildSignOperation(signerContext);
-  console.log({signerContext})
+  console.log({ signerContext });
 
   return {
     createTransaction,

@@ -1,5 +1,8 @@
 import type { CosmosPreloadData } from "./types";
-import { CosmosCoinConfig, getCoinConfig, cosmosConfig } from "./config";
+import {
+  // CosmosCoinConfig, getCoinConfig,
+  cosmosConfig,
+} from "./config";
 
 // @ts-ignore
 // const LEDGER_VALIDATOR_ADDRESS = (getCoinConfig() as CosmosCoinConfig).config_currency_cosmos

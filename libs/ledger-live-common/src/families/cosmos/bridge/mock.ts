@@ -38,7 +38,7 @@ import { getCryptoCurrencyById } from "../../../currencies";
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 import { getCurrencyConfiguration } from "../../../config";
 import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
-import {assignFromAccountRaw, assignToAccountRaw} from "@ledgerhq/coin-cosmos/serialization";
+import { assignFromAccountRaw, assignToAccountRaw } from "@ledgerhq/coin-cosmos/serialization";
 // import { CosmosValidatorsManager } from "@ledgerhq/coin-cosmos/CosmosValidatorsManager";
 // import cryptoFactory from "../chain/chain";
 

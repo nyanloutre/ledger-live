@@ -21,7 +21,7 @@ import { Transaction, CosmosAccount, TransactionStatus } from "@ledgerhq/coin-co
 import { CosmosSigner } from "@ledgerhq/coin-cosmos/types/signer";
 import makeCliTools from "@ledgerhq/coin-cosmos/cli";
 import { createBridges } from "@ledgerhq/coin-cosmos/bridge/js";
-import cosmosResolver from "@ledgerhq/coin-cosmos/hw-getAddress"
+import cosmosResolver from "@ledgerhq/coin-cosmos/hw-getAddress";
 // import Cosmos from "@ledgerhq/hw-app-cosmos";
 
 const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {

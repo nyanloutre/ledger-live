@@ -1,5 +1,5 @@
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
-import { createBridges } from "./js";
+// import { createBridges } from "./js";
 import cryptoFactory from "../chain/chain";
 // jest.mock("../chain/chain");
 jest.mock("../CosmosValidatorsManager");

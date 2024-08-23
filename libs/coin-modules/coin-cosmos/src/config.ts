@@ -1,4 +1,3 @@
-
 import { ConfigInfo } from "@ledgerhq/live-config/LiveConfig";
 
 type CosmosConfig = Record<string, ConfigInfo>;
@@ -181,4 +180,3 @@ export const getCoinConfig = (): CosmosCoinConfig => {
 };
 
 export { cosmosConfig };
-
