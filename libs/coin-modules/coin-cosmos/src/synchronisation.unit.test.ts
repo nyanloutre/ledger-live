@@ -8,8 +8,8 @@ import { CosmosAccount, CosmosOperation, CosmosTx } from "./types";
 import * as jsHelpers from "@ledgerhq/coin-framework/bridge/jsHelpers";
 
 jest.mock("./api/Cosmos");
-jest.mock("../../account");
-jest.mock("../../bridge/jsHelpers");
+// jest.mock("../../account");
+jest.mock("@ledgerhq/coin-framework/bridge/jsHelpers");
 
 const infoMock = {
   currency: {
