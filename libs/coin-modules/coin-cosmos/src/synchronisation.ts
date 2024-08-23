@@ -17,6 +17,7 @@ import getAddressWrapper from "@ledgerhq/coin-framework/bridge/getAddressWrapper
 
 export const getAccountShape: GetAccountShape<CosmosAccount> = async (info: any) => {
   const { address, currency, derivationMode, initialAccount } = info;
+  console.log({getaccountshapeinfo: info})
   const accountId = encodeAccountId({
     type: "js",
     version: "2",

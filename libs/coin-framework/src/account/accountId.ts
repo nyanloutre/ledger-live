@@ -36,6 +36,7 @@ export function encodeAccountId({
   xpubOrAddress,
   derivationMode,
 }: AccountIdParams): string {
+  console.log({type, version, currencyId, xpubOrAddress, derivationMode})
   return `${ensureNoColon(type, "type")}:${ensureNoColon(version, "version")}:${ensureNoColon(
     currencyId,
     "currencyId",
