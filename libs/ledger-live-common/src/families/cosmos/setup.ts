@@ -50,17 +50,17 @@ const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
   const cosmos = new CosmosApp(transport);
   // return new CosmosApp(transport)
   return {
-    getAddress: (path: string, hrp: string, boolDisplay?: boolean) => {
+    getAddress: async (path: string, hrp: string, boolDisplay?: boolean) => {
       const pathSplit = path.split("/").map(p => parseInt(p.replace("'", "")));
-      const res = cosmos.getAddressAndPubKey(pathSplit, hrp, boolDisplay)
+      const res = await cosmos.getAddressAndPubKey(pathSplit, hrp, boolDisplay)
       // console.log(`setup createsigner in getaddress for ${path}, path split = ${pathSplit}`)
       console.log({createsignerGetAddresspath: path, pathSplit, res})
       return  res
     },
     // sign: (path: string, rawTxHex: string, tokenSignatures: string[]) =>
-    sign: (path: number[], buffer: Buffer, transactionType?: number) => {
+    sign: async (path: number[], buffer: Buffer, transactionType?: number) => {
       let transactionTypeStr = transactionType !== undefined ? transactionType.toString() : undefined;
-      const res =  cosmos.sign(path, buffer, transactionTypeStr)
+      const res =  await cosmos.sign(path, buffer, transactionTypeStr)
       console.log({createSignerSignPath: path, res})
       return res;
     }

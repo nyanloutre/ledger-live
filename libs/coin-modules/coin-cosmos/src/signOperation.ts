@@ -67,6 +67,7 @@ export const buildSignOperation =
             false, // TODO: check if defaulting to false is good
           ),
         );
+        console.log({BUILDSIGNOPERATIONADDRESS: address, publicKey})
         // TODO: is publicKey always compressed?
         const compressed_pk = publicKey;
         const pubKey = Buffer.from(compressed_pk).toString("base64");
