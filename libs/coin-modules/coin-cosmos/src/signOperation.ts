@@ -59,10 +59,10 @@ export const buildSignOperation =
         const path = account.freshAddressPath.split("/").map(p => parseInt(p.replace("'", "")));
 
         // const { compressed_pk } = await app.getAddressAndPubKey(path, chainInstance.prefix);
-
         const { address, publicKey } = await signerContext(deviceId, signer =>
           signer.getAddressAndPubKey(
-            account.freshAddressPath,
+            // account.freshAddressPath,
+            path,
             chainInstance.prefix,
             false, // TODO: check if defaulting to false is good
           ),

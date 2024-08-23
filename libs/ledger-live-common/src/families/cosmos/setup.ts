@@ -22,7 +22,7 @@ import { CosmosSigner } from "@ledgerhq/coin-cosmos/types/signer";
 import makeCliTools from "@ledgerhq/coin-cosmos/cli";
 import { createBridges } from "@ledgerhq/coin-cosmos/bridge/js";
 import cosmosResolver from "@ledgerhq/coin-cosmos/hw-getAddress"
-// import Cosmos from "@ledgerhq/hw-app-cosmos";
+import Cosmos from "@ledgerhq/hw-app-cosmos";
 /*
 const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
     const trx = new Trx(transport);
@@ -50,6 +50,7 @@ const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
 
 const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
   // return new Cosmos(transport)
+  // 
   return new CosmosApp(transport);
   /*
   const cosmos = new CosmosApp(transport);
