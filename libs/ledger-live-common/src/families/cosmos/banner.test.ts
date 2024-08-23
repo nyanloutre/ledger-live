@@ -8,11 +8,11 @@ import { LiveConfig } from "@ledgerhq/live-config/LiveConfig";
 import { liveConfig } from "../../config/sharedConfig";
 import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
 
-jest.mock("./prepareTransaction", () => ({
+jest.mock("@ledgerhq/coin-cosmos/prepareTransaction", () => ({
   calculateFees: jest.fn(() => Promise.resolve({})),
 }));
 
-jest.mock("./chain/chain");
+jest.mock("@ledgerhq/coin-cosmos/chain/chain");
 
 LiveConfig.setConfig(liveConfig);
 const LEDGER_VALIDATOR_ADDRESS = LiveConfig.getValueByKey("config_currency_cosmos").ledgerValidator;

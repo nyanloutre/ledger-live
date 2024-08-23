@@ -34,7 +34,7 @@ import type { Account, AccountBridge, CurrencyBridge } from "@ledgerhq/types-liv
 //   // type Transaction,
 // } from "@ledgerhq/coin-cosmos";
 // import { CosmosValidatorsManager } from "../CosmosValidatorsManager";
-import { getCryptoCurrencyById } from "../../../currencies";
+// import { getCryptoCurrencyById } from "../../../currencies";
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 import { getCurrencyConfiguration } from "../../../config";
 import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
