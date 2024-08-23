@@ -50,7 +50,8 @@ const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
 
 const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
   // return new Cosmos(transport)
-  // return new CosmosApp(transport);
+  return new CosmosApp(transport);
+  /*
   const cosmos = new CosmosApp(transport);
   // return new CosmosApp(transport)
   return {
@@ -69,6 +70,7 @@ const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
       return res;
     }
   }
+  */
 
   // const cosmos = new Cosmos(transport);
   // return {
