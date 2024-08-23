@@ -91,7 +91,10 @@ export function testBridge<T extends TransactionCommon>(data: DatasetTest<T>): v
     console.log({accounts})
     accounts.forEach(accountData =>
       implementations.forEach(impl => {
-        console.log({accountDataImp: accountData.implementations})
+        console.log({accountDataImp: accountData.implementations, currencyId})
+        if (accountData.implementations) {
+          console.log(`---> implementations found for ${currencyId}`)
+        }
         if (accountData.implementations && !accountData.implementations.includes(impl)) {
           return;
         }
