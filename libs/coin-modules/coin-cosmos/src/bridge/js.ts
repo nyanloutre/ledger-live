@@ -44,11 +44,12 @@ function buildCurrencyBridge(signerContext: SignerContext<CosmosSigner>): Curren
 
   const getAddress = resolver(signerContext);
   // const getAddress = signerGetAddress(signerContext);
-  const receive = makeAccountBridgeReceive(getAddressWrapper(getAddress));
+  // const receive = makeAccountBridgeReceive(getAddressWrapper(getAddress));
 
   const scanAccounts = makeScanAccounts({
     getAccountShape,
-    getAddressFn: getAddress,// getAddressWrapper(getAddress),
+    // getAddressFn: getAddress
+    getAddressFn: getAddressWrapper(getAddress),
   });
 
   const getPreloadStrategy = () => ({
