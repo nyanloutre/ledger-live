@@ -52,12 +52,17 @@ const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
   return {
     getAddress: (path: string, hrp: string, boolDisplay?: boolean) => {
       const pathSplit = path.split("/").map(p => parseInt(p.replace("'", "")));
-      return cosmos.getAddressAndPubKey(pathSplit, hrp, boolDisplay)
+      const res = cosmos.getAddressAndPubKey(pathSplit, hrp, boolDisplay)
+      // console.log(`setup createsigner in getaddress for ${path}, path split = ${pathSplit}`)
+      console.log({createsignerGetAddresspath: path, pathSplit, res})
+      return  res
     },
     // sign: (path: string, rawTxHex: string, tokenSignatures: string[]) =>
     sign: (path: number[], buffer: Buffer, transactionType?: number) => {
       let transactionTypeStr = transactionType !== undefined ? transactionType.toString() : undefined;
-      return cosmos.sign(path, buffer, transactionTypeStr)
+      const res =  cosmos.sign(path, buffer, transactionTypeStr)
+      console.log({createSignerSignPath: path, res})
+      return res;
     }
   }
   // const cosmos = new Cosmos(transport);
