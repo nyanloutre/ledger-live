@@ -54,7 +54,7 @@ const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
       const pathSplit = path.split("/").map(p => parseInt(p.replace("'", "")));
       const res = await cosmos.getAddressAndPubKey(pathSplit, hrp, boolDisplay)
       // console.log(`setup createsigner in getaddress for ${path}, path split = ${pathSplit}`)
-      console.log({createsignerGetAddresspath: path, pathSplit, res})
+      console.log({createsignerGetAddresspath: path, hrp, boolDisplay, pathSplit, res})
       return  res
     },
     // sign: (path: string, rawTxHex: string, tokenSignatures: string[]) =>
