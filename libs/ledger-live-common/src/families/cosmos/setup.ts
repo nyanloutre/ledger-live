@@ -51,9 +51,9 @@ const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
 const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
   // return new Cosmos(transport)
   // return new CosmosApp(transport);
-  // const cosmos = new CosmosApp(transport);
-  return new CosmosApp(transport)
-  /*return {
+  const cosmos = new CosmosApp(transport);
+  // return new CosmosApp(transport)
+  return {
     getAddress: async (path: string, hrp: string, boolDisplay?: boolean) => {
       const pathSplit = path.split("/").map(p => parseInt(p.replace("'", "")));
       const res = await cosmos.getAddressAndPubKey(pathSplit, hrp, boolDisplay)
@@ -70,7 +70,6 @@ const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
     }
   }
 
-  */
   // const cosmos = new Cosmos(transport);
   // return {
   //   getAddress: 
