@@ -22,62 +22,10 @@ import { CosmosSigner } from "@ledgerhq/coin-cosmos/types/signer";
 import makeCliTools from "@ledgerhq/coin-cosmos/cli";
 import { createBridges } from "@ledgerhq/coin-cosmos/bridge/js";
 import cosmosResolver from "@ledgerhq/coin-cosmos/hw-getAddress"
-import Cosmos from "@ledgerhq/hw-app-cosmos";
-/*
-const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
-    const trx = new Trx(transport);
-
-  return {
-    getAddress: (path: string, boolDisplay?: boolean) => trx.getAddress(path, boolDisplay),
-    sign: (path: string, rawTxHex: string, tokenSignatures: string[]) =>
-      trx.signTransaction(path, rawTxHex, tokenSignatures),
-  };
-  // return new CosmosApp(transport);
-  const cosmos =  new CosmosApp(transport);
-  return {
-    getAddress: (path: number[], boolDisplay?: boolean) => {
-      return cosmos.getAddressAndPubKey(path, chainPrefix)
-    },
-    sign: (path: string, rawTxHex: string, tokenSignatures: string[]) =>
-      cosmos.sign(path, rawTxHex, tokenSignatures),
-  }
-};
-*/
-
-// /*
-
-
+// import Cosmos from "@ledgerhq/hw-app-cosmos";
 
 const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
-  // return new Cosmos(transport)
-  // 
   return new CosmosApp(transport);
-  /*
-  const cosmos = new CosmosApp(transport);
-  // return new CosmosApp(transport)
-  return {
-    getAddress: async (path: string, hrp: string, boolDisplay?: boolean) => {
-      const pathSplit = path.split("/").map(p => parseInt(p.replace("'", "")));
-      const res = await cosmos.getAddressAndPubKey(pathSplit, hrp, boolDisplay)
-      // console.log(`setup createsigner in getaddress for ${path}, path split = ${pathSplit}`)
-      console.log({createsignerGetAddresspath: path, hrp, boolDisplay, pathSplit, res})
-      return  res
-    },
-    // sign: (path: string, rawTxHex: string, tokenSignatures: string[]) =>
-    sign: async (path: number[], buffer: Buffer, transactionType?: number) => {
-      let transactionTypeStr = transactionType !== undefined ? transactionType.toString() : undefined;
-      const res =  await cosmos.sign(path, buffer, transactionTypeStr)
-      console.log({createSignerSignPath: path, res})
-      return res;
-    }
-  }
-  */
-
-  // const cosmos = new Cosmos(transport);
-  // return {
-  //   getAddress: 
-    
-  // }
 };
 
 const cosmos = getCryptoCurrencyById("cosmos");
