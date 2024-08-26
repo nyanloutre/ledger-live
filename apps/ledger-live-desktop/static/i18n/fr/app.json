@@ -1524,7 +1524,7 @@
     "for" : "Adresse pour <1><0>{{name}}</0></1>",
     "messageIfUnverified" : "Vérifiez que cette adresse est identique à celle affichée sur votre appareil",
     "messageIfSkipped" : "Vous n’avez pas vérifié votre adresse {{name}} sur votre appareil Ledger. Vérifiez-la pour une sécurité optimale.",
-    "showQrCode" : "Afficher le code QR",
+    "showQrCode" : "Voir le code QR",
     "taprootWarning" : "Vérifiez que l’émetteur prend en charge Taproot",
     "dashStakingWarning" : "N’utilisez pas cette adresse pour recevoir vos récompenses de staking."
   },
@@ -4066,6 +4066,8 @@
       },
       "experimentalApps" : "Autoriser les Apps Expérimentales",
       "experimentalAppsDesc" : "Affichez et autorisez l’ouverture des Platform Apps \"Expérimentales\".",
+      "mockAppUpdate" : "Simuler des mises à jour d’app",
+      "mockAppUpdateDesc" : "Permet d’afficher « Mises à jour d’apps disponibles » dans My Ledger, pour réinstaller la même version d’une app.",
       "catalogUrl" : "Définir le fournisseur du Catalogue d’apps",
       "catalogUrlDesc" : "Saisissez l’URL de votre fournisseur du Catalogue personnalisé.",
       "enablePlatformDevTools" : "Activer les Outils de développement Platform",
@@ -5544,6 +5546,13 @@
       "title" : "Impossible de calculer le montant et les frais",
       "description" : "Impossible de calculer le montant et les frais"
     },
+    "InvalidRecipientForTokenTransfer" : {
+      "title" : "Bénéficiaire invalide pour le transfert de tokens. Types de comptes pris en charge pour le transfert de tokens : [f0, f4, 0x]"
+    },
+    "FilecoinFeeEstimationFailed" : {
+      "title" : "Échec de l’estimation des frais",
+      "description" : "Échec de l’estimation des frais sur le réseau. Vérifiez les entrées, la transaction risque de ne pas aboutir."
+    },
     "NotEnoughBalance" : {
       "title" : "Solde insuffisant",
       "description" : "Vérifiez que ce compte a des fonds suffisants."
@@ -5644,6 +5653,10 @@
     "TransportStatusError" : {
       "title" : "Une erreur est survenue. Veuillez reconnecter votre appareil.",
       "description" : "{{message}}"
+    },
+    "TrustchainNotFound" : {
+      "title" : "Erreur lors de la récupération de vos données",
+      "description" : "Veuillez réessayer ou contacter l’Assistance Ledger."
     },
     "DeviceShouldStayInApp" : {
       "title" : "Merci d’ouvrir l’app {{appName}}",
@@ -6359,7 +6372,7 @@
       "description" : "Votre appareil Ledger va générer une clé de chiffrement. Vos données restent privées, et vous seul(e) pouvez les récupérer.",
       "cta" : "Synchroniser les comptes"
     },
-    "alreadySync" : "Vous avez déjà créé une clé ?",
+    "alreadySync" : "Déjà synchronisé avec une application Ledger Live ?",
     "manage" : {
       "cta" : "Gérer",
       "synchronize" : {
@@ -6450,17 +6463,34 @@
       },
       "qrCode" : {
         "title" : "Synchroniser",
-        "hint" : "Essayez-vous de synchroniser deux applications Ledger Live pour l’ordinateur ? Cliquez ici.",
-        "description" : "Scannez et synchronisez vos comptes avec une autre application Ledger Live",
-        "steps" : {
-          "step1" : "Ouvrez l’application Ledger Live à synchroniser",
-          "step2" : "Accédez à <0>Paramètres</0> > <0>Général</0> > <0>Ledger Sync</0> > <0>Synchroniser</0> > <0>Afficher le code QR</0>",
-          "step3" : "Scannez le code QR jusqu’à ce que la barre soit à 100 %."
+        "options" : {
+          "mobile" : "Mobile",
+          "desktop" : "Ordinateur"
+        },
+        "mobile" : {
+          "description" : "Scannez et synchronisez vos comptes avec une autre application Ledger Live",
+          "steps" : {
+            "step1" : "Ouvrez l’application Ledger Live à synchroniser",
+            "step2" : "Accédez à <0>Paramètres</0> > <0>Général</0> > <0>Ledger Sync</0> > <0>Synchroniser</0> > <0>Voir le code QR</0>",
+            "step3" : "Scannez le code QR"
+          }
+        },
+        "desktop" : {
+          "description" : "Synchronisez vos comptes avec une autre application Ledger Live",
+          "steps" : {
+            "step1" : "Ouvrez l’application Ledger Live à synchroniser",
+            "step2" : "Accédez à <0>Paramètres</0> > <0>Général</0> > <0>Ledger Sync</0> > <0>Synchroniser</0> > <0>Utiliser votre Ledger</0>",
+            "step3" : "Connectez votre appareil Ledger"
+          }
         }
       },
       "pinCode" : {
         "title" : "Saisie du code",
-        "description" : "Saisissez le code sur l’autre application Ledger Live que vous voulez synchroniser."
+        "description" : "Saisissez le code sur l’autre application Ledger Live que vous voulez synchroniser.",
+        "error" : {
+          "title" : "Les codes ne sont pas identiques",
+          "description" : "Le code que vous saisissez doit être identique à celui affiché sur l’autre application Ledger Live."
+        }
       }
     },
     "manageInstances" : {
