@@ -14,7 +14,7 @@ function resolver(signerContext: SignerContext<CosmosSigner>): GetAddressFn {
         const pathSplit = path.split("/").map(p => parseInt(p.replace("'", "")));
         const { bech32_address, compressed_pk, return_code, error_message } =
           await signer.getAddressAndPubKey(pathSplit, cosmosApiImpl.prefix, verify || false);
-        console.log({ RESOLVERADDRESS: bech32_address, compressed_pk });
+        console.log({ RESOLVERADDRESS: bech32_address, compressed_pk, return_code, error_message });
         return { bech32_address, compressed_pk };
       },
     )) as CosmosGetAddressAndPubKeyRes;
