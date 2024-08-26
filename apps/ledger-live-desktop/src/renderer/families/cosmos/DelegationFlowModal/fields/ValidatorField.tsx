@@ -43,6 +43,7 @@ const ValidatorField = ({ account, onChangeValidator, chosenVoteAccAddr }: Props
   }
 
   const renderItem = (validator: CosmosValidatorItem) => {
+    console.log({validator})
     return (
       <ValidatorRow
         currency={account.currency}
