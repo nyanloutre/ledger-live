@@ -145,7 +145,8 @@
     "add" : "Adicionar",
     "or" : "OU",
     "clearAll" : "Limpar tudo",
-    "buyLedger" : "Comprar uma Ledger"
+    "buyLedger" : "Comprar uma Ledger",
+    "quote" : "Cotação"
   },
   "devices" : {
     "nanoS" : "Nano S",
@@ -4066,6 +4067,8 @@
       },
       "experimentalApps" : "Permitir aplicativos experimentais",
       "experimentalAppsDesc" : "Exibe e permite abrir aplicativos da plataforma marcados como 'experimentais'.",
+      "mockAppUpdate" : "Atualização simulada do aplicativo",
+      "mockAppUpdateDesc" : "Exibe a versão atual do aplicativo em Minha Ledger para reinstalar a mesma versão",
       "catalogUrl" : "Definir o provedor do catálogo de aplicativos",
       "catalogUrlDesc" : "Insira a URL do provedor de aplicativos da sua escolha",
       "enablePlatformDevTools" : "Habilitar ferramentas de desenvolvedor da plataforma",
@@ -5544,6 +5547,13 @@
       "title" : "Impossível calcular quantia e taxas",
       "description" : "Impossível calcular quantia e taxas"
     },
+    "InvalidRecipientForTokenTransfer" : {
+      "title" : "Destinatário inválido para transferência de token, tipos de conta compatíveis para a transferência de token: [f0, f4, 0x]"
+    },
+    "FilecoinFeeEstimationFailed" : {
+      "title" : "Desculpe, falha na estimativa de taxas",
+      "description" : "A estimativa de taxa falhou na rede. Verifique suas entradas, é provável que a transação vá falhar"
+    },
     "NotEnoughBalance" : {
       "title" : "Fundos Insuficientes",
       "description" : "Certifique-se de que a conta tem fundos suficientes."
@@ -5644,6 +5654,10 @@
     "TransportStatusError" : {
       "title" : "Algo deu errado. Reconecte seu dispositivo",
       "description" : "{{message}}"
+    },
+    "TrustchainNotFound" : {
+      "title" : "Algo deu errado ao buscar seus dados",
+      "description" : "Tente novamente ou contate o Suporte Ledger."
     },
     "DeviceShouldStayInApp" : {
       "title" : "Abra o aplicativo {{appName}}",
@@ -6359,7 +6373,7 @@
       "description" : "Sua Ledger vai gerar uma chave de encriptação garantindo que seus dados permaneçam privados e só possam ser recuperados por você.",
       "cta" : "Sincronize suas contas"
     },
-    "alreadySync" : "Já criou uma chave?",
+    "alreadySync" : "Já sincronizou um aplicativo Ledger Live?",
     "manage" : {
       "cta" : "Gerenciar",
       "synchronize" : {
@@ -6460,7 +6474,11 @@
       },
       "pinCode" : {
         "title" : "Insira o código",
-        "description" : "Digite o código exibido no outro Ledger Live com o qual você deseja sincronizar."
+        "description" : "Digite o código exibido no outro Ledger Live com o qual você deseja sincronizar.",
+        "error" : {
+          "title" : "Os códigos não correspondem",
+          "description" : "Certifique-se de que o código digitado seja o mesmo exibido na outra instância do Ledger Live."
+        }
       }
     },
     "manageInstances" : {
