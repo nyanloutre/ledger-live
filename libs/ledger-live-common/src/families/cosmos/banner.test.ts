@@ -14,11 +14,11 @@ jest.mock("@ledgerhq/coin-cosmos/prepareTransaction", () => ({
 
 jest.mock("@ledgerhq/coin-cosmos/chain/chain");
 
-jest.mock('@ledgerhq/coin-cosmos/logic', () => ({
-  ...jest.requireActual("@ledgerhq/coin-cosmos/logic"),
-  canDelegate: jest.fn(),
-  canRedelegate: jest.fn(),
-}));
+// jest.mock('@ledgerhq/coin-cosmos/logic', () => ({
+//   ...jest.requireActual("@ledgerhq/coin-cosmos/logic"),
+//   canDelegate: jest.fn(),
+//   canRedelegate: jest.fn(),
+// }));
 
 
 LiveConfig.setConfig(liveConfig);
