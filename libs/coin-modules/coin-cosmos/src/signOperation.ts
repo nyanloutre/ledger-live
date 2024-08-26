@@ -63,7 +63,12 @@ export const buildSignOperation =
         const path = account.freshAddressPath.split("/").map(p => parseInt(p.replace("'", "")));
 
         // const { compressed_pk } = await app.getAddressAndPubKey(path, chainInstance.prefix);
-        const { address, publicKey } = await signerContext(deviceId, signer =>
+        const {
+          bech32_address,
+          compressed_pk,
+          return_code: return_code_getaddr,
+          error_message,
+        } = await signerContext(deviceId, signer =>
           signer.getAddressAndPubKey(
             // account.freshAddressPath,
             path,
@@ -71,9 +76,16 @@ export const buildSignOperation =
             false, // TODO: check if defaulting to false is good
           ),
         );
-        console.log({ BUILDSIGNOPERATIONADDRESS: address, publicKey });
+        const address = bech32_address;
+        const publicKey = compressed_pk;
+        console.log({
+          BUILDSIGNOPERATIONADDRESS: address,
+          publicKey,
+          return_code_getaddr,
+          error_message,
+        });
         // TODO: is publicKey always compressed?
-        const compressed_pk = publicKey;
+        // const compressed_pk = publicKey;
         const pubKey = Buffer.from(compressed_pk).toString("base64");
 
         // HRP is only needed when signing for ethermint chains
