@@ -168,6 +168,7 @@ export const buildSignOperation =
           });
         }
 
+        console.log({transactionSignOperations: transaction})
         if (transaction.mode !== "send") {
           Object.assign(extra, {
             validators: transaction.validators,

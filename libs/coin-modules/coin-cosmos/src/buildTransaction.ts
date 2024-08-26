@@ -72,7 +72,9 @@ export const txToMessages = (
       break;
     case "delegate":
       if (transaction.validators && transaction.validators.length > 0) {
+        console.log({transaction})
         const validator = transaction.validators[0];
+        // TODO: what is aminoMsg
         if (validator && validator.address && transaction.amount.gt(0)) {
           const aminoMsg: AminoMsgDelegate = {
             type: "cosmos-sdk/MsgDelegate",
@@ -112,6 +114,7 @@ export const txToMessages = (
         transaction.validators[0].amount.gt(0)
       ) {
         const validator = transaction.validators[0];
+        console.log({transaction})
         const aminoMsg: AminoMsgBeginRedelegate = {
           type: "cosmos-sdk/MsgBeginRedelegate",
           value: {

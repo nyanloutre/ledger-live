@@ -21,6 +21,7 @@ export function toCosmosResourcesRaw(r: CosmosResources): CosmosResourcesRaw {
     unbondings,
     sequence,
   } = r;
+  console.log({delegationsFromSerialization: delegations})
 
   return {
     delegations: delegations.map(({ amount, status, pendingRewards, validatorAddress }) => ({

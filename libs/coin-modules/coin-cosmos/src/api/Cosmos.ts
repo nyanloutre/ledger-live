@@ -215,12 +215,14 @@ export class CosmosAPI {
   ): Promise<CosmosDelegation[]> => {
     const delegations: Array<CosmosDelegation> = [];
 
+    console.log(`---- in getDelegations -----`)
     const {
       data: { delegation_responses: delegationResponses },
     } = await network<CosmosSDKTypes.GetDelegatorDelegations>({
       method: "GET",
       url: `${this.defaultEndpoint}/cosmos/staking/${this.version}/delegations/${address}`,
     });
+    console.log({delegationResponses})
 
     const filteredDelegationResponses = delegationResponses.filter(
       delegation => delegation.balance.amount !== "0",

@@ -47,6 +47,7 @@ export class CosmosValidatorsManager {
         url,
         method: "GET",
       });
+      console.log({data})
       const validators = data.validators.map((validator: GetValidatorItem) => {
         const commission = parseFloat(validator.commission.commission_rates.rate);
         return {

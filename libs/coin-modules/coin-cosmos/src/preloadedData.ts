@@ -13,6 +13,7 @@ export function asSafeCosmosPreloadData(data?: {
 
   if (typeof data === "object" && data) {
     const validatorsUnsafe = data.validators;
+    console.log({validatorsUnsafe})
 
     if (
       typeof validatorsUnsafe === "object" &&

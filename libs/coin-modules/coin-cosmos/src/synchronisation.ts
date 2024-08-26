@@ -226,6 +226,8 @@ const txToOps = (info: AccountShapeInfo, accountId: string, txs: CosmosTx[]): Co
         break;
       }
       case "MsgDelegate": {
+        console.log(`in synchronisation MsgDelegate`)
+        console.log({correspondingMessages})
         op.type = "DELEGATE";
         op.value = new BigNumber(fees);
         const delegateShards: { amount: BigNumber; address: string }[] = [];

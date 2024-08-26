@@ -29,6 +29,7 @@ export function mapDelegations(
   validators: CosmosValidatorItem[],
   unit: Unit,
 ): CosmosMappedDelegation[] {
+  console.log({delegations})
   return delegations.map(d => {
     const rank = validators.findIndex(v => v.validatorAddress === d.validatorAddress);
     const validator = validators[rank] ?? d;
@@ -95,6 +96,7 @@ export const mapDelegationInfo = (
   unit: Unit,
   transaction?: Transaction,
 ): CosmosMappedDelegationInfo[] => {
+  console.log({delegationsMapDelegationInfo: delegations})
   return delegations.map(d => ({
     ...d,
     validator: validators.find(v => v.validatorAddress === d.address),
