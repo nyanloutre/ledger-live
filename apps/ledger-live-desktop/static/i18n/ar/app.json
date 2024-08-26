@@ -145,7 +145,8 @@
     "add" : "إضافة",
     "or" : "أو",
     "clearAll" : "إزالة الكل",
-    "buyLedger" : "شراء Ledger"
+    "buyLedger" : "شراء Ledger",
+    "quote" : "عرض أسعار"
   },
   "devices" : {
     "nanoS" : "Nano S",
@@ -4066,6 +4067,8 @@
       },
       "experimentalApps" : "السماح بالتطبيقات التجريبية",
       "experimentalAppsDesc" : "عرض تطبيقات المنصة التجريبية والسماح بفتحها.",
+      "mockAppUpdate" : "تحديث صوري للتطبيق",
+      "mockAppUpdateDesc" : "يعرض التحديث المتاح للتطبيق في My Ledger (جهازي Ledger)، ويقوم بإعادة تثبيت نفس إصدار التطبيق",
       "catalogUrl" : "تعيين مزود تطبيقات الكتالوج",
       "catalogUrlDesc" : "أدخِل رابط URL لمزود الكتالوج المخصص لديك",
       "enablePlatformDevTools" : "تمكين أدوات تطوير المنصة",
@@ -5544,6 +5547,13 @@
       "title" : "من المستحيل حساب المبلغ والرسوم",
       "description" : "من المستحيل حساب المبلغ والرسوم"
     },
+    "InvalidRecipientForTokenTransfer" : {
+      "title" : "المستلم لتحويل رمز التوكن غير صالح، أنواع الحساب المدعومة لتحويل رموز التوكن: [f0, f4, 0x]"
+    },
+    "FilecoinFeeEstimationFailed" : {
+      "title" : "عذراً، فشل تقدير الرسوم",
+      "description" : "فشل تقدير الرسوم على الشبكة. تحقق من المُدخلات، من المرجح أن تفشل المعاملة"
+    },
     "NotEnoughBalance" : {
       "title" : "عفواً، الأموال المتوفرة غير كافية",
       "description" : "يرجى التأكد من أن الحساب به أموال كافية."
@@ -5644,6 +5654,10 @@
     "TransportStatusError" : {
       "title" : "حدث خطأ ما. يُرجى إعادة توصيل جهازك",
       "description" : "{{message}}"
+    },
+    "TrustchainNotFound" : {
+      "title" : "حدث خطأ ما أثناء جلب بياناتك",
+      "description" : "يرجى إعادة المحاولة مرةً أخرى أو التواصل مع دعم Ledger."
     },
     "DeviceShouldStayInApp" : {
       "title" : "يرجى فتح تطبيق {{appName}}",
@@ -6359,7 +6373,7 @@
       "description" : "سيقوم جهازك Ledger بإنشاء مفتاح تشفير، مما يضمن أن بياناتك تظل خاصةً وقابلة للاستعادة بواسطتك أنت وحدك.",
       "cta" : "مزامنة حساباتك"
     },
-    "alreadySync" : "أنشأت مفتاحاً بالفعل؟",
+    "alreadySync" : "قم بمزامنة تطبيق Ledger Live بالفعل؟",
     "manage" : {
       "cta" : "إدارة",
       "synchronize" : {
@@ -6460,7 +6474,11 @@
       },
       "pinCode" : {
         "title" : "أدخِل الكود",
-        "description" : "اكتب الكود المعروض على Ledger Live الآخر الذي تريد المزامنة معه."
+        "description" : "اكتب الكود المعروض على Ledger Live الآخر الذي تريد المزامنة معه.",
+        "error" : {
+          "title" : "الأكواد غير متطابقة",
+          "description" : "تأكد من أن الكود الذي تكتبه هو نفسه المعروض في حالة Ledger Live الأخرى."
+        }
       }
     },
     "manageInstances" : {
