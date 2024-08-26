@@ -4066,6 +4066,8 @@
       },
       "experimentalApps" : "실험적 앱 허용",
       "experimentalAppsDesc" : "실험적이라 태그 된 플랫폼 앱을 표시하고 허용하세요.",
+      "mockAppUpdate" : "모의 앱 업데이트",
+      "mockAppUpdateDesc" : "내 Ledger에 이용할 수 있는 앱 업데이트를 표시하세요. 같은 앱 버전이 재설치 됩니다",
       "catalogUrl" : "카탈로그 앱 공급자 설정",
       "catalogUrlDesc" : "사용자 지정 카탈로그 제공자 URL를 입력하세요",
       "enablePlatformDevTools" : "플랫폼 개발자 도구 사용",
@@ -5544,6 +5546,13 @@
       "title" : "금액 및 수수료 계산이 불가능합니다",
       "description" : "금액 및 수수료 계산이 불가능합니다"
     },
+    "InvalidRecipientForTokenTransfer" : {
+      "title" : "토큰 전송에 대한 수신자가 잘못되었습니다. 토큰 전송에 지원되는 계정 유형: [f0, f4, 0x]"
+    },
+    "FilecoinFeeEstimationFailed" : {
+      "title" : "죄송합니다, 수수료 추정에 실패했습니다",
+      "description" : "네트워크 수수료 추정 실패. 입력값을 확인하세요. 거래에 실패할 수 있습니다"
+    },
     "NotEnoughBalance" : {
       "title" : "죄송하지만 자금이 부족합니다",
       "description" : "계정에 자금이 충분한지 확인해 주세요."
@@ -5644,6 +5653,10 @@
     "TransportStatusError" : {
       "title" : "문제가 발생했습니다. 장치를 다시 연결하세요",
       "description" : "{{message}}"
+    },
+    "TrustchainNotFound" : {
+      "title" : "데이터를 가져오는 중에 문제가 발생했습니다.",
+      "description" : "다시 시도하거나 Ledger 지원 부서에 문의하세요."
     },
     "DeviceShouldStayInApp" : {
       "title" : "{{appName}} 앱을 실행해주세요",
@@ -6359,7 +6372,7 @@
       "description" : "Ledger 장치가 암호화 키를 생성하여 데이터가 비공개로 유지되고 본인만 검색할 수 있도록 보장합니다.",
       "cta" : "계정 동기화"
     },
-    "alreadySync" : "이미 생성된 키가 있나요?",
+    "alreadySync" : "Ledger Live 앱 동기화를 이미 마치셨나요?",
     "manage" : {
       "cta" : "관리",
       "synchronize" : {
@@ -6449,18 +6462,35 @@
         }
       },
       "qrCode" : {
-        "title" : "동기화",
-        "hint" : "두 개의 Ledger Live 데스크탑 앱을 동기화하려고 하시나요? 여기를 클릭하세요.",
-        "description" : "귀하의 계정을 다른 Ledger Live 앱과 스캔하고 동기화하세요",
-        "steps" : {
-          "step1" : "동기화하려는 Ledger Live 앱을 엽니다.",
-          "step2" : "<0>설정</0> > <0>일반</0> > <0>Ledger 동기화</0> > <0>동기화</0> > <0>QR 표시</0>로 차례로 이동합니다",
-          "step3" : "100% 로딩될 때까지 QR 코드를 스캔하세요."
+        "title" : "동기화된 인스턴스",
+        "options" : {
+          "mobile" : "모바일",
+          "desktop" : "데스크탑"
+        },
+        "mobile" : {
+          "description" : "귀하의 계정을 다른 Ledger Live 앱과 스캔하고 동기화하세요",
+          "steps" : {
+            "step1" : "동기화하려는 Ledger Live 앱을 엽니다.",
+            "step2" : "<0>설정</0> > <0>일반</0> > <0>Ledger 동기화</0> > <0>동기화</0> > <0>QR 표시</0>로 차례로 이동합니다",
+            "step3" : "QR 코드 스캔"
+          }
+        },
+        "desktop" : {
+          "description" : "내 계정을 다른 Ledger Live 앱과 동기화",
+          "steps" : {
+            "step1" : "동기화하려는 Ledger Live 앱을 엽니다.",
+            "step2" : "<0>설정</0> > <0>일반</0> > <0>Ledger 동기화</0> > <0>동기화</0> > <0>\u001D Ledger 사용하기</0>로 차례로 이동합니다",
+            "step3" : "Ledger 장치에 연결합니다"
+          }
         }
       },
       "pinCode" : {
         "title" : "코드 입력",
-        "description" : "동기화하려는 다른 Ledger Live에 표시된 코드를 입력합니다."
+        "description" : "동기화하려는 다른 Ledger Live에 표시된 코드를 입력합니다.",
+        "error" : {
+          "title" : "코드가 일치하지 않습니다",
+          "description" : "입력한 코드가 다른 Ledger Live 인스턴스에 표시된 코드와 일치하는지 확인해 주세요."
+        }
       }
     },
     "manageInstances" : {
