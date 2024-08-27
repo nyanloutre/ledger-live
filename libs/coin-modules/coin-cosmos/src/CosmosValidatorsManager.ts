@@ -66,8 +66,7 @@ export class CosmosValidatorsManager {
   getValidators = async (): Promise<CosmosValidatorItem[]> => {
     // validators need the rewardsState ONLY to compute voting power as
     // percentage instead of raw uatoms amounts
-    const res =  await this.cacheValidators();
-    return res
+    return await this.cacheValidators();
   };
 
   hydrateValidators = (validators: CosmosValidatorItem[]): void => {

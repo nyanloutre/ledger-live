@@ -13,7 +13,6 @@ export function asSafeCosmosPreloadData(data?: {
 
   if (typeof data === "object" && data) {
     const validatorsUnsafe = data.validators;
-    console.log({validatorsUnsafe})
 
     if (
       typeof validatorsUnsafe === "object" &&
@@ -35,7 +34,6 @@ export function asSafeCosmosPreloadData(data?: {
 const updates = new Subject<{ [currencyId: string]: CosmosPreloadData }>();
 
 export function setCosmosPreloadData(currencyId: string, data: CosmosPreloadData): void {
-  console.log({setCosmosPreloadData: data, currencyId})
   currentCosmosPreloadedData[currencyId] = data;
   updates.next(currentCosmosPreloadedData);
 }
@@ -43,7 +41,6 @@ export function setCosmosPreloadData(currencyId: string, data: CosmosPreloadData
 export function getCurrentCosmosPreloadData(): {
   [currencyId: string]: CosmosPreloadData;
 } {
-  console.log(`-----GETCURRENTCOSMOSPRELOADDATA: ${currentCosmosPreloadedData}`)
   return currentCosmosPreloadedData;
 }
 
