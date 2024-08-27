@@ -39,7 +39,8 @@ import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 import { getCurrencyConfiguration } from "../../../config";
 import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
 import { assignFromAccountRaw, assignToAccountRaw } from "@ledgerhq/coin-cosmos/serialization";
-// import { CosmosValidatorsManager } from "@ledgerhq/coin-cosmos/CosmosValidatorsManager";
+import { CosmosValidatorsManager } from "@ledgerhq/coin-cosmos/CosmosValidatorsManager";
+import { getCryptoCurrencyById } from "@ledgerhq/cryptoassets/currencies";
 // import cryptoFactory from "../chain/chain";
 
 const receive = makeAccountBridgeReceive();
@@ -155,8 +156,8 @@ const currencyBridge: CurrencyBridge = {
     const { validators } = data;
     if (!validators || typeof validators !== "object" || !Array.isArray(validators)) return;
     // TODO : uncomment both
-    // const cosmosValidatorsManager = new CosmosValidatorsManager(getCryptoCurrencyById("cosmos"));
-    // cosmosValidatorsManager.hydrateValidators(validators);
+    const cosmosValidatorsManager = new CosmosValidatorsManager(getCryptoCurrencyById("cosmos"));
+    cosmosValidatorsManager.hydrateValidators(validators);
     setCosmosPreloadData("cosmos", asSafeCosmosPreloadData(data));
   },
 };
