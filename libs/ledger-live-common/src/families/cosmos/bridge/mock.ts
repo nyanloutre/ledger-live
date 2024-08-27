@@ -155,7 +155,6 @@ const currencyBridge: CurrencyBridge = {
     relatedImpl.ledgerValidator = data.config.ledgerValidator;
     const { validators } = data;
     if (!validators || typeof validators !== "object" || !Array.isArray(validators)) return;
-    // TODO : uncomment both
     const cosmosValidatorsManager = new CosmosValidatorsManager(getCryptoCurrencyById("cosmos"));
     cosmosValidatorsManager.hydrateValidators(validators);
     setCosmosPreloadData("cosmos", asSafeCosmosPreloadData(data));
