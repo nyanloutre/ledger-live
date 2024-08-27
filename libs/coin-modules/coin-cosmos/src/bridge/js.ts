@@ -40,8 +40,6 @@ import { CosmosSigner } from "../types/signer";
 const sync = makeSync({ getAccountShape });
 
 function buildCurrencyBridge(signerContext: SignerContext<CosmosSigner>): CurrencyBridge {
-  console.log({ signerContextFromBuildCurrencyBridge: signerContext });
-
   const getAddress = resolver(signerContext);
   // const getAddress = signerGetAddress(signerContext);
   // const receive = makeAccountBridgeReceive(getAddressWrapper(getAddress));
@@ -63,13 +61,11 @@ function buildCurrencyBridge(signerContext: SignerContext<CosmosSigner>): Curren
     }),
     preload: async (currency: CryptoCurrency) => {
       const config = getCoinConfig();
-      console.log(`in COSMOS PRELOAD`)
       const cosmosValidatorsManager = new CosmosValidatorsManager(
         getCryptoCurrencyById(currency.id),
         { endPoint: (config as unknown as CosmosCurrencyConfig).lcd },
       );
       const validators = await cosmosValidatorsManager.getValidators();
-      console.log({cosmosValidatorsManager, PRELOADVALIDATORS: validators})
       setCosmosPreloadData(currency.id, {
         validators,
       });
@@ -122,7 +118,6 @@ function buildAccountBridge(
 
   const receive = makeAccountBridgeReceive(getAddressWrapper(getAddress));
   const signOperation = buildSignOperation(signerContext);
-  console.log({ signerContext });
 
   return {
     createTransaction,
