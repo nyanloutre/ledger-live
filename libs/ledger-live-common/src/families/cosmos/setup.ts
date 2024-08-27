@@ -13,10 +13,25 @@ import { CosmosSigner } from "@ledgerhq/coin-cosmos/types/signer";
 import makeCliTools from "@ledgerhq/coin-cosmos/cli";
 import { createBridges } from "@ledgerhq/coin-cosmos/bridge/js";
 import cosmosResolver from "@ledgerhq/coin-cosmos/hw-getAddress";
+import Cosmos from "@ledgerhq/hw-app-cosmos";
 
 const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
-  return new CosmosApp(transport);
+  const cosmos = new CosmosApp(transport);
+  const hwCosmos = new Cosmos(transport);
+
+  return {
+    getAddressAndPubKey: cosmos.getAddressAndPubKey,
+    // NOTE: explain this one, to support cosmos-like chains
+    getAddress: hwCosmos.getAddress,
+    sign: cosmos.sign,
+    // getAddress: (path: string, boolDisplay?: boolean) => trx.getAddress(path, boolDisplay),
+    // sign: (path: string, rawTxHex: string, tokenSignatures: string[]) =>
+    //   trx.signTransaction(path, rawTxHex, tokenSignatures),
+  };
 };
+// const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
+//   return new CosmosApp(transport);
+// };
 
 const cosmos = getCryptoCurrencyById("cosmos");
 const getCurrencyConfig = (): CosmosCoinConfig => {
