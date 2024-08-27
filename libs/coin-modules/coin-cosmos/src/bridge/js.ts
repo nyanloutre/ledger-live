@@ -40,12 +40,9 @@ const sync = makeSync({ getAccountShape });
 
 function buildCurrencyBridge(signerContext: SignerContext<CosmosSigner>): CurrencyBridge {
   const getAddress = resolver(signerContext);
-  // const getAddress = signerGetAddress(signerContext);
-  // const receive = makeAccountBridgeReceive(getAddressWrapper(getAddress));
 
   const scanAccounts = makeScanAccounts({
     getAccountShape,
-    // getAddressFn: getAddress
     getAddressFn: getAddressWrapper(getAddress),
   });
 
@@ -54,13 +51,10 @@ function buildCurrencyBridge(signerContext: SignerContext<CosmosSigner>): Curren
   });
 
   return {
-    // getPreloadStrategy: () => {},
-    getPreloadStrategy: () => ({
-      preloadMaxAge: 1 * 1000, // 1 second cache
-    }),
+    getPreloadStrategy,
     preload: async (currency: CryptoCurrency) => {
       const config = getCoinConfig(currency);
-      console.log({config})
+      console.log({ config });
       const cosmosValidatorsManager = new CosmosValidatorsManager(
         getCryptoCurrencyById(currency.id),
         { endPoint: (config as unknown as CosmosCurrencyConfig).lcd },
@@ -91,20 +85,6 @@ function buildCurrencyBridge(signerContext: SignerContext<CosmosSigner>): Curren
       );
       cosmosValidatorsManager.hydrateValidators(validators);
       setCosmosPreloadData(currency.id, asSafeCosmosPreloadData(data));
-      /*
-      if (!data || typeof data !== "object") return;
-      const relatedImpl = cryptoFactory(currency.id);
-      relatedImpl.lcd = data.config.lcd;
-      relatedImpl.minGasPrice = data.config.minGasPrice;
-      relatedImpl.ledgerValidator = data.config?.ledgerValidator;
-      const { validators } = data;
-      if (!validators || typeof validators !== "object" || !Array.isArray(validators)) return;
-      const cosmosValidatorsManager = new CosmosValidatorsManager(
-        getCryptoCurrencyById(currency.id),
-      );
-      cosmosValidatorsManager.hydrateValidators(validators);
-      setCosmosPreloadData(currency.id, asSafeCosmosPreloadData(data));
-      */
     },
     scanAccounts,
   };
@@ -140,10 +120,7 @@ function buildAccountBridge(
   };
 }
 
-export function createBridges(
-  signerContext: SignerContext<CosmosSigner>,
-  coinConfig: CoinConfig,
-) {
+export function createBridges(signerContext: SignerContext<CosmosSigner>, coinConfig: CoinConfig) {
   setCoinConfig(coinConfig);
   return {
     currencyBridge: buildCurrencyBridge(signerContext),

@@ -166,7 +166,7 @@ import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 
 export type CosmosCoinConfig = CurrencyConfig & CosmosConfig;
 
-export type CoinConfig = (currency: CryptoCurrency) => CosmosCoinConfig
+export type CoinConfig = (currency: CryptoCurrency) => CosmosCoinConfig;
 
 let coinConfig: CoinConfig | undefined;
 
