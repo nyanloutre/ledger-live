@@ -18,11 +18,10 @@ import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
   const cosmos = new CosmosApp(transport) as CosmosApp & { getAddress: typeof hwCosmos.getAddress; serializePath: typeof hwCosmos.serializePath };
   const hwCosmos = new Cosmos(transport);
-  // cosmos.serializePath = hwCosmos.serializePath;
   cosmos.getAddress = hwCosmos.getAddress;
   return cosmos;
 
-  // debugger;
+  // NOTE: cannot do like below, "this" would get lost
   // return {
   //   getAddressAndPubKey: cosmos.getAddressAndPubKey,
   //   sign: cosmos.sign,
