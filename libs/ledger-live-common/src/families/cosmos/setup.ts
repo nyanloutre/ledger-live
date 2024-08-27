@@ -3,7 +3,6 @@
 import { CosmosCoinConfig } from "@ledgerhq/coin-cosmos/config";
 import Transport from "@ledgerhq/hw-transport";
 import type { Bridge } from "@ledgerhq/types-live";
-import { getCryptoCurrencyById } from "@ledgerhq/cryptoassets/currencies";
 import { CreateSigner, createResolver, executeWithSigner } from "../../bridge/setup";
 import { Resolver } from "../../hw/getAddress/types";
 import { getCurrencyConfiguration } from "../../config";
@@ -30,13 +29,7 @@ const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
     //   trx.signTransaction(path, rawTxHex, tokenSignatures),
   };
 };
-// const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
-//   return new CosmosApp(transport);
-// };
-
-// const cosmos = getCryptoCurrencyById("cosmos");
 const getCurrencyConfig = (currency: CryptoCurrency): CosmosCoinConfig => {
-  // const currency = getCryptoCurrencyById(currency);
   console.log("-----GETCURRENCYCONFIG ----- ", currency)
   console.log({currency})
   return getCurrencyConfiguration(currency);

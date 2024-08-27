@@ -30,9 +30,8 @@ import {
   makeScanAccounts,
   makeSync,
 } from "@ledgerhq/coin-framework/bridge/jsHelpers";
-import { CosmosCoinConfig, CoinConfig2, getCoinConfig, setCoinConfig, setCoinConfig2 } from "../config";
+import { CoinConfig, getCoinConfig, setCoinConfig } from "../config";
 import getAddressWrapper from "@ledgerhq/coin-framework/bridge/getAddressWrapper";
-import { CoinConfig } from "@ledgerhq/coin-framework/config";
 import { SignerContext } from "@ledgerhq/coin-framework/signer";
 import resolver from "../hw-getAddress";
 import { CosmosSigner } from "../types/signer";
@@ -143,11 +142,9 @@ function buildAccountBridge(
 
 export function createBridges(
   signerContext: SignerContext<CosmosSigner>,
-  // coinConfig: CoinConfig, //<CosmosCoinConfig>,
-  coinConfig: CoinConfig2,
+  coinConfig: CoinConfig,
 ) {
-  setCoinConfig2(coinConfig);
-
+  setCoinConfig(coinConfig);
   return {
     currencyBridge: buildCurrencyBridge(signerContext),
     accountBridge: buildAccountBridge(signerContext),

@@ -160,31 +160,26 @@ const cosmosConfig: CosmosConfig = {
   },
 };
 
-import { CurrencyConfig, CoinConfig } from "@ledgerhq/coin-framework/config";
+import { CurrencyConfig } from "@ledgerhq/coin-framework/config";
 import { MissingCoinConfig } from "@ledgerhq/coin-framework/errors";
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 
 export type CosmosCoinConfig = CurrencyConfig & CosmosConfig;
 
-export type CoinConfig2 = (currency: CryptoCurrency) => CosmosCoinConfig
+export type CoinConfig = (currency: CryptoCurrency) => CosmosCoinConfig
 
-let coinConfig: CoinConfig<CosmosCoinConfig> | undefined;
-let coinConfig2: CoinConfig2 | undefined;
+let coinConfig: CoinConfig | undefined;
 
-export const setCoinConfig = (config: CoinConfig<CosmosCoinConfig>): void => {
+export const setCoinConfig = (config: CoinConfig): void => {
   coinConfig = config;
 };
 
-export const setCoinConfig2 = (config: CoinConfig2): void => {
-  coinConfig2 = config;
-};
-
 export const getCoinConfig = (currency: CryptoCurrency): CosmosCoinConfig => {
-  if (!coinConfig2) {
+  if (!coinConfig) {
     throw new MissingCoinConfig();
   }
 
-  return coinConfig2(currency);
+  return coinConfig(currency);
 };
 
 export { cosmosConfig };
