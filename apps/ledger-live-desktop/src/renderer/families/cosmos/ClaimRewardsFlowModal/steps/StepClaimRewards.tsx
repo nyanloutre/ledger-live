@@ -14,10 +14,6 @@ import Text from "~/renderer/components/Text";
 import DelegationSelectorField from "../fields/DelegationSelectorField";
 import ErrorBanner from "~/renderer/components/ErrorBanner";
 import AccountFooter from "~/renderer/modals/Send/AccountFooter";
-// import {
-//   CosmosLikeTransaction,
-//   CosmosMappedDelegation,
-// } from "@ledgerhq/live-common/families/cosmos/types";
 import type {
   CosmosLikeTransaction,
   CosmosMappedDelegation,

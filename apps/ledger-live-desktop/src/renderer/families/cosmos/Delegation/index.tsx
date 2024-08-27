@@ -19,7 +19,6 @@ import LinkWithExternalIcon from "~/renderer/components/LinkWithExternalIcon";
 import IconChartLine from "~/renderer/icons/ChartLine";
 import { Header, UnbondingHeader } from "./Header";
 import { Row, UnbondingRow } from "./Row";
-// import cosmosBase from "@ledgerhq/live-common/families/cosmos/chain/cosmosBase";
 import ToolTip from "~/renderer/components/Tooltip";
 import ClaimRewards from "~/renderer/icons/ClaimReward";
 import DelegateIcon from "~/renderer/icons/Delegate";

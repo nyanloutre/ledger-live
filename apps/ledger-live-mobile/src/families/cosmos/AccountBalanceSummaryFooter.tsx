@@ -3,8 +3,7 @@ import { ScrollView } from "react-native";
 import { useTranslation } from "react-i18next";
 import BigNumber from "bignumber.js";
 import { getCryptoCurrencyIcon } from "@ledgerhq/live-common/reactNative";
-// import { CosmosAccount } from "@ledgerhq/live-common/families/cosmos/types";
-// import { CosmosAPI } from "@ledgerhq/live-common/families/cosmos/api/Cosmos";
+import { CosmosAccount } from "@ledgerhq/coin-cosmos/types/index";
 import { CosmosAPI } from "@ledgerhq/coin-cosmos/api/Cosmos";
 import { Account } from "@ledgerhq/types-live";
 import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
@@ -15,7 +14,6 @@ import type { ModalInfo } from "~/modals/Info";
 import CurrencyUnitValue from "~/components/CurrencyUnitValue";
 import InfoItem from "~/components/BalanceSummaryInfoItem";
 import { useAccountUnit } from "~/hooks/useAccountUnit";
-import { CosmosAccount } from "@ledgerhq/coin-cosmos/types/index";
 
 type Props = {
   account: CosmosAccount;

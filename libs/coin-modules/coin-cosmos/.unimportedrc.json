@@ -10,6 +10,8 @@
     "src/hw-getAddress.ts",
     "src/initAccount.ts",
     "src/mock.ts",
+    "src/preloadedData.ts",
+    "src/preloadedData.mock.ts",
     "src/serialization.ts",
     "src/specs.ts",
     "src/transaction.ts"
