@@ -78,7 +78,6 @@ export function testBridge<T extends TransactionCommon>(data: DatasetTest<T>): v
     currency: CryptoCurrency;
   }> = [];
   const { implementations, currencies } = data;
-  console.log({currencies, implementations})
   Object.keys(currencies).forEach(currencyId => {
     const currencyData = currencies[currencyId];
     const currency = getCryptoCurrencyById(currencyId);
@@ -88,13 +87,8 @@ export function testBridge<T extends TransactionCommon>(data: DatasetTest<T>): v
     });
 
     const accounts = currencyData.accounts || [];
-    console.log({accounts})
     accounts.forEach(accountData =>
       implementations.forEach(impl => {
-        console.log({accountDataImp: accountData.implementations, currencyId})
-        if (accountData.implementations) {
-          console.log(`---> implementations found for ${currencyId}`)
-        }
         if (accountData.implementations && !accountData.implementations.includes(impl)) {
           return;
         }
@@ -119,7 +113,6 @@ export function testBridge<T extends TransactionCommon>(data: DatasetTest<T>): v
 
   currenciesRelated.map(({ currencyData, currency }) => {
     const bridge = getCurrencyBridge(currency);
-    console.log({currency, bridge})
 
     const scanAccounts = async apdus => {
       const deviceId = await mockDeviceWithAPDUs(apdus, currencyData.mockDeviceOptions);
@@ -139,8 +132,7 @@ export function testBridge<T extends TransactionCommon>(data: DatasetTest<T>): v
         );
         return accounts;
       } catch (e: any) {
-        console.log({e})
-        console.trace(e.message)
+        console.log({ e });
         console.error(e.message);
         throw e;
       } finally {
