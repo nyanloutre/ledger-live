@@ -132,7 +132,6 @@ export function testBridge<T extends TransactionCommon>(data: DatasetTest<T>): v
         );
         return accounts;
       } catch (e: any) {
-        console.log({ e });
         console.error(e.message);
         throw e;
       } finally {

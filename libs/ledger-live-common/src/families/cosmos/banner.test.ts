@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 import { getAccountBannerState } from "./banner";
 import * as preloadedData from "@ledgerhq/coin-cosmos/preloadedData";
 import type { CosmosAccount, CosmosValidatorItem } from "./types";

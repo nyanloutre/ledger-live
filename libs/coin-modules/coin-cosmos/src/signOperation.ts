@@ -58,10 +58,7 @@ export const buildSignOperation =
         const path = account.freshAddressPath.split("/").map(p => parseInt(p.replace("'", "")));
 
         // const { compressed_pk } = await app.getAddressAndPubKey(path, chainInstance.prefix);
-        const {
-          bech32_address,
-          compressed_pk,
-        } = await signerContext(deviceId, signer =>
+        const { bech32_address, compressed_pk } = await signerContext(deviceId, signer =>
           signer.getAddressAndPubKey(
             path,
             chainInstance.prefix,
@@ -78,7 +75,7 @@ export const buildSignOperation =
           deviceId,
           async signer => {
             let res;
-        // HRP is only needed when signing for ethermint chains
+            // HRP is only needed when signing for ethermint chains
             if (path[1] === 60) {
               res = await signer.sign(path, tx, chainInstance.prefix);
             } else {

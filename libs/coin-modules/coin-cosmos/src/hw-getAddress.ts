@@ -8,14 +8,14 @@ function resolver(signerContext: SignerContext<CosmosSigner>): GetAddressFn {
   return async (deviceId: string, { path, verify, currency }: GetAddressOptions) => {
     const cosmosApiImpl = cryptoFactory(currency.id);
 
-    const { address, publicKey } = (await signerContext(
-      deviceId,
-      async signer => {
-        const { address, publicKey } =
-          await signer.getAddress(path, cosmosApiImpl.prefix, verify || false);
-        return { address, publicKey };
-      },
-    )) as CosmosAddress;
+    const { address, publicKey } = (await signerContext(deviceId, async signer => {
+      const { address, publicKey } = await signer.getAddress(
+        path,
+        cosmosApiImpl.prefix,
+        verify || false,
+      );
+      return { address, publicKey };
+    })) as CosmosAddress;
     // TODO: compressed convertion like in signOperation.ts ?
     //         const pubKey = Buffer.from(compressed_pk).toString("base64");
     return {

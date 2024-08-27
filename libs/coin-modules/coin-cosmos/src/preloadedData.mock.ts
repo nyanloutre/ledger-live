@@ -4,6 +4,7 @@ import {
   cosmosConfig,
 } from "./config";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 // const LEDGER_VALIDATOR_ADDRESS = (getCoinConfig() as CosmosCoinConfig).config_currency_cosmos
 //   .default["ledgerValidator"];
