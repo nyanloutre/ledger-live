@@ -30,7 +30,7 @@ import {
   makeScanAccounts,
   makeSync,
 } from "@ledgerhq/coin-framework/bridge/jsHelpers";
-import { CosmosCoinConfig, getCoinConfig, setCoinConfig } from "../config";
+import { CosmosCoinConfig, CoinConfig2, getCoinConfig, setCoinConfig, setCoinConfig2 } from "../config";
 import getAddressWrapper from "@ledgerhq/coin-framework/bridge/getAddressWrapper";
 import { CoinConfig } from "@ledgerhq/coin-framework/config";
 import { SignerContext } from "@ledgerhq/coin-framework/signer";
@@ -60,7 +60,8 @@ function buildCurrencyBridge(signerContext: SignerContext<CosmosSigner>): Curren
       preloadMaxAge: 1 * 1000, // 1 second cache
     }),
     preload: async (currency: CryptoCurrency) => {
-      const config = getCoinConfig();
+      const config = getCoinConfig(currency);
+      console.log({config})
       const cosmosValidatorsManager = new CosmosValidatorsManager(
         getCryptoCurrencyById(currency.id),
         { endPoint: (config as unknown as CosmosCurrencyConfig).lcd },
@@ -142,9 +143,10 @@ function buildAccountBridge(
 
 export function createBridges(
   signerContext: SignerContext<CosmosSigner>,
-  coinConfig: CoinConfig<CosmosCoinConfig>,
+  // coinConfig: CoinConfig, //<CosmosCoinConfig>,
+  coinConfig: CoinConfig2,
 ) {
-  setCoinConfig(coinConfig);
+  setCoinConfig2(coinConfig);
 
   return {
     currencyBridge: buildCurrencyBridge(signerContext),

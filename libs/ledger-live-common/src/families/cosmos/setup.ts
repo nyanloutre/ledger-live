@@ -14,6 +14,7 @@ import makeCliTools from "@ledgerhq/coin-cosmos/cli";
 import { createBridges } from "@ledgerhq/coin-cosmos/bridge/js";
 import cosmosResolver from "@ledgerhq/coin-cosmos/hw-getAddress";
 import Cosmos from "@ledgerhq/hw-app-cosmos";
+import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 
 const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
   const cosmos = new CosmosApp(transport);
@@ -33,9 +34,12 @@ const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
 //   return new CosmosApp(transport);
 // };
 
-const cosmos = getCryptoCurrencyById("cosmos");
-const getCurrencyConfig = (): CosmosCoinConfig => {
-  return getCurrencyConfiguration(cosmos);
+// const cosmos = getCryptoCurrencyById("cosmos");
+const getCurrencyConfig = (currency: CryptoCurrency): CosmosCoinConfig => {
+  // const currency = getCryptoCurrencyById(currency);
+  console.log("-----GETCURRENCYCONFIG ----- ", currency)
+  console.log({currency})
+  return getCurrencyConfiguration(currency);
 };
 
 const bridge: Bridge<Transaction, CosmosAccount, TransactionStatus> = createBridges(
