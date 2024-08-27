@@ -58,15 +58,13 @@ export const buildSignOperation =
         const path = account.freshAddressPath.split("/").map(p => parseInt(p.replace("'", "")));
 
         // const { compressed_pk } = await app.getAddressAndPubKey(path, chainInstance.prefix);
-        const { bech32_address, compressed_pk } = await signerContext(deviceId, signer =>
+        const { compressed_pk } = await signerContext(deviceId, signer =>
           signer.getAddressAndPubKey(
             path,
             chainInstance.prefix,
             false, // TODO: check if defaulting to false is good
           ),
         );
-        const address = bech32_address;
-        const publicKey = compressed_pk;
         // TODO: is publicKey always compressed?
         // const compressed_pk = publicKey;
         const pubKey = Buffer.from(compressed_pk).toString("base64");
