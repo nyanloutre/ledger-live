@@ -22,8 +22,8 @@ const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
   return {
     getAddressAndPubKey: cosmos.getAddressAndPubKey,
     // NOTE: explain this one, to support cosmos-like chains
-    getAddress: hwCosmos.getAddress,
     sign: cosmos.sign,
+    getAddress: hwCosmos.getAddress,
     // getAddress: (path: string, boolDisplay?: boolean) => trx.getAddress(path, boolDisplay),
     // sign: (path: string, rawTxHex: string, tokenSignatures: string[]) =>
     //   trx.signTransaction(path, rawTxHex, tokenSignatures),
