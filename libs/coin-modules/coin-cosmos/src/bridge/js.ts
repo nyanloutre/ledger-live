@@ -54,7 +54,6 @@ function buildCurrencyBridge(signerContext: SignerContext<CosmosSigner>): Curren
     getPreloadStrategy,
     preload: async (currency: CryptoCurrency) => {
       const config = getCoinConfig(currency);
-      console.log({ config });
       const cosmosValidatorsManager = new CosmosValidatorsManager(
         getCryptoCurrencyById(currency.id),
         { endPoint: (config as unknown as CosmosCurrencyConfig).lcd },

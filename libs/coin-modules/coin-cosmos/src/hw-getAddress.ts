@@ -13,7 +13,6 @@ function resolver(signerContext: SignerContext<CosmosSigner>): GetAddressFn {
       async signer => {
         const { address, publicKey } =
           await signer.getAddress(path, cosmosApiImpl.prefix, verify || false);
-        console.log({ RESOLVERADDRESS: address, publicKey});
         return { address, publicKey };
       },
     )) as CosmosAddress;

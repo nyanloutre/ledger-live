@@ -136,12 +136,6 @@ export function useLedgerFirstShuffledValidatorsCosmosFamily(
 ): CosmosValidatorItem[] {
   const data = getCurrentCosmosPreloadData()[currencyId];
   const ledgerValidatorAddress = cryptoFactory(currencyId).ledgerValidator;
-  console.log({
-    dataFromuseLedgerFirstShuffledValidatorsCosmosFamily: data,
-    ledgerValidatorAddress,
-    currencyId,
-    searchInput,
-  });
 
   return useMemo(() => {
     return reorderValidators(data?.validators ?? [], ledgerValidatorAddress, searchInput);
