@@ -24,14 +24,9 @@ const createSigner: CreateSigner<CosmosSigner> = (transport: Transport) => {
     // NOTE: explain this one, to support cosmos-like chains
     sign: cosmos.sign,
     getAddress: hwCosmos.getAddress,
-    // getAddress: (path: string, boolDisplay?: boolean) => trx.getAddress(path, boolDisplay),
-    // sign: (path: string, rawTxHex: string, tokenSignatures: string[]) =>
-    //   trx.signTransaction(path, rawTxHex, tokenSignatures),
   };
 };
 const getCurrencyConfig = (currency: CryptoCurrency): CosmosCoinConfig => {
-  console.log("-----GETCURRENCYCONFIG ----- ", currency)
-  console.log({currency})
   return getCurrencyConfiguration(currency);
 };
 
