@@ -222,7 +222,7 @@ export class CosmosAPI {
       method: "GET",
       url: `${this.defaultEndpoint}/cosmos/staking/${this.version}/delegations/${address}`,
     });
-    console.log({delegationResponses})
+    console.log({delegationResponsesCHECK: delegationResponses})
 
     const filteredDelegationResponses = delegationResponses.filter(
       delegation => delegation.balance.amount !== "0",

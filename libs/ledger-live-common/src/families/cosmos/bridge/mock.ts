@@ -22,9 +22,9 @@ import {
   makeAccountBridgeReceive,
 } from "../../../bridge/mockHelpers";
 import { defaultUpdateTransaction } from "@ledgerhq/coin-framework/bridge/jsHelpers";
-import { setCosmosPreloadData, asSafeCosmosPreloadData } from "../preloadedData";
+import { setCosmosPreloadData, asSafeCosmosPreloadData } from "@ledgerhq/coin-cosmos/preloadedData";
 import { getMainAccount } from "@ledgerhq/coin-framework/account/index";
-import mockPreloadedData from "../preloadedData.mock";
+import mockPreloadedData from "@ledgerhq/coin-cosmos/preloadedData.mock";
 import type { Account, AccountBridge, CurrencyBridge } from "@ledgerhq/types-live";
 // import { assignFromAccountRaw, assignToAccountRaw } from "../serialization";
 // import {

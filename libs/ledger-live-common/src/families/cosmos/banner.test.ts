@@ -1,8 +1,8 @@
 import { getAccountBannerState } from "./banner";
-import * as preloadedData from "./preloadedData";
+import * as preloadedData from "@ledgerhq/coin-cosmos/preloadedData";
 // import * as logic from "@ledgerhq/coin-cosmos/logic";
 import type { CosmosAccount, CosmosValidatorItem } from "./types";
-import data from "./preloadedData.mock";
+import data from "@ledgerhq/coin-cosmos/preloadedData.mock";
 import { BigNumber } from "bignumber.js";
 import { LiveConfig } from "@ledgerhq/live-config/LiveConfig";
 import { liveConfig } from "../../config/sharedConfig";

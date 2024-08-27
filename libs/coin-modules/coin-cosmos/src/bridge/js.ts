@@ -58,14 +58,19 @@ function buildCurrencyBridge(signerContext: SignerContext<CosmosSigner>): Curren
   });
 
   return {
-    getPreloadStrategy,
+    // getPreloadStrategy: () => {},
+    getPreloadStrategy: () => ({
+      preloadMaxAge: 1 * 1000, // 1 second cache
+    }),
     preload: async (currency: CryptoCurrency) => {
       const config = getCoinConfig();
+      console.log(`in COSMOS PRELOAD`)
       const cosmosValidatorsManager = new CosmosValidatorsManager(
         getCryptoCurrencyById(currency.id),
         { endPoint: (config as unknown as CosmosCurrencyConfig).lcd },
       );
       const validators = await cosmosValidatorsManager.getValidators();
+      console.log({cosmosValidatorsManager, PRELOADVALIDATORS: validators})
       setCosmosPreloadData(currency.id, {
         validators,
       });
@@ -91,6 +96,24 @@ function buildCurrencyBridge(signerContext: SignerContext<CosmosSigner>): Curren
       );
       cosmosValidatorsManager.hydrateValidators(validators);
       setCosmosPreloadData(currency.id, asSafeCosmosPreloadData(data));
+      /*
+      console.log("SOON0")
+      console.log({SOON0: data, currency})
+      if (!data || typeof data !== "object") return;
+      const relatedImpl = cryptoFactory(currency.id);
+      relatedImpl.lcd = data.config.lcd;
+      relatedImpl.minGasPrice = data.config.minGasPrice;
+      relatedImpl.ledgerValidator = data.config?.ledgerValidator;
+      const { validators } = data;
+      console.log("SOON0")
+      console.log({SOONvalidatorsInHydrate1: validators})
+      if (!validators || typeof validators !== "object" || !Array.isArray(validators)) return;
+      const cosmosValidatorsManager = new CosmosValidatorsManager(
+        getCryptoCurrencyById(currency.id),
+      );
+      cosmosValidatorsManager.hydrateValidators(validators);
+      setCosmosPreloadData(currency.id, asSafeCosmosPreloadData(data));
+      */
     },
     scanAccounts,
   };

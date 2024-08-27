@@ -20,8 +20,8 @@ import type {
   CosmosValidatorItem,
   Transaction,
 } from "./types";
-import { getCurrentCosmosPreloadData } from "./preloadedData";
-import preloadedMockData from "./preloadedData.mock";
+import { getCurrentCosmosPreloadData } from "@ledgerhq/coin-cosmos/preloadedData";
+import preloadedMockData from "@ledgerhq/coin-cosmos/preloadedData.mock";
 import * as hooks from "./react";
 import { CurrencyBridge } from "@ledgerhq/types-live";
 import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";

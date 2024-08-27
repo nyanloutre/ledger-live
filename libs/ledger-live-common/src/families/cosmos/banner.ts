@@ -1,4 +1,4 @@
-import { getCurrentCosmosPreloadData } from "./preloadedData";
+import { getCurrentCosmosPreloadData } from "@ledgerhq/coin-cosmos/preloadedData";
 import { canDelegate, canRedelegate } from "./logic";
 // import cryptoFactory from "./chain/chain";
 import type { CosmosAccount, CosmosValidatorItem } from "./types";

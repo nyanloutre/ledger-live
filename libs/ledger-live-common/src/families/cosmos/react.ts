@@ -1,6 +1,6 @@
 import invariant from "invariant";
 import { useEffect, useMemo, useState } from "react";
-import { getCurrentCosmosPreloadData, getCosmosPreloadDataUpdates } from "./preloadedData";
+import { getCurrentCosmosPreloadData, getCosmosPreloadDataUpdates } from "@ledgerhq/coin-cosmos/preloadedData";
 import type {
   CosmosMappedDelegation,
   CosmosValidatorItem,
@@ -134,6 +134,7 @@ export function useLedgerFirstShuffledValidatorsCosmosFamily(
 ): CosmosValidatorItem[] {
   const data = getCurrentCosmosPreloadData()[currencyId];
   const ledgerValidatorAddress = cryptoFactory(currencyId).ledgerValidator;
+  console.log({dataFromuseLedgerFirstShuffledValidatorsCosmosFamily: data, ledgerValidatorAddress, currencyId, searchInput})
 
   return useMemo(() => {
     return reorderValidators(data?.validators ?? [], ledgerValidatorAddress, searchInput);

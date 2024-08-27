@@ -30,6 +30,7 @@ const ValidatorField = ({ account, onChangeValidator, chosenVoteAccAddr }: Props
   const unit = useAccountUnit(account);
   const currencyId = account.currency.id;
   const validators = useLedgerFirstShuffledValidatorsCosmosFamily(currencyId, search);
+  console.log({validators})
   const onSearch = useCallback(
     (evt: React.ChangeEvent<HTMLInputElement>) => setSearch(evt.target.value),
     [setSearch],

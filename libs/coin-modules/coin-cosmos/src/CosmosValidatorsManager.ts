@@ -47,6 +47,7 @@ export class CosmosValidatorsManager {
         url,
         method: "GET",
       });
+      console.log({dataFromCacheValidatorsCHECK: data})
       console.log({data})
       const validators = data.validators.map((validator: GetValidatorItem) => {
         const commission = parseFloat(validator.commission.commission_rates.rate);
@@ -67,10 +68,15 @@ export class CosmosValidatorsManager {
   getValidators = async (): Promise<CosmosValidatorItem[]> => {
     // validators need the rewardsState ONLY to compute voting power as
     // percentage instead of raw uatoms amounts
-    return await this.cacheValidators();
+    console.log("SOON4 get validators")
+    const res =  await this.cacheValidators();
+    console.log({validators: res})
+    return res
   };
 
   hydrateValidators = (validators: CosmosValidatorItem[]): void => {
+    console.log("SOON2")
+    console.log({SOONHYDRATEVALIDATORS2: validators})
     log(`${this._currency.id}/validators`, "hydrate " + validators.length + " validators");
     this.cacheValidators.hydrate("", validators);
   };
