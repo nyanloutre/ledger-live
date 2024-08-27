@@ -3,8 +3,6 @@ import { SignerContext } from "@ledgerhq/coin-framework/signer";
 import { GetAddressOptions, Result  } from "@ledgerhq/coin-framework/derivation";
 import cryptoFactory from "./chain/chain";
 import { CosmosGetAddressAndPubKeyRes, CosmosAddress, CosmosSigner } from "./types/signer";
-import Transport from "@ledgerhq/hw-transport";
-import Cosmos from "@ledgerhq/hw-app-cosmos";
 
 // export type Resolver = (transport: Transport, addressOpt: GetAddressOptions) => Promise<Result>;
 
