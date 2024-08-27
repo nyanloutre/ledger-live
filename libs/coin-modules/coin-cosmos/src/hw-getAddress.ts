@@ -1,24 +1,9 @@
 import { GetAddressFn } from "@ledgerhq/coin-framework/bridge/getAddressWrapper";
 import { SignerContext } from "@ledgerhq/coin-framework/signer";
-import { GetAddressOptions, Result  } from "@ledgerhq/coin-framework/derivation";
+import { GetAddressOptions } from "@ledgerhq/coin-framework/derivation";
 import cryptoFactory from "./chain/chain";
-import { CosmosGetAddressAndPubKeyRes, CosmosAddress, CosmosSigner } from "./types/signer";
+import { CosmosAddress, CosmosSigner } from "./types/signer";
 
-// export type Resolver = (transport: Transport, addressOpt: GetAddressOptions) => Promise<Result>;
-
-
-// const resolver: Resolver = async (transport, { path, verify, currency }) => {
-//   const cosmosApiImpl = cryptoFactory(currency.id);
-//   const cosmos = new Cosmos(transport);
-//   const r = await cosmos.getAddress(path, cosmosApiImpl.prefix, verify || false);
-//   return {
-//     address: r.address,
-//     publicKey: r.publicKey,
-//     path,
-//   };
-// };
-
-// export default resolver;
 function resolver(signerContext: SignerContext<CosmosSigner>): GetAddressFn {
   return async (deviceId: string, { path, verify, currency }: GetAddressOptions) => {
     const cosmosApiImpl = cryptoFactory(currency.id);
@@ -26,10 +11,8 @@ function resolver(signerContext: SignerContext<CosmosSigner>): GetAddressFn {
     const { address, publicKey } = (await signerContext(
       deviceId,
       async signer => {
-        // const pathSplit = path.split("/").map(p => parseInt(p.replace("'", "")));
         const { address, publicKey } =
           await signer.getAddress(path, cosmosApiImpl.prefix, verify || false);
-          // await signer.getAddressAndPubKey(pathSplit, cosmosApiImpl.prefix, verify || false);
         console.log({ RESOLVERADDRESS: address, publicKey});
         return { address, publicKey };
       },
