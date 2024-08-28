@@ -1,18 +1,15 @@
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
-// import { createBridges } from "./js";
 import cryptoFactory from "../chain/chain";
-// jest.mock("../chain/chain");
-jest.mock("../CosmosValidatorsManager");
 import cosmosBase from "../chain/cosmosBase";
 import { CurrencyBridge } from "@ledgerhq/types-live";
+
+jest.mock("../CosmosValidatorsManager");
 const mockedCryptoFactory = jest.mocked(cryptoFactory);
 
 describe.skip("currencyBridge", () => {
   let currencyBridge: CurrencyBridge;
   describe("hydrate", () => {
-    beforeEach(() => {
-      // currencyBridge = createBridges()
-    });
+    beforeEach(() => {});
     afterEach(() => {
       jest.resetAllMocks();
     });
