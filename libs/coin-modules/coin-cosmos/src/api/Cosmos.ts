@@ -2,7 +2,7 @@ import { AxiosError } from "axios";
 import network from "@ledgerhq/live-network/network";
 import { log } from "@ledgerhq/logs";
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
-import { Operation } from "@ledgerhq/types-live";
+import { Account, Operation, SignedOperation } from "@ledgerhq/types-live";
 import BigNumber from "bignumber.js";
 import { SequenceNumberError } from "@ledgerhq/errors";
 import { patchOperationWithHash } from "@ledgerhq/coin-framework/operation";
@@ -450,9 +450,11 @@ export class CosmosAPI {
    * @deprecated body {..., mode } -> BROADCAST_MODE_BLOCK (Deprecated: post v0.47 use BROADCAST_MODE_SYNC instead)
    * @notice returns {..., events } (Since: cosmos-sdk 0.42.11, 0.44.5, 0.45)
    */
-  // TO CHECK
-  broadcast = async (tx: any): Promise<Operation> => {
-    const { operation, signature } = tx.signedOperation;
+  broadcast = async ({
+    signedOperation: { signature, operation },
+  }: {
+    signedOperation: SignedOperation;
+  }): Promise<Operation> => {
     const {
       data: { tx_response: txResponse },
     } = await network<CosmosSDKTypes.PostBroadcast>({

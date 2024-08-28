@@ -121,19 +121,6 @@ const cosmosValidators = {
     ),
 };
 
-// export type CliTools = {
-//   options: typeof options;
-//   inferAccounts: typeof inferAccounts;
-//   inferTransactions: (
-//     transactions: Array<{
-//       account: AccountLike;
-//       transaction: Transaction;
-//     }>,
-//     opts: Record<string, any>,
-//     { inferAmount }: any,
-//   ) => Transaction[];
-//   commands: { tronSuperRepresentative: typeof tronSuperRepresentative };
-// };
 export default function makeCliTools() {
   return {
     options,
