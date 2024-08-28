@@ -2,7 +2,7 @@ import { AxiosError } from "axios";
 import network from "@ledgerhq/live-network/network";
 import { log } from "@ledgerhq/logs";
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
-import { Account, Operation, SignedOperation } from "@ledgerhq/types-live";
+import { Operation, SignedOperation } from "@ledgerhq/types-live";
 import BigNumber from "bignumber.js";
 import { SequenceNumberError } from "@ledgerhq/errors";
 import { patchOperationWithHash } from "@ledgerhq/coin-framework/operation";

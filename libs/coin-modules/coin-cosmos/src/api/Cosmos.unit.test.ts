@@ -8,7 +8,6 @@ import { Operation } from "@ledgerhq/types-live";
 jest.mock("@ledgerhq/live-network/network");
 const mockedNetwork = jest.mocked(network);
 
-
 describe("CosmosApi", () => {
   let cosmosApi: CosmosAPI;
 
@@ -595,7 +594,9 @@ describe("CosmosApi", () => {
         data: { tx_response: { code: 32 } },
       } as AxiosResponse);
       await expect(
-        cosmosApi.broadcast({ signedOperation: { operation: {} as Operation, signature: "signedOperation" } }),
+        cosmosApi.broadcast({
+          signedOperation: { operation: {} as Operation, signature: "signedOperation" },
+        }),
       ).rejects.toThrow("SequenceNumberError");
     });
   });
