@@ -26,22 +26,12 @@ import { setCosmosPreloadData, asSafeCosmosPreloadData } from "@ledgerhq/coin-co
 import { getMainAccount } from "@ledgerhq/coin-framework/account/index";
 import mockPreloadedData from "@ledgerhq/coin-cosmos/preloadedData.mock";
 import type { Account, AccountBridge, CurrencyBridge } from "@ledgerhq/types-live";
-// import { assignFromAccountRaw, assignToAccountRaw } from "../serialization";
-// import {
-//   assignFromAccountRaw,
-//   assignToAccountRaw,
-//   createBridges,
-//   // type Transaction,
-// } from "@ledgerhq/coin-cosmos";
-// import { CosmosValidatorsManager } from "../CosmosValidatorsManager";
-// import { getCryptoCurrencyById } from "../../../currencies";
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 import { getCurrencyConfiguration } from "../../../config";
 import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
 import { assignFromAccountRaw, assignToAccountRaw } from "@ledgerhq/coin-cosmos/serialization";
 import { CosmosValidatorsManager } from "@ledgerhq/coin-cosmos/CosmosValidatorsManager";
 import { getCryptoCurrencyById } from "@ledgerhq/cryptoassets/currencies";
-// import cryptoFactory from "../chain/chain";
 
 const receive = makeAccountBridgeReceive();
 
