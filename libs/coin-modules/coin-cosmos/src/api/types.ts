@@ -341,8 +341,8 @@ export type PostSimulate = {
 };
 
 export type GetValidatorItem = {
-  operator_address: any;
-  description: { moniker: any };
-  tokens: any;
-  commission: { commission_rates: { rate: any } };
+  operator_address: string;
+  description: { moniker: string };
+  tokens: string;
+  commission: { commission_rates: { rate: string } };
 };
