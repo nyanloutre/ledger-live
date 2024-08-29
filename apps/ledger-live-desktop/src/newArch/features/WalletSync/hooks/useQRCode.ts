@@ -1,6 +1,10 @@
 import { useCallback, useState } from "react";
 import { createQRCodeHostInstance } from "@ledgerhq/trustchain/qrcode/index";
-import { InvalidDigitsError, NoTrustchainInitialized } from "@ledgerhq/trustchain/errors";
+import {
+  InvalidDigitsError,
+  NoTrustchainInitialized,
+  TrustchainAlreadyInitialized,
+} from "@ledgerhq/trustchain/errors";
 import { useDispatch, useSelector } from "react-redux";
 import { setFlow, setQrCodePinCode } from "~/renderer/actions/walletSync";
 import { Flow, Step } from "~/renderer/reducers/walletSync";
@@ -58,13 +62,15 @@ export function useQRCode() {
       },
       memberCredentials,
       memberName,
-      alreadyHasATrustchain: !!trustchain,
+      initialTrustchainId: trustchain?.rootId,
     })
       .catch(e => {
         if (e instanceof InvalidDigitsError) {
           dispatch(setFlow({ flow: Flow.Synchronize, step: Step.PinCodeError }));
         } else if (e instanceof NoTrustchainInitialized) {
           dispatch(setFlow({ flow: Flow.Synchronize, step: Step.UnbackedError }));
+        } else if (e instanceof TrustchainAlreadyInitialized) {
+          dispatch(setFlow({ flow: Flow.Synchronize, step: Step.SynchronizeWithQRCode }));
         }
         setError(e);
         throw e;
