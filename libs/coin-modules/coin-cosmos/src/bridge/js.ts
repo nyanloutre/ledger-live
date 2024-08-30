@@ -1,6 +1,32 @@
-import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
+import getAddressWrapper from "@ledgerhq/coin-framework/bridge/getAddressWrapper";
+import {
+  makeAccountBridgeReceive,
+  makeScanAccounts,
+  makeSync,
+} from "@ledgerhq/coin-framework/bridge/jsHelpers";
+import { SignerContext } from "@ledgerhq/coin-framework/signer";
 import { getCryptoCurrencyById } from "@ledgerhq/cryptoassets";
+import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 import type { AccountBridge, CurrencyBridge } from "@ledgerhq/types-live";
+
+import { CosmosValidatorsManager } from "../CosmosValidatorsManager";
+import { CosmosAPI } from "../api/Cosmos";
+import cryptoFactory from "../chain/chain";
+import { CoinConfig, getCoinConfig, setCoinConfig } from "../config";
+import { createTransaction } from "../createTransaction";
+import { estimateMaxSpendable } from "../estimateMaxSpendable";
+import getTransactionStatus from "../getTransactionStatus";
+import resolver from "../hw-getAddress";
+import { asSafeCosmosPreloadData, setCosmosPreloadData } from "../preloadedData";
+import { prepareTransaction } from "../prepareTransaction";
+import {
+  assignFromAccountRaw,
+  assignToAccountRaw,
+  fromOperationExtraRaw,
+  toOperationExtraRaw,
+} from "../serialization";
+import { buildSignOperation } from "../signOperation";
+import { getAccountShape } from "../synchronisation";
 import type {
   CosmosAccount,
   CosmosCurrencyConfig,
@@ -8,33 +34,8 @@ import type {
   Transaction,
   TransactionStatus,
 } from "../types";
-import { asSafeCosmosPreloadData, setCosmosPreloadData } from "../preloadedData";
-import { CosmosValidatorsManager } from "../CosmosValidatorsManager";
-import { estimateMaxSpendable } from "../estimateMaxSpendable";
-import getTransactionStatus from "../getTransactionStatus";
-import { prepareTransaction } from "../prepareTransaction";
-import { updateTransaction } from "../updateTransaction";
-import { createTransaction } from "../createTransaction";
-import { getAccountShape } from "../synchronisation";
-import { buildSignOperation } from "../signOperation";
-import cryptoFactory from "../chain/chain";
-import { CosmosAPI } from "../api/Cosmos";
-import {
-  assignFromAccountRaw,
-  assignToAccountRaw,
-  fromOperationExtraRaw,
-  toOperationExtraRaw,
-} from "../serialization";
-import {
-  makeAccountBridgeReceive,
-  makeScanAccounts,
-  makeSync,
-} from "@ledgerhq/coin-framework/bridge/jsHelpers";
-import { CoinConfig, getCoinConfig, setCoinConfig } from "../config";
-import getAddressWrapper from "@ledgerhq/coin-framework/bridge/getAddressWrapper";
-import { SignerContext } from "@ledgerhq/coin-framework/signer";
-import resolver from "../hw-getAddress";
 import { CosmosSigner } from "../types/signer";
+import { updateTransaction } from "../updateTransaction";
 
 const sync = makeSync({ getAccountShape });
 

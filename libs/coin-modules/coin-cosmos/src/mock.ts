@@ -1,16 +1,16 @@
-import Prando from "prando";
 import { BigNumber } from "bignumber.js";
+import Prando from "prando";
+import { genAddress, genHex } from "@ledgerhq/coin-framework/mocks/helpers";
 import type { OperationType } from "@ledgerhq/types-live";
+import preloadedData from "./preloadedData.mock";
 import type {
   CosmosAccount,
-  CosmosOperation,
-  CosmosResources,
   CosmosDelegation,
-  CosmosUnbonding,
+  CosmosOperation,
   CosmosRedelegation,
+  CosmosResources,
+  CosmosUnbonding,
 } from "./types";
-import preloadedData from "./preloadedData.mock";
-import { genHex, genAddress } from "@ledgerhq/coin-framework/mocks/helpers";
 const { validators } = preloadedData;
 
 function setCosmosResources(

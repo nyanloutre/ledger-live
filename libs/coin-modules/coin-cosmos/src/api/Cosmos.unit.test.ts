@@ -1,9 +1,9 @@
 import network from "@ledgerhq/live-network/network";
+import { Operation } from "@ledgerhq/types-live";
 import { AxiosResponse } from "axios";
 import BigNumber from "bignumber.js";
 import cryptoFactory from "../chain/chain";
 import { CosmosAPI } from "./Cosmos";
-import { Operation } from "@ledgerhq/types-live";
 
 jest.mock("@ledgerhq/live-network/network");
 const mockedNetwork = jest.mocked(network);

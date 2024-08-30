@@ -1,24 +1,24 @@
 import invariant from "invariant";
 import { useEffect, useMemo, useState } from "react";
+import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
 import {
-  getCurrentCosmosPreloadData,
   getCosmosPreloadDataUpdates,
+  getCurrentCosmosPreloadData,
 } from "@ledgerhq/coin-cosmos/preloadedData";
-import type {
-  CosmosMappedDelegation,
-  CosmosValidatorItem,
-  CosmosMappedValidator,
-  CosmosDelegationInfo,
-  CosmosOperationMode,
-  CosmosSearchFilter,
-  Transaction,
-  CosmosPreloadData,
-  CosmosAccount,
-} from "./types";
-import { mapDelegations, searchFilter as defaultSearchFilter } from "./logic";
 import { getAccountCurrency } from "../../account";
 import useMemoOnce from "../../hooks/useMemoOnce";
-import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
+import { searchFilter as defaultSearchFilter, mapDelegations } from "./logic";
+import type {
+  CosmosAccount,
+  CosmosDelegationInfo,
+  CosmosMappedDelegation,
+  CosmosMappedValidator,
+  CosmosOperationMode,
+  CosmosPreloadData,
+  CosmosSearchFilter,
+  CosmosValidatorItem,
+  Transaction,
+} from "./types";
 
 export function useCosmosFamilyPreloadData(currencyId?: string): CosmosPreloadData {
   const getCurrent = getCurrentCosmosPreloadData;

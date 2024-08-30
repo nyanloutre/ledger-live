@@ -1,11 +1,11 @@
+import BigNumber from "bignumber.js";
+import { getEnv } from "@ledgerhq/live-env";
 import { CacheRes, makeLRUCache } from "@ledgerhq/live-network/cache";
 import { log } from "@ledgerhq/logs";
 import type { Account, AccountBridge } from "@ledgerhq/types-live";
-import BigNumber from "bignumber.js";
-import { getEnv } from "@ledgerhq/live-env";
 import { CosmosAPI } from "./api/Cosmos";
+import { buildTransaction, txToMessages } from "./buildTransaction";
 import cryptoFactory from "./chain/chain";
-import { txToMessages, buildTransaction } from "./buildTransaction";
 import { getMaxEstimatedBalance } from "./logic";
 import { CosmosAccount, Transaction } from "./types";
 

@@ -1,7 +1,7 @@
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
+import { CurrencyBridge } from "@ledgerhq/types-live";
 import cryptoFactory from "../chain/chain";
 import cosmosBase from "../chain/cosmosBase";
-import { CurrencyBridge } from "@ledgerhq/types-live";
 
 jest.mock("../CosmosValidatorsManager");
 const mockedCryptoFactory = jest.mocked(cryptoFactory);

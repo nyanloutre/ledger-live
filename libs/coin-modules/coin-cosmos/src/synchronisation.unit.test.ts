@@ -1,11 +1,11 @@
+import BigNumber from "bignumber.js";
+import * as jsHelpers from "@ledgerhq/coin-framework/bridge/jsHelpers";
+import { AccountShapeInfo } from "@ledgerhq/coin-framework/bridge/jsHelpers";
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 import { Operation, SyncConfig } from "@ledgerhq/types-live";
-import BigNumber from "bignumber.js";
-import { AccountShapeInfo } from "@ledgerhq/coin-framework/bridge/jsHelpers";
 import { CosmosAPI } from "./api/Cosmos";
 import { getAccountShape } from "./synchronisation";
 import { CosmosAccount, CosmosOperation, CosmosTx } from "./types";
-import * as jsHelpers from "@ledgerhq/coin-framework/bridge/jsHelpers";
 
 jest.mock("./api/Cosmos");
 jest.mock("@ledgerhq/coin-framework/account");

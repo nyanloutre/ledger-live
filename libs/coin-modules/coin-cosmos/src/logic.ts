@@ -1,21 +1,21 @@
-import invariant from "invariant";
 import { BigNumber } from "bignumber.js";
+import invariant from "invariant";
 import { formatCurrencyUnit } from "@ledgerhq/coin-framework/currencies";
+import type { Unit } from "@ledgerhq/types-cryptoassets";
 import type {
+  CosmosAccount,
   CosmosDelegation,
   CosmosDelegationInfo,
-  CosmosValidatorItem,
   CosmosMappedDelegation,
   CosmosMappedDelegationInfo,
-  CosmosSearchFilter,
-  CosmosUnbonding,
+  CosmosMappedRedelegation,
   CosmosMappedUnbonding,
   CosmosRedelegation,
-  CosmosMappedRedelegation,
-  CosmosAccount,
+  CosmosSearchFilter,
+  CosmosUnbonding,
+  CosmosValidatorItem,
+  Transaction,
 } from "./types";
-import type { Transaction } from "./types";
-import type { Unit } from "@ledgerhq/types-cryptoassets";
 
 export const COSMOS_MAX_REDELEGATIONS = 7;
 export const COSMOS_MAX_UNBONDINGS = 7;

@@ -1,15 +1,14 @@
 import { AxiosError } from "axios";
+import { patchOperationWithHash } from "@ledgerhq/coin-framework/operation";
+import { SequenceNumberError } from "@ledgerhq/errors";
 import network from "@ledgerhq/live-network/network";
 import { log } from "@ledgerhq/logs";
 import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 import { Operation, SignedOperation } from "@ledgerhq/types-live";
 import BigNumber from "bignumber.js";
-import { SequenceNumberError } from "@ledgerhq/errors";
-import { patchOperationWithHash } from "@ledgerhq/coin-framework/operation";
+import semver from "semver";
 import cryptoFactory from "../chain/chain";
 import cosmosBase from "../chain/cosmosBase";
-import * as CosmosSDKTypes from "./types";
-import semver from "semver";
 import {
   CosmosDelegation,
   CosmosDelegationStatus,
@@ -17,6 +16,7 @@ import {
   CosmosTx,
   CosmosUnbonding,
 } from "../types";
+import * as CosmosSDKTypes from "./types";
 
 const USDC_DENOM = "ibc/8E27BA2D5493AF5636760E354E46004562C46AB7EC0CC4C1CA14E9E20E2545B5";
 

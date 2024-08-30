@@ -1,9 +1,8 @@
-import { DeviceModelId } from "@ledgerhq/devices";
+import { BigNumber } from "bignumber.js";
 import expect from "expect";
 import invariant from "invariant";
 import sample from "lodash/sample";
 import sampleSize from "lodash/sampleSize";
-import { toOperationRaw } from "@ledgerhq/coin-framework/serialization";
 import {
   botTest,
   expectSiblingsHaveSpendablePartGreaterThan,
@@ -12,24 +11,25 @@ import {
   SpeculosButton,
 } from "@ledgerhq/coin-framework/bot/specs";
 import type { AppSpec, MutationSpec } from "@ledgerhq/coin-framework/bot/types";
+import { toOperationRaw } from "@ledgerhq/coin-framework/serialization";
 import { getCryptoCurrencyById } from "@ledgerhq/cryptoassets/currencies";
+import { DeviceModelId } from "@ledgerhq/devices";
+import { log } from "@ledgerhq/logs";
+import { Operation } from "@ledgerhq/types-live";
+import { canDelegate, canRedelegate, canUndelegate, getMaxDelegationAvailable } from "./logic";
 import { getCurrentCosmosPreloadData } from "./preloadedData";
+import { acceptTransaction } from "./speculos-deviceActions";
 import type {
   CosmosAccount,
   CosmosDelegation,
-  CosmosOperationExtraRaw,
   CosmosDelegationInfoRaw,
+  CosmosOperationExtraRaw,
+  CosmosOperationRaw,
   CosmosRedelegation,
   CosmosResources,
   CosmosUnbonding,
   Transaction,
-  CosmosOperationRaw,
 } from "./types";
-import { canDelegate, canRedelegate, canUndelegate, getMaxDelegationAvailable } from "./logic";
-import { acceptTransaction } from "./speculos-deviceActions";
-import { Operation } from "@ledgerhq/types-live";
-import { BigNumber } from "bignumber.js";
-import { log } from "@ledgerhq/logs";
 
 const maxAccounts = 16;
 

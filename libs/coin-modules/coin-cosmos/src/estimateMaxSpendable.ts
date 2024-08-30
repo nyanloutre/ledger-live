@@ -1,10 +1,10 @@
-import type { AccountBridge } from "@ledgerhq/types-live";
+import { getMainAccount } from "@ledgerhq/coin-framework/account/index";
 import { getAbandonSeedAddress } from "@ledgerhq/cryptoassets";
-import type { CosmosAccount, Transaction } from "./types";
+import type { AccountBridge } from "@ledgerhq/types-live";
+import { createTransaction } from "./createTransaction";
 import getTransactionStatus from "./getTransactionStatus";
 import { prepareTransaction } from "./prepareTransaction";
-import { createTransaction } from "./createTransaction";
-import { getMainAccount } from "@ledgerhq/coin-framework/account/index";
+import type { CosmosAccount, Transaction } from "./types";
 
 export const estimateMaxSpendable: AccountBridge<
   Transaction,

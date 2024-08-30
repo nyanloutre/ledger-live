@@ -1,16 +1,16 @@
 import BigNumber from "bignumber.js";
-import { buildTransaction, txToMessages } from "./buildTransaction";
-import { CosmosAccount, CosmosDelegationInfo, Transaction } from "./types";
 import {
+  MsgBeginRedelegate,
   MsgDelegate,
   MsgUndelegate,
-  MsgBeginRedelegate,
 } from "cosmjs-types/cosmos/staking/v1beta1/tx";
-
-import { cosmos } from "@keplr-wallet/cosmos";
 import { MsgWithdrawDelegatorReward } from "cosmjs-types/cosmos/distribution/v1beta1/tx";
 import { TxBody, TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
+import { cosmos } from "@keplr-wallet/cosmos";
 import { Fee } from "@keplr-wallet/proto-types/cosmos/tx/v1beta1/tx";
+
+import { buildTransaction, txToMessages } from "./buildTransaction";
+import { CosmosAccount, CosmosDelegationInfo, Transaction } from "./types";
 
 const veryBigNumber = new BigNumber(3333300000000000000000);
 

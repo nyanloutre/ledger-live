@@ -1,37 +1,37 @@
 import { BigNumber } from "bignumber.js";
-import {
-  AmountRequired,
-  NotEnoughBalance,
-  RecipientRequired,
-  InvalidAddress,
-  FeeTooHigh,
-} from "@ledgerhq/errors";
+import { CosmosValidatorsManager } from "@ledgerhq/coin-cosmos/CosmosValidatorsManager";
+import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
+import { asSafeCosmosPreloadData, setCosmosPreloadData } from "@ledgerhq/coin-cosmos/preloadedData";
+import mockPreloadedData from "@ledgerhq/coin-cosmos/preloadedData.mock";
+import { assignFromAccountRaw, assignToAccountRaw } from "@ledgerhq/coin-cosmos/serialization";
 import type {
   CosmosAccount,
+  CosmosCurrencyConfig,
   CosmosValidatorItem,
   StatusErrorMap,
   Transaction,
-  CosmosCurrencyConfig,
 } from "@ledgerhq/coin-cosmos/types/index";
+import { getMainAccount } from "@ledgerhq/coin-framework/account/index";
+import { defaultUpdateTransaction } from "@ledgerhq/coin-framework/bridge/jsHelpers";
+import { getCryptoCurrencyById } from "@ledgerhq/cryptoassets/currencies";
 import {
-  scanAccounts,
-  signOperation,
+  AmountRequired,
+  FeeTooHigh,
+  InvalidAddress,
+  NotEnoughBalance,
+  RecipientRequired,
+} from "@ledgerhq/errors";
+import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
+import type { Account, AccountBridge, CurrencyBridge } from "@ledgerhq/types-live";
+import {
   broadcast,
-  sync,
   isInvalidRecipient,
   makeAccountBridgeReceive,
+  scanAccounts,
+  signOperation,
+  sync,
 } from "../../../bridge/mockHelpers";
-import { defaultUpdateTransaction } from "@ledgerhq/coin-framework/bridge/jsHelpers";
-import { setCosmosPreloadData, asSafeCosmosPreloadData } from "@ledgerhq/coin-cosmos/preloadedData";
-import { getMainAccount } from "@ledgerhq/coin-framework/account/index";
-import mockPreloadedData from "@ledgerhq/coin-cosmos/preloadedData.mock";
-import type { Account, AccountBridge, CurrencyBridge } from "@ledgerhq/types-live";
-import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 import { getCurrencyConfiguration } from "../../../config";
-import cryptoFactory from "@ledgerhq/coin-cosmos/chain/chain";
-import { assignFromAccountRaw, assignToAccountRaw } from "@ledgerhq/coin-cosmos/serialization";
-import { CosmosValidatorsManager } from "@ledgerhq/coin-cosmos/CosmosValidatorsManager";
-import { getCryptoCurrencyById } from "@ledgerhq/cryptoassets/currencies";
 
 const receive = makeAccountBridgeReceive();
 

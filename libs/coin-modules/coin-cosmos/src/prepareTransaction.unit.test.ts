@@ -1,6 +1,6 @@
+import BigNumber from "bignumber.js";
 import network from "@ledgerhq/live-network/network";
 import { CryptoCurrencyId } from "@ledgerhq/types-cryptoassets";
-import BigNumber from "bignumber.js";
 import * as jsPrepareTransaction from "./prepareTransaction";
 import { calculateFees, getEstimatedFees } from "./prepareTransaction";
 import { CosmosAccount, Transaction } from "./types";

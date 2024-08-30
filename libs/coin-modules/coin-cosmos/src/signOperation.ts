@@ -1,16 +1,16 @@
-import { CosmosAccount, RETURN_CODES, Transaction } from "./types";
-import { Observable } from "rxjs";
 import BigNumber from "bignumber.js";
+import { Observable } from "rxjs";
+import { makeSignDoc, serializeSignDoc } from "@cosmjs/amino";
 import { Secp256k1Signature } from "@cosmjs/crypto";
-import { serializeSignDoc, makeSignDoc } from "@cosmjs/amino";
-import { UserRefusedOnDevice, ExpertModeRequired } from "@ledgerhq/errors";
 import { Coin } from "@keplr-wallet/proto-types/cosmos/base/v1beta1/coin";
-import type { AccountBridge, Operation, OperationType } from "@ledgerhq/types-live";
 import { encodeOperationId } from "@ledgerhq/coin-framework/operation";
 import { SignerContext } from "@ledgerhq/coin-framework/signer";
-import { txToMessages, buildTransaction } from "./buildTransaction";
+import { ExpertModeRequired, UserRefusedOnDevice } from "@ledgerhq/errors";
+import type { AccountBridge, Operation, OperationType } from "@ledgerhq/types-live";
 import { CosmosAPI } from "./api/Cosmos";
+import { buildTransaction, txToMessages } from "./buildTransaction";
 import cryptoFactory from "./chain/chain";
+import { CosmosAccount, RETURN_CODES, Transaction } from "./types";
 import { CosmosSignatureSdk, CosmosSigner } from "./types/signer";
 
 export const buildSignOperation =

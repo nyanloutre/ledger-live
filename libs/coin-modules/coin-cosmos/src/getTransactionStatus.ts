@@ -1,38 +1,38 @@
+import * as bech32 from "bech32";
+import { BigNumber } from "bignumber.js";
+import invariant from "invariant";
+import { findCryptoCurrencyById } from "@ledgerhq/cryptoassets";
 import {
-  AmountRequired,
-  FeeNotLoaded,
-  InvalidAddress,
-  InvalidAddressBecauseDestinationIsAlsoSource,
-  NotEnoughBalance,
-  RecipientRequired,
-  RecommendUndelegation,
+    AmountRequired,
+    FeeNotLoaded,
+    InvalidAddress,
+    InvalidAddressBecauseDestinationIsAlsoSource,
+    NotEnoughBalance,
+    RecipientRequired,
+    RecommendUndelegation,
 } from "@ledgerhq/errors";
+import { AccountBridge } from "@ledgerhq/types-live";
+import cryptoFactory from "./chain/chain";
 import {
-  ClaimRewardsFeesWarning,
-  CosmosDelegateAllFundsWarning,
-  CosmosRedelegationInProgress,
-  CosmosTooManyValidators,
-  NotEnoughDelegationBalance,
+    ClaimRewardsFeesWarning,
+    CosmosDelegateAllFundsWarning,
+    CosmosRedelegationInProgress,
+    CosmosTooManyValidators,
+    NotEnoughDelegationBalance,
 } from "./errors";
 import {
-  CosmosLikeTransaction,
-  StatusErrorMap,
-  CosmosAccount,
-  TransactionStatus,
-  Transaction,
-} from "./types";
-import { BigNumber } from "bignumber.js";
-import {
-  COSMOS_MAX_DELEGATIONS,
-  COSMOS_MAX_REDELEGATIONS,
-  COSMOS_MAX_UNBONDINGS,
-  getMaxEstimatedBalance,
+    COSMOS_MAX_DELEGATIONS,
+    COSMOS_MAX_REDELEGATIONS,
+    COSMOS_MAX_UNBONDINGS,
+    getMaxEstimatedBalance,
 } from "./logic";
-import invariant from "invariant";
-import * as bech32 from "bech32";
-import { findCryptoCurrencyById } from "@ledgerhq/cryptoassets";
-import cryptoFactory from "./chain/chain";
-import { AccountBridge } from "@ledgerhq/types-live";
+import {
+    CosmosAccount,
+    CosmosLikeTransaction,
+    StatusErrorMap,
+    Transaction,
+    TransactionStatus,
+} from "./types";
 
 export class CosmosTransactionStatusManager {
   getTransactionStatus: AccountBridge<Transaction>["getTransactionStatus"] = async (

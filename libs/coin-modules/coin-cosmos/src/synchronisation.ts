@@ -1,16 +1,16 @@
 import { BigNumber } from "bignumber.js";
+import { encodeAccountId } from "@ledgerhq/coin-framework/account";
 import {
+  AccountShapeInfo,
   GetAccountShape,
   mergeOps,
-  AccountShapeInfo,
 } from "@ledgerhq/coin-framework/bridge/jsHelpers";
-import { encodeAccountId } from "@ledgerhq/coin-framework/account";
-import { CosmosAPI } from "./api/Cosmos";
 import { encodeOperationId } from "@ledgerhq/coin-framework/operation";
-import { CosmosAccount, CosmosOperation, CosmosTx } from "./types";
 import type { OperationType } from "@ledgerhq/types-live";
+import { CosmosAPI } from "./api/Cosmos";
 import { getMainMessage } from "./helpers";
 import { parseAmountStringToNumber } from "./logic";
+import { CosmosAccount, CosmosOperation, CosmosTx } from "./types";
 
 export const getAccountShape: GetAccountShape<CosmosAccount> = async (info: any) => {
   const { address, currency, derivationMode, initialAccount } = info;
